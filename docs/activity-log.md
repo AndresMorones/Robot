@@ -26,3 +26,34 @@ Running dev journal for the HappyRobot inbound-carrier take-home. Concise, chron
 **Memory state (for Claude-Code continuity)**: 7 feedback memories active under `C:\Users\Andre\.claude\projects\c--Users-Andre-OneDrive-Documentos-GitHub-Robot\memory\` — engagement style, terse step cues, closing-section format, auto-accept summary, activity-log discipline, HR platform manual actions, references org, and decision documentation. Index at `MEMORY.md`.
 
 **Next**: Await (a) Andres's review of CLAUDE.md, activity log, and ADR-001, and (b) WS4 research completion. After both, decide whether to start Step 2 (FastAPI skeleton — API core) or invest more time in Claude Code env first. Default if Andres doesn't direct: start step 2 on the next session, gated on WS4 research having produced something usable.
+
+### 14:15 — Kickoff commit landed
+
+**What I did**: Staged and committed the three kickoff files with conventional-commit message `chore: kickoff — CLAUDE.md + activity log + ADR-001 (ruff-alone)`. Commit SHA `f11d223`. Git emitted LF→CRLF warnings on the three files — this is the default Windows `core.autocrlf` behavior on a cross-platform repo; benign for now, ADR-worthy if it causes diff-noise later.
+
+**Files touched**: none new — just the commit on the three previously-created files.
+
+**Next**: Wait for WS4 research agent to finish and populate `docs/references/happyrobot/`. When it does, commit that batch separately.
+
+### 16:30 — WS4 research landed, with a pivot
+
+**What I did**: The backgrounded Explore agent hit a tool-permission wall — Explore subagents are read-only (no `Write`/`Edit`). It successfully drafted all research, created `docs/references/happyrobot/README.md` + empty `tool-calls/` + `webhooks/` subfolders via Bash, but couldn't save the 10 content files. Rather than re-spawn a general-purpose agent and redo the research, I wrote the 10 files myself using the comprehensive HR research I already had from the earlier (pre-plan-approval) Explore pass. Faster; no duplicate token spend on web-research.
+
+**Files touched (created)**:
+- `docs/references/happyrobot/platform-concepts.md` — DAG model, immutable-publish, web-call trigger, AI-worker-as-gatekeeper framing
+- `docs/references/happyrobot/node-taxonomy.md` — 8 node types + config fields + our workflow's node count table
+- `docs/references/happyrobot/voice-agent-prompting.md` — US freight-carrier persona + 3 few-shot transcripts (BOOKED / declined / FMCSA-fail)
+- `docs/references/happyrobot/tool-calls/README.md` — index of 4 tool-call nodes
+- `docs/references/happyrobot/tool-calls/patterns.md` — auth + timeout + retry + variable-mapping syntax + idempotency
+- `docs/references/happyrobot/webhooks/call-ended.md` — payload shape, Bearer auth, no HMAC, idempotency by call_id
+- `docs/references/happyrobot/post-call-extraction.md` — prompt template emitting `CallLogRequest` JSON + outcome/sentiment rules
+- `docs/references/happyrobot/transfer-mock.md` — Agent-node-as-transfer pattern (no real SIP)
+- `docs/references/happyrobot/testing.md` — Test tab, web-call-test quota cost, debugging checklist
+- `docs/references/happyrobot/gotchas.md` — 10-min cap, tier-dependent Bearer support, no HMAC, no analytics-UI, autoscale constraint
+- `docs/references/happyrobot/design-notes-for-our-workflow.md` — **the actionable file** — step-by-step 15-step build guide for `inbound-carrier-v1`
+
+**Decisions made**: none new (everything follows prior architectural decisions from the plan).
+
+**Lesson for future research tasks**: when spawning a research agent with an expected artifact (files), use `subagent_type: "general-purpose"` (has `*` tools including Write), not `"Explore"` (read-only). Candidate ADR-002 flagged in next-steps if this pattern repeats.
+
+**Next**: Commit `docs/references/happyrobot/` as a `docs(hr):` batch. Then decide with Andres whether to (a) start Step 2 (API skeleton / WS2) or (b) prepare the FMCSA reference stub `docs/references/fmcsa/` since that's the other research-heavy area before API work.
