@@ -35,6 +35,18 @@ Running dev journal for the HappyRobot inbound-carrier take-home. Concise, chron
 
 **Next**: Wait for WS4 research agent to finish and populate `docs/references/happyrobot/`. When it does, commit that batch separately.
 
+### 17:50 — Split voice-agent-prompting (5 → 6 files)
+
+**What I did**: Per Andres's pick, split `voice-agent-prompting.md` into `voice-agent-prompt.md` (the in-call Agent-node system prompt) and `post-call-extraction-prompt.md` (the workflow-level Post-Call setting). They were mixed-purpose in the combined file — different parts of the HR UI configure each. Updated cross-refs in `platform-essentials.md`, `design-notes-for-our-workflow.md`, and `README.md`.
+
+**Files**: 1 rename (voice-agent-prompting → voice-agent-prompt), 1 new (post-call-extraction-prompt), 3 modifications (cross-ref updates), 0 deletions. HR ref dir now at 6 files.
+
+**Commit**: `4c50935` — `docs(hr): split voice-agent-prompting into in-call vs post-call prompts`.
+
+**Next**: still WS2a — minimal FastAPI skeleton.
+
+---
+
 ### 17:30 — HR docs trim (12 → 5 files)
 
 **What I did**: Coalesced the over-grown HR reference directory from 12 files in 3 directories down to 5 files at the top level. No content lost; merged for scannability per Andres's "concise + clean + modular; coalesce when appropriate" preference.
