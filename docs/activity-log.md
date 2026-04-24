@@ -35,6 +35,40 @@ Running dev journal for the HappyRobot inbound-carrier take-home. Concise, chron
 
 **Next**: Wait for WS4 research agent to finish and populate `docs/references/happyrobot/`. When it does, commit that batch separately.
 
+### 18:30 — WS2a: minimal FastAPI skeleton landed
+
+**What I did**: Scaffolded the FastAPI backend's first slice. 20 source files + uv.lock. Bearer auth (header + `?token=` fallback), `/healthz` (no auth), `/v1/loads/search` (Bearer required), 10 seeded loads in `data/loads.json`. structlog JSON to stdout. No FMCSA / negotiate / calls-log / dashboard yet — those land in WS2b/WS2c/WS5.
+
+**Files (21 total in commit, including uv.lock)**:
+- Root: `.gitignore`, `.gitattributes` (eol=lf — resolves CRLF warnings going forward)
+- `api/.env.example`, `api/pyproject.toml`, `api/uv.lock`
+- `api/app/`: `main.py`, `config.py`, `deps.py`, `models.py`, `services/load_store.py`, `routers/health.py`, `routers/loads.py` (+3 `__init__.py`)
+- `api/tests/`: `conftest.py`, `test_health.py`, `test_auth.py`, `test_loads.py` (+1 `__init__.py`)
+- `data/loads.json` (10 loads, 4 equipment types, 17 states, rate range $850–$2500)
+
+**Tooling installed**: `uv 0.11.7` via `pip install --user uv`. Lives at `C:\Users\Andre\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\Scripts\uv.exe`. **Add to PATH** for convenience: `export PATH="/c/Users/Andre/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0/LocalCache/local-packages/Python39/Scripts:$PATH"` (or the Windows equivalent).
+
+**Verification (all green)**:
+- `uv sync --extra dev` → 32 deps installed (fastapi 0.136, pydantic 2.13, structlog 25.5, ruff 0.15, pytest 9.0, …)
+- `uv run pytest -q` → **15/15 passed in 0.28s**
+- `uv run ruff check .` → all checks passed
+- `uv run ruff format --check .` → 15/15 formatted (one file was formatted on first run; now clean)
+
+**Run locally**: `cd api && uv run uvicorn app.main:app --reload` → :8000
+
+**Decisions baked in (no separate ADR — captured in CLAUDE.md / inline / commit msg)**:
+- pyproject.toml at `api/`, not repo root (cleaner monorepo boundary; dashboard will sit alongside at `dashboard/` later)
+- Single `models.py` (not split per-domain) — split when count >10
+- `B008` ruff rule ignored (FastAPI `Depends(...)`/`Header(...)` defaults are intentional)
+- TestClient via context manager → properly exercises lifespan startup/shutdown
+- Test fixtures monkeypatch `settings` attributes (pydantic v2 BaseModel allows mutation by default)
+
+**Commit**: `2f81a6d` — `feat(api): WS2a minimal FastAPI skeleton with bearer auth and /v1/loads/search` — 21 files, +1394 lines (incl. ~1000 lines uv.lock).
+
+**Next**: WS2.5 — Dockerize this skeleton + deploy to Fly.io. Once deployed, HR-side step 1 (Andres creates workflow + first tool-call node pointing at `https://robot-api.fly.dev/v1/loads/search`) can run in parallel with WS2b (FMCSA endpoint).
+
+---
+
 ### 17:50 — Split voice-agent-prompting (5 → 6 files)
 
 **What I did**: Per Andres's pick, split `voice-agent-prompting.md` into `voice-agent-prompt.md` (the in-call Agent-node system prompt) and `post-call-extraction-prompt.md` (the workflow-level Post-Call setting). They were mixed-purpose in the combined file — different parts of the HR UI configure each. Updated cross-refs in `platform-essentials.md`, `design-notes-for-our-workflow.md`, and `README.md`.
