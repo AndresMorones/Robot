@@ -35,6 +35,28 @@ Running dev journal for the HappyRobot inbound-carrier take-home. Concise, chron
 
 **Next**: Wait for WS4 research agent to finish and populate `docs/references/happyrobot/`. When it does, commit that batch separately.
 
+### 17:30 — HR docs trim (12 → 5 files)
+
+**What I did**: Coalesced the over-grown HR reference directory from 12 files in 3 directories down to 5 files at the top level. No content lost; merged for scannability per Andres's "concise + clean + modular; coalesce when appropriate" preference.
+
+**Mapping**:
+- platform-concepts + node-taxonomy + gotchas → `platform-essentials.md` (NEW)
+- post-call-extraction → absorbed into `voice-agent-prompting.md`
+- tool-calls/patterns + transfer-mock + webhooks/call-ended → absorbed into `design-notes-for-our-workflow.md`
+- tool-calls/README.md (redundant index) → deleted
+- README.md → regenerated for the new 5-file index
+- testing.md → unchanged
+
+**Files**: 8 deletions, 1 new file, 3 modifications, 2 empty subdirs removed (tool-calls/, webhooks/).
+
+**Commit**: `4cfb209` — `docs(hr): coalesce 12 reference files into 5 (remove subdirs)` — net -342 lines (576 insertions, 918 deletions).
+
+**Plan doc updated** earlier: `C:\Users\Andre\.claude\plans\now-i-want-you-fizzy-eagle.md` now has a "Current state + sequencing principle" section, the trim plan, and a "Next step in flight: WS2a" spec.
+
+**Next**: WS2a — minimal FastAPI skeleton. 16 files: `.gitignore` + `.gitattributes` + `.env.example` + `api/` (pyproject.toml, app/main.py, app/config.py, app/deps.py, app/models.py, app/services/load_store.py, app/routers/health.py, app/routers/loads.py, tests/) + `data/loads.json`. Awaiting Andres review of the trim before scaffolding code.
+
+---
+
 ### 16:30 — WS4 research landed, with a pivot
 
 **What I did**: The backgrounded Explore agent hit a tool-permission wall — Explore subagents are read-only (no `Write`/`Edit`). It successfully drafted all research, created `docs/references/happyrobot/README.md` + empty `tool-calls/` + `webhooks/` subfolders via Bash, but couldn't save the 10 content files. Rather than re-spawn a general-purpose agent and redo the research, I wrote the 10 files myself using the comprehensive HR research I already had from the earlier (pre-plan-approval) Explore pass. Faster; no duplicate token spend on web-research.
