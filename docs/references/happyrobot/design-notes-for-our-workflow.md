@@ -25,7 +25,7 @@
 
 ### Step 3 — Greeting + MC-capture agent
 1. Add Agent node → Name: `greet_and_capture_mc`.
-2. System prompt: paste the "Greeting + MC Capture" section (from voice-agent-prompting source-of-truth).
+2. System prompt: paste the "Greeting + MC Capture" section (from `voice-agent-prompt.md` source-of-truth).
 3. Initial message: `"Hi, this is Acme Logistics. May I have your MC or DOT number?"`
 4. Voice: pick US-English professional (preview in Voice Playground first).
 5. Extract variable: `mc_number` (normalize to `MC-123456` format).
@@ -119,7 +119,7 @@ Response fields used: `action`, `broker_counter`, `should_transfer`.
 See "Transfer mock" reference below.
 
 ### Step 12 — Post-Call extraction
-- Workflow Settings → Post-Call → paste the prompt from `voice-agent-prompting.md` § "Post-call extraction prompt."
+- Workflow Settings → Post-Call → paste the prompt from `post-call-extraction-prompt.md`.
 - Test with a sample transcript if HR supports offline testing.
 
 ### Step 13 — `call.ended` webhook

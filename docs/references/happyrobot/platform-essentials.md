@@ -89,7 +89,7 @@ Every node type you'll use. Field-label wording is inferred; confirm in your wor
 
 ### 7. Post-Call Extraction (workflow-level setting, not a node)
 **Purpose**: LLM prompt over the transcript after call ends, emitting our `CallLogRequest` JSON.
-- Config: prompt (source of truth in `voice-agent-prompting.md` § "Post-call extraction prompt").
+- Config: prompt (source of truth in `post-call-extraction-prompt.md`).
 
 ### 8. `call.ended` Webhook (workflow-level setting, not a node)
 **Purpose**: HR POSTs JSON to our `/v1/calls/log` after the call ends.
