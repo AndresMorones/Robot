@@ -1,22 +1,23 @@
 # Design Notes for `inbound-carrier-v1`
 
-**Start here** when you're actually building the workflow in HR. This is the prescriptive file; everything else in this directory is descriptive reference.
+**Start here** when actually building the workflow in HR. This is the prescriptive build guide; `platform-essentials.md` is descriptive reference for context.
 
-## Prerequisites before building
+## Prerequisites
 
 - FastAPI deployed to Fly.io with endpoints live: `/v1/fmcsa/verify`, `/v1/loads/search`, `/v1/negotiate/evaluate`, `/v1/calls/log`.
   - Alternative: local API + ngrok tunnel during dev; swap URLs to Fly before publish.
-- `API_BEARER_TOKEN` generated and stored in (a) Fly secret on `robot-api`, (b) HR workflow secret (add at workflow level before configuring any tool-call node).
-- FMCSA webKey stored in Fly secret `FMCSA_WEB_KEY`.
-- You've skimmed `platform-concepts.md` and `node-taxonomy.md`.
+- `API_BEARER_TOKEN` generated and stored in (a) Fly secret on `robot-api`, (b) HR workflow secret.
+- `FMCSA_WEB_KEY` stored in Fly secret.
+- You've skimmed `platform-essentials.md`.
+
+---
 
 ## Step-by-step workflow construction
 
 ### Step 1 — Create the workflow
 1. HR platform → New Workflow → Name: `inbound-carrier-v1`.
-2. Workflow Settings → Secrets → Add `API_BEARER_TOKEN` (paste the token value; store it safely in your password manager — HR won't show it back).
-3. Workflow Settings → Post-Call → configure later (Step 10).
-4. Workflow Settings → Webhooks → configure later (Step 11).
+2. Workflow Settings → Secrets → Add `API_BEARER_TOKEN` (paste value; store in your password manager — HR won't show it back).
+3. Post-Call + Webhooks settings configured later (Steps 12–13).
 
 ### Step 2 — Add Web-Call Trigger
 1. Add node → Web-Call Trigger → Name: `inbound_web_call`.
@@ -24,152 +25,292 @@
 
 ### Step 3 — Greeting + MC-capture agent
 1. Add Agent node → Name: `greet_and_capture_mc`.
-2. System prompt: paste the "Greeting + MC Capture" section from `.claude/skills/happyrobot-agent-prompt/SKILL.md`.
-3. Initial message: `"Hi, this is Acme Logistics. May I have your MC or DOT number?"`.
+2. System prompt: paste the "Greeting + MC Capture" section (from voice-agent-prompting source-of-truth).
+3. Initial message: `"Hi, this is Acme Logistics. May I have your MC or DOT number?"`
 4. Voice: pick US-English professional (preview in Voice Playground first).
 5. Extract variable: `mc_number` (normalize to `MC-123456` format).
-6. Tools available: (none at this step).
+6. Tools available: (none here).
 7. Exit condition: `mc_number` extracted.
 8. Test with a sample utterance → confirm `mc_number` output.
 
 ### Step 4 — Tool call: `fmcsa_verify`
-1. Add Tool-Call node → Name: `fmcsa_verify`.
-2. URL: `https://robot-api.fly.dev/v1/fmcsa/verify`.
-3. Method: POST.
-4. Headers:
-   - `Authorization: Bearer {workflow_secret:API_BEARER_TOKEN}`
-   - `Content-Type: application/json`
-   - **If your tier rejects custom Authorization headers**: remove the Authorization header and change URL to `https://robot-api.fly.dev/v1/fmcsa/verify?token={workflow_secret:API_BEARER_TOKEN}`.
-5. Body:
-   ```json
-   {"identifier": "{{mc_number}}", "identifier_type": "MC"}
-   ```
-6. Timeout: 2500 ms. Retries: 1.
-7. Test with a real MC from `data/fmcsa-fixtures/`: paste the body, hit Test. Confirm response JSON has `eligible`, `reason_codes`, `carrier_name`, `manual_review_required`.
+Configure per "Tool-call patterns" reference below. URL: `https://robot-api.fly.dev/v1/fmcsa/verify`. Body:
+```json
+{"identifier": "{{mc_number}}", "identifier_type": "MC"}
+```
+Test with a real MC from `data/fmcsa-fixtures/`. Confirm response has `eligible`, `reason_codes`, `carrier_name`, `manual_review_required`.
 
 ### Step 5 — Condition: eligibility gate
 1. Add Condition node → Name: `eligibility_gate`.
-2. Expression: route on `{eligible}` and `{manual_review_required}`:
-   - If `{eligible} == true AND {manual_review_required} == false` → continue to lane-capture (Step 6).
-   - If `{eligible} == true AND {manual_review_required} == true` → go to callback branch (Step 8a).
-   - Else → polite decline (Step 8b).
-3. If HR doesn't support compound expressions, chain two conditions: first `{eligible}`, then `{manual_review_required}`.
-4. Test with sample variable values.
+2. Expression — route on `{eligible}` and `{manual_review_required}`:
+   - `{eligible} == true AND {manual_review_required} == false` → continue (Step 6).
+   - `{eligible} == true AND {manual_review_required} == true` → callback branch (Step 10a).
+   - Else → polite decline (Step 10b).
+3. If HR doesn't support compound expressions, chain two conditions.
 
 ### Step 6 — Lane + equipment capture agent
 1. Add Agent node → Name: `capture_lane_equipment`.
-2. System prompt: `.claude/skills/happyrobot-agent-prompt/SKILL.md` section "Lane & Equipment".
-3. Extract variables: `origin_state`, `destination_state`, `equipment_type` (enum), `earliest_pickup` (date).
-4. Exit condition: all 4 variables extracted (or carrier says "anywhere" → extract as null).
+2. System prompt: "Lane & Equipment" section.
+3. Extract: `origin_state`, `destination_state`, `equipment_type` (enum), `earliest_pickup` (date).
+4. Exit: all 4 extracted (or "anywhere" → null).
 
 ### Step 7 — Tool call: `loads_search`
-1. Add Tool-Call node → Name: `loads_search`.
-2. URL + method + headers: same pattern as Step 4; URL = `/v1/loads/search`.
-3. Body:
-   ```json
-   {
-     "origin_state": "{{origin_state}}",
-     "destination_state": "{{destination_state}}",
-     "equipment_type": "{{equipment_type}}",
-     "pickup_after": "{{earliest_pickup}}",
-     "max_results": 3
-   }
-   ```
-4. Timeout 2500 ms, 1 retry.
-5. Test with a sample matching the seeded `data/loads.json`.
+URL: `https://robot-api.fly.dev/v1/loads/search`. Body:
+```json
+{
+  "origin_state": "{{origin_state}}",
+  "destination_state": "{{destination_state}}",
+  "equipment_type": "{{equipment_type}}",
+  "pickup_after": "{{earliest_pickup}}",
+  "max_results": 3
+}
+```
+Test with a sample matching seeded `data/loads.json`.
 
 ### Step 7b — Condition: match gate
-1. Expression: `{matches.length} > 0` or equivalent (HR may express this differently).
-2. True → pitch + negotiation (Step 8). False → no-match branch (Step 8c).
+- `{matches.length} > 0` → pitch + negotiation (Step 8). Else → no-match branch (Step 10c).
 
 ### Step 8 — Pitch + negotiation loop
 
-This is the most complex branch. Build carefully.
-
-**8a. Pitch agent**
-- Agent node → Name: `pitch_and_round_1`.
-- System prompt: "Pitch Load" section.
-- Pitches `{matches[0]}` — includes loadboard_rate.
-- Extracts: `carrier_interested` (bool), `carrier_offer` (int, if carrier counter-offered).
-- Sets `round_number = 1` as a workflow variable.
+**8a. Pitch agent** (Agent node → `pitch_and_round_1`)
+- Pitches `{matches[0]}` including `loadboard_rate`.
+- Extracts: `carrier_interested` (bool), `carrier_offer` (int).
+- Sets workflow variable `round_number = 1`.
 
 **8b. Tool call: `negotiate_evaluate`**
-- URL: `/v1/negotiate/evaluate`.
-- Body:
-  ```json
-  {
-    "load_id": "{{matches[0].load_id}}",
-    "round_number": "{{round_number}}",
-    "carrier_offer": "{{carrier_offer}}",
-    "prior_broker_offers": "{{prior_broker_offers}}"
-  }
-  ```
-- Response fields used downstream: `action`, `broker_counter`, `should_transfer`.
+URL: `/v1/negotiate/evaluate`. Body:
+```json
+{
+  "load_id": "{{matches[0].load_id}}",
+  "round_number": "{{round_number}}",
+  "carrier_offer": "{{carrier_offer}}",
+  "prior_broker_offers": "{{prior_broker_offers}}"
+}
+```
+Response fields used: `action`, `broker_counter`, `should_transfer`.
 
 **8c. Condition: action branch**
-- `{action} == "ACCEPT"` → confirmation agent (Step 9).
-- `{action} == "REJECT"` → outcome = CARRIER_DECLINED_RATE → end (Step 10).
-- `{action} == "ESCALATE_HUMAN"` → transfer mock (Step 11b).
-- `{action} == "COUNTER"` → deliver-counter agent (next).
+- `ACCEPT` → confirmation agent (Step 9).
+- `REJECT` → outcome = CARRIER_DECLINED_RATE → end (Step 10).
+- `ESCALATE_HUMAN` → transfer mock (Step 11).
+- `COUNTER` → deliver-counter agent (8d).
 
 **8d. Deliver counter agent**
-- Agent node → Name: `deliver_counter_round_N`.
-- System prompt: "Deliver Counter" section; reads `broker_counter` to the carrier.
-- Extracts: new `carrier_offer` (carrier's response).
-- Appends to `prior_broker_offers` list.
-- Increments `round_number`.
+- Reads `{broker_counter}` to the carrier.
+- Extracts new `carrier_offer`.
+- Appends to `prior_broker_offers`. Increments `round_number`.
 
 **8e. Round-cap condition**
 - `{round_number} > 3` → outcome = NEGOTIATION_STALLED → end (Step 10).
-- Else → loop back to Step 8b.
+- Else → loop to Step 8b.
 
 ### Step 9 — Booking confirmation agent
 - Reached only on ACCEPT.
-- Agent says "Deal at $X. Let me have dispatch send the BOL."
-- Extracts: dispatch email / phone.
-- Then → transfer mock (Step 11).
+- Says "Deal at $X. Let me have dispatch send the BOL."
+- Extracts dispatch email / phone.
+- → Step 11 (transfer mock).
 
 ### Step 10 — Polite-decline / callback branches
-- **8a callback**: agent captures callback name + number → routes to end.
-- **8b polite decline**: agent says "I'm sorry, we can't work with you right now" (without revealing why) → routes to end.
-- **8c no-match**: agent says "Nothing in your lane right now — can I take a callback?" → captures callback info → routes to end.
+- **10a callback**: capture name + callback number → end.
+- **10b polite decline**: "I'm sorry, we can't work with you right now" (don't reveal why) → end.
+- **10c no-match**: "Nothing in your lane right now — can I take a callback?" → capture → end.
 
 ### Step 11 — Transfer mock
-See `transfer-mock.md`. Implement as an Agent node that says "Connecting you now..." and exits.
+See "Transfer mock" reference below.
 
-### Step 12 — Post-call extraction
-- Workflow Settings → Post-Call → paste the prompt from `post-call-extraction.md`.
+### Step 12 — Post-Call extraction
+- Workflow Settings → Post-Call → paste the prompt from `voice-agent-prompting.md` § "Post-call extraction prompt."
 - Test with a sample transcript if HR supports offline testing.
 
 ### Step 13 — `call.ended` webhook
 - Workflow Settings → Webhooks → add `call.ended`.
 - URL: `https://robot-api.fly.dev/v1/calls/log`.
-- Headers: same auth pattern as tool calls.
-- See `webhooks/call-ended.md`.
+- Headers: same auth as tool calls.
+- See "`call.ended` webhook" reference below.
 
 ### Step 14 — Publish
-- Verify every node shows green-checked (tested).
+- Verify every node is green-checked (tested).
 - Click Publish.
-- Confirm the web-call URL still works by hitting it in a browser.
+- Confirm web-call URL still works.
 
 ### Step 15 — Smoke test
-- Make one real web-call end-to-end with a known MC.
+- One real web-call end-to-end with a known MC.
 - Watch `fly logs -a robot-api` in another terminal.
-- Verify: FMCSA verify fires, loads search fires, at least one negotiate round fires, call.ended webhook lands, CallRecord appears in `data/calls.json`.
-- Capture the transcript + webhook payload → save to `docs/references/happyrobot/smoke-tests/2026-MM-DD-<scenario>.md`.
+- Verify: `fmcsa_verify` fires, `loads_search` fires, ≥1 `negotiate_evaluate` fires, `call.ended` lands, CallRecord appears in `data/calls.json`.
+- Capture transcript + webhook payload → save to `smoke-tests/2026-MM-DD-<scenario>.md`.
 
-## Post-build: run the hr-workflow-critic subagent
+### Versioning reminder
+Material change post-publish → create `inbound-carrier-v2`. Don't stop-edit-republish v1 during demo. Record in `changelog.md`.
 
-Once the workflow is published and smoke-tested, invoke the `hr-workflow-critic` subagent (when we add it) against all the `docs/references/happyrobot/` files + the published workflow. It'll flag gaps: missing fallback branches, transfer wiring, timeout config, auth header usage.
+### Common first-build issues
+1. **Tool-call headers rejected**: pivot every node to `?token=` query-string URL. Update all 4 nodes consistently.
+2. **Variable syntax mismatch**: try `{var}` / `{{var}}` / `${var}` until substitution works. Document in workspace.
+3. **Compound expression fail**: chain two conditions instead.
+4. **Response-field mapping breaks**: always test tool-call nodes before wiring downstream conditions.
+5. **Publish blocked on orange exclamation**: click through each node looking for the warning.
 
-## Common first-build issues
+---
 
-1. **Tool-call headers reject**: if your tier blocks custom Authorization, pivot every tool-call node to the `?token=` query-string URL. Update all four nodes consistently.
-2. **Variable syntax mismatch**: if `{{mc_number}}` doesn't substitute, try `{mc_number}` or `${mc_number}`. Check HR's docs for exact syntax in your workspace.
-3. **Condition compound-expression fail**: if `A AND B` isn't supported, chain two conditions.
-4. **Response-field mapping breaks**: always test tool-call nodes before wiring downstream conditions. The test run is what tells HR the response schema.
-5. **Publish blocks on orange-exclamation node**: click through each node looking for the warning. Usually means a required field is empty or a test wasn't run.
+## Reference: Tool-call patterns
 
-## Versioning reminder
+Click-precise patterns for configuring every tool-call node in our workflow.
 
-After any material change to this workflow post-publish, create `inbound-carrier-v2`. Don't try to stop-edit-republish v1 during live demo traffic. Record the change in `docs/references/happyrobot/changelog.md`.
+### URL
+- Production: `https://robot-api.fly.dev/v1/{endpoint}`
+- Local dev: `https://<random>.ngrok-free.app/v1/{endpoint}` (tunnel via `ngrok http 8000`); swap to Fly before publish.
+
+### Method
+POST for all our tool calls.
+
+### Headers — auth
+**Preferred (Bearer header)**:
+```
+Authorization: Bearer {workflow_secret:API_BEARER_TOKEN}
+Content-Type: application/json
+```
+
+The `{workflow_secret:...}` syntax references the secret stored at workflow level (Step 1 above). Set once; reference everywhere.
+
+**Fallback (query-string token)** if your tier blocks custom Authorization headers:
+```
+URL: https://robot-api.fly.dev/v1/{endpoint}?token={workflow_secret:API_BEARER_TOKEN}
+Headers: Content-Type: application/json   (only)
+```
+
+Our `app/deps.py::require_bearer` accepts both. Query-string path emits a `auth.query_string_used` warning so we can quantify fallback usage.
+
+**Never** hard-code the token value. Always reference via `{workflow_secret:...}`.
+
+### Timeout
+**2500 ms** on every tool-call node. (HR default is often 10s — too loose; voice agent feels broken beyond 3s of silence.)
+
+### Retries
+**1 retry** on 5xx or timeout. No retry on 4xx.
+
+If double-fail (primary + retry both fail): tool node returns failure state → downstream condition routes to soft-apology + callback branch. Voice agent reads pre-canned: "Our system's a little slow right now — let me take a callback."
+
+### Variable mapping (request body)
+Template-substitute upstream variables. Syntax candidate: `{{var}}` (most common); also try `{var}` or `${var}` if substitution doesn't work. **Confirm in your workspace on first test.**
+
+### Response parsing
+HR auto-parses JSON response body. Top-level keys become downstream variables. **Test the node before wiring any downstream condition** — the test run is what tells HR the response schema.
+
+### Error handling design contract
+Our endpoints don't 5xx on expected upstream failures:
+- `/v1/fmcsa/verify` returns 200 with `manual_review_required: true` instead of 5xx when FMCSA is down.
+- `/v1/loads/search` returns 200 with `matches: []` instead of 5xx on empty result.
+
+So the tool-call node doesn't fail; the workflow condition node handles fallback gracefully.
+
+The only endpoints that can actually 5xx are `/v1/negotiate/evaluate` (bug in our code) and `/v1/calls/log` (storage failure). Both handled via retry + soft-apology.
+
+### Idempotency
+Our API endpoints are idempotent where it matters:
+- `fmcsa_verify` — 24h cache by identifier
+- `loads_search` — pure read
+- `negotiate_evaluate` — pure function, stateless
+- `calls_log` — upsert by `call_id`; replay returns `created: false`
+
+So HR's retry policy is safe.
+
+### Latency budget
+| Endpoint | Target p50 | Hard max |
+|---|---|---|
+| `fmcsa/verify` (cache hit) | <50 ms | 500 ms |
+| `fmcsa/verify` (cache miss) | 300 ms | 2000 ms |
+| `loads/search` | <50 ms | 500 ms |
+| `negotiate/evaluate` | <10 ms | 100 ms |
+| `calls/log` | <50 ms | 1000 ms |
+
+If any hot endpoint approaches hard max, agent flow stalls audibly.
+
+---
+
+## Reference: Transfer mock
+
+Per the take-home spec: "Transfer is out of scope as it won't work with the web call, you can mock a message."
+
+### Implementation pattern (Agent node, NOT real Transfer node)
+
+Use an **Agent node** with a single utterance + exit-on-completion. Reason: a real Transfer node with a dummy SIP destination may try to dial and surface a "transfer failed" error in the call log. An Agent node that just says a line and ends produces clean log output.
+
+### Agent-node mock config
+- **Name**: `transfer_mock`
+- **System prompt**: `"Say exactly: 'Great, I've got everything I need. I'm connecting you now to our dispatch team to finalize the paperwork. Please hold for a moment.' Then stop speaking and exit this node."`
+- **Initial message**: (leave empty — the system prompt drives the utterance)
+- **Voice**: same as the main agent (continuity)
+- **Extracted variables**: none
+- **Exit condition**: "after single utterance complete" (or whatever HR labels its one-shot mode)
+
+After this node, the workflow reaches a terminal state. HR ends the call, fires `call.ended`, our API records `outcome: TRANSFERRED_TO_REP` (or `BOOKED` on the BOOKED→transfer path; the post-call extraction disambiguates via transcript).
+
+### What the HR call log shows
+Clean: final agent utterance, normal call-end status, duration recorded, no failed-dial error.
+
+### For the broker doc
+Document honestly: "transfer is wired at the workflow level as a graceful end-call; real SIP transfer is out of scope for the take-home demo but would slot into the same workflow position."
+
+### Real-transfer-in-production (worth mentioning in broker doc's future-sprint section)
+HR supports SIP-based transfer via Twilio / Telnyx / direct trunk. Configure a Transfer node with real SIP URI; warm vs cold transfer is a node setting. Zero code changes on our side.
+
+### Unresolved
+- Whether HR's Transfer node has a built-in "mock" or "end-call-gracefully" mode that does this without using an Agent node.
+- Whether the Agent-node approach triggers `call.ended` the same way (test on first build).
+
+---
+
+## Reference: `call.ended` webhook
+
+The only path HR uses to write data back to us after the call. **Workflow-level setting**, not a node.
+
+### When it fires
+After the call terminates AND post-call extraction completes. HR waits for extraction so the payload carries the structured data, not just metadata.
+
+### Configuration
+- **URL**: `https://robot-api.fly.dev/v1/calls/log`
+- **Method**: POST
+- **Headers**: `Authorization: Bearer {workflow_secret:API_BEARER_TOKEN}` + `Content-Type: application/json`
+  - Fallback: `?token={workflow_secret:...}` in URL
+- **Retries**: enable platform retries (we're idempotent)
+- **Timeout**: HR default fine; our endpoint p95 < 500 ms
+
+### Payload shape (approximate; verify on first real call)
+
+```json
+{
+  "event": "call.ended",
+  "call_id": "hr_call_abc123",
+  "workflow_id": "inbound-carrier-v1",
+  "workflow_version": "1",
+  "started_at": "2026-04-23T18:02:00Z",
+  "ended_at": "2026-04-23T18:09:35Z",
+  "duration_seconds": 455,
+  "status": "completed",
+  "transcript_url": "https://hr-assets.example.com/transcripts/...?sig=...",
+  "recording_url": "https://hr-assets.example.com/recordings/...?sig=...",
+  "extracted": { /* CallLogRequest JSON from post-call extraction */ }
+}
+```
+
+Our `/v1/calls/log` handler tries `.extracted` first, then falls back to root — handles both nesting shapes HR might use.
+
+### Authentication
+Bearer token only. **No HMAC signing in HR's public webhook docs** — we can't cryptographically verify the request. Mitigations: idempotency by `call_id`, scoped-token, rotation on suspicion, anomaly monitoring.
+
+### Idempotency (critical)
+HR retries on 5xx / timeout. If our API 5xx's once and recovers, HR may POST the same `call.ended` twice. Our `/v1/calls/log`:
+- Keys by `call_id`. First call: creates, returns `{call_id, created: true, stored_at}`. Replay: no-op, returns `{call_id, created: false, stored_at}`.
+- We do NOT merge partial updates. If HR sends a different payload for the same `call_id`, we keep the first record and log a warning.
+
+### Debugging chain
+1. API log emits `calls.log.received` with `call_id`, payload size, status.
+2. `data/calls.json` gets a new record (atomic write).
+3. `/v1/dashboard/*` reflects on next fetch.
+
+If webhook fails to land: check `fly logs -a robot-api` for auth or parse errors.
+If lands but dashboard doesn't update: verify `call_id` in `data/calls.json` (`fly ssh` + grep).
+
+### Unresolved
+- Exact payload nesting (verify by logging first real webhook).
+- HR retry count + backoff (idempotency makes this a non-issue).
+- Whether HR fires multiple events per call (`call.started`, `call.transferred`, `call.ended`) — we'd see extra logs if so.
