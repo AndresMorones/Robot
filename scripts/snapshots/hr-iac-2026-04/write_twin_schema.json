@@ -1,0 +1,1 @@
+{"data":{"event_id":"7021bfff-3e47-459c-b871-b0271ca04d9f","event_name":"Write to Twin","fields":[{"name":"tableName","type":"string","description":null,"required_for_execution":false},{"name":"columnValues","type":"array","description":null,"required_for_execution":false}],"defaults":null,"available_options":null}}

@@ -1,0 +1,13 @@
+{
+  "identifier": "MC-123456",
+  "identifier_type": "MC",
+  "eligible": true,
+  "manual_review_required": false,
+  "carrier_name": "ABC Trucking LLC",
+  "dot_number": "1234567",
+  "entity_type": "CARRIER",
+  "operating_status": "AUTHORIZED_FOR_PROPERTY",
+  "insurance_on_file": true,
+  "safety_rating": "SATISFACTORY",
+  "reason_codes": []
+}

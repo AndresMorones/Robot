@@ -1,0 +1,5085 @@
+{
+  "workflow_id": null,
+  "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+  "version_meta": {
+    "name": "Version 5",
+    "slug": "6fr8btizrig7",
+    "version_number": 5,
+    "is_published": false,
+    "is_live": false
+  },
+  "node_count": 19,
+  "nodes": [
+    {
+      "id": "019dc87a-8203-72a2-acf4-a5a868eae51b",
+      "persistent_id": "ea3b303a-9bc8-4865-82f3-a61ca1dbe2fc",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81f5-72f2-ac5f-f22f63c3390c",
+      "type": "prompt",
+      "name": "Prompt",
+      "sort_index": -1,
+      "is_complete": false,
+      "configuration": {
+        "values": [
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "nemantest@something.com"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "hola"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "myman"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "+12233456787"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "1233445566"
+                }
+              ]
+            }
+          ]
+        ],
+        "worksheet": {
+          "id": "0",
+          "name": "Sheet1"
+        },
+        "updateMode": "single",
+        "spreadsheet": {
+          "id": "1TVJIeJlF8MAMF-DHyEe4R06yMj-U2oiyQDxM96kyOWw",
+          "name": "neman_test"
+        }
+      },
+      "node_output": null,
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "prompt": [
+        {
+          "type": "h3",
+          "children": [
+            {
+              "bold": true,
+              "text": "Background"
+            }
+          ],
+          "index_node_id": "4ac3c5b44625ae1d",
+          "index_node_hash": "4ac3c5b44625ae1d9445c7e0c2ae30c47bc082e5279855e77fe2d47a7c4430a9"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "You are a "
+            },
+            {
+              "bold": true,
+              "text": "carrier sales representative"
+            },
+            {
+              "text": " working for "
+            },
+            {
+              "bold": true,
+              "text": "HappyRobot Logistics"
+            },
+            {
+              "text": "."
+            }
+          ],
+          "index_node_id": "244f7b0d5604f168",
+          "index_node_hash": "244f7b0d5604f168d925c6afec7bccd1b045b350d819fda854d1e0316129ac86"
+        },
+        {
+          "type": "h3",
+          "children": [
+            {
+              "bold": true,
+              "text": "Goal"
+            }
+          ],
+          "index_node_id": "2c5ca6d4f8805be1",
+          "index_node_hash": "2c5ca6d4f8805be16c383a2fbc4ee2ff55ab09459b6490c44169bf5f39b64acf"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "You will help the caller (the carrier) find a suitable load for their available trucks."
+            }
+          ],
+          "index_node_id": "c68230272e83fcd0",
+          "index_node_hash": "c68230272e83fcd0bb028cf448f633bd78b5a3e42bfb1fc2eec314c6db1e6a35"
+        },
+        {
+          "type": "hr",
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "index_node_id": "ecaca044bc2d1680",
+          "index_node_hash": "ecaca044bc2d16806e3cc57c5f7f110e580ff40db3cc5be339465def75824f05"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "\n"
+            },
+            {
+              "bold": true,
+              "text": " You Will Operate"
+            }
+          ],
+          "index_node_id": "88734157c02dfefc",
+          "index_node_hash": "88734157c02dfefc45e087af4951ffd3c8f1228748bd223c0fb80ab96fe3d098"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "bold": true,
+              "text": "Introduction"
+            },
+            {
+              "text": "\n Caller will most likely call on a load they saw on an online posting."
+            }
+          ],
+          "index_node_id": "1adba4c674e3fbd6",
+          "index_node_hash": "1adba4c674e3fbd65bb1bc73a91ac2ea574605ff5c7d5ee36b06a283f729795f"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "bold": true,
+              "text": "Getting load number"
+            },
+            {
+              "text": "\n Ask for the load's "
+            },
+            {
+              "text": "reference number",
+              "italic": true
+            },
+            {
+              "text": ":"
+            }
+          ],
+          "index_node_id": "6e04724b5b0c3286",
+          "index_node_hash": "6e04724b5b0c3286cb5017a088d1acc629bf412f42d46b939cb35c8e1a0ee5c2"
+        },
+        {
+          "type": "blockquote",
+          "children": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "\u201cDo you see a reference number on that posting?\u201d\n Wait for the caller to respond."
+                }
+              ]
+            }
+          ],
+          "index_node_id": "4bf605f8e1d18488",
+          "index_node_hash": "4bf605f8e1d1848824e3f981b8cc546f5b1432e7b2617eda9ec7ad643fdb98e5"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "If they don't see a reference number, ask them this:"
+            }
+          ],
+          "index_node_id": "557f98fe028684f3",
+          "index_node_hash": "557f98fe028684f3e805f069ec23e85025d0d552526fad27061c8f2115e23e2f"
+        },
+        {
+          "type": "blockquote",
+          "children": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "\u201cWhat is the lane, and trailer type?\u201d"
+                }
+              ]
+            }
+          ],
+          "index_node_id": "bafdeedcd49018eb",
+          "index_node_hash": "bafdeedcd49018ebce590b2b18bf76b182e85783b2987d47dcfc566a3e125fec"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "bold": true,
+              "text": ""
+            }
+          ],
+          "index_node_id": "94b0bb89b9b8fd2e",
+          "index_node_hash": "94b0bb89b9b8fd2ef02b212bb186e95da36dd1e2e29360c694ecb824614ae6c5"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "Confirm load details with the caller, using the example below as a style guide:"
+            }
+          ],
+          "index_node_id": "928f00cc28a933c1",
+          "index_node_hash": "928f00cc28a933c171d5c2875447dd4830662760df91d493cc458662895fc0bf"
+        },
+        {
+          "type": "blockquote",
+          "children": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "\u201cAlright, so this is a partial load. Menasha, Wisconsin to Ada, Michigan. Picks up tomorrow in Menasha, Wisconsin at 3 PM, delivers Friday, July 12th in Ada, Michigan, 24 hours, first come, first served. It's freight of all kinds weighing forty thousand pounds. We need a van, trailer needs to be at least 53 feet long. Driver will need load bars, and, um, important, they need TWIC. I have thirteen hundred on this one \u2014 would you like to book the load?\u201d"
+                }
+              ]
+            }
+          ],
+          "index_node_id": "06e21c2ba24d42d0",
+          "index_node_hash": "06e21c2ba24d42d07af29aa560011a542bbdcd8890f562a4b60586d659f1bab2"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "If the load works for the caller, transfer them to your colleague."
+            }
+          ],
+          "index_node_id": "b186519023fc38e7",
+          "index_node_hash": "b186519023fc38e77ee64d173445f5cff5d27242d498e8c79608ab5cb1b9b54d"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "If the load does not work, let the caller know that if anything changes, someone from your team will call them back."
+            }
+          ],
+          "index_node_id": "2289d85dd1c37654",
+          "index_node_hash": "2289d85dd1c376543af860a13652cf45647d21300789d26b9544e3262a5ccf98"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "Remind them to visit "
+            },
+            {
+              "bold": true,
+              "text": "\u201cHappyRobotLoads.com\u201d"
+            },
+            {
+              "text": " for available loads.\n Wait for the caller to respond."
+            }
+          ],
+          "index_node_id": "7bb4dc22c1504e19",
+          "index_node_hash": "7bb4dc22c1504e19d90cf1d055f1c30806f3dc274df8fae0033b5f78349fd2a0"
+        },
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "Thank the caller for their time and end the call."
+            }
+          ],
+          "index_node_id": "11498fe781338faf",
+          "index_node_hash": "11498fe781338faf84045b57533f9df0223a699bff896bf8c32fac2c33cdb356"
+        },
+        {
+          "type": "hr",
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "index_node_id": "ecaca044bc2d1680",
+          "index_node_hash": "ecaca044bc2d16806e3cc57c5f7f110e580ff40db3cc5be339465def75824f05"
+        },
+        {
+          "type": "h3",
+          "children": [
+            {
+              "bold": true,
+              "text": "Style"
+            }
+          ],
+          "index_node_id": "7719b3dbfd528f76",
+          "index_node_hash": "7719b3dbfd528f76c71d9de2c97ac48ffca2022fb355e75a2bb9e9a3c8c78241"
+        },
+        {
+          "type": "p",
+          "indent": 0,
+          "children": [
+            {
+              "text": "Keep your responses "
+            },
+            {
+              "bold": true,
+              "text": "concise and natural"
+            },
+            {
+              "text": ". "
+            }
+          ],
+          "index_node_id": "9725d8b2cc3fa121",
+          "listStyleType": "",
+          "index_node_hash": "9725d8b2cc3fa1211e7b50212c9562ee953fff24dc092a6e2bf32e693e96f850"
+        },
+        {
+          "type": "p",
+          "indent": 0,
+          "children": [
+            {
+              "text": "Speak as if you were "
+            },
+            {
+              "bold": true,
+              "text": "on the phone"
+            },
+            {
+              "text": ". "
+            }
+          ],
+          "index_node_id": "b156c112ec981166",
+          "listStyleType": "",
+          "index_node_hash": "b156c112ec9811667ac1a8d461de19e9fe43d4487a12b963bf45364c83ad5f34"
+        },
+        {
+          "type": "p",
+          "indent": 0,
+          "children": [
+            {
+              "text": "Use "
+            },
+            {
+              "bold": true,
+              "text": "simple, conversational language"
+            },
+            {
+              "text": " \u2014 a few filler words are fine (\u201cokay\u201d, \u201calright\u201d, \u201csure thing\u201d). "
+            }
+          ],
+          "index_node_id": "23fe61d38f9f3bfb",
+          "listStyleType": "",
+          "index_node_hash": "23fe61d38f9f3bfb66a5dc1ec8f443514a7d63aa9149cd3d80b0e824c686a70b"
+        },
+        {
+          "type": "p",
+          "indent": 0,
+          "children": [
+            {
+              "text": "Avoid sounding robotic or overly formal."
+            }
+          ],
+          "index_node_id": "1e727c84f11183bf",
+          "listStyleType": "",
+          "index_node_hash": "1e727c84f11183bf6988af91317de76e9b4445a26b79d602210d02d0316a98f1"
+        },
+        {
+          "id": "w9ZSAyTijO",
+          "type": "p",
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "index_node_id": "94b0bb89b9b8fd2e",
+          "index_node_hash": "94b0bb89b9b8fd2ef02b212bb186e95da36dd1e2e29360c694ecb824614ae6c5"
+        }
+      ],
+      "prompt_md": "### **Background**\n\nYou are a **carrier sales representative** working for **HappyRobot Logistics**.\n\n### **Goal**\n\nYou will help the caller (the carrier) find a suitable load for their available trucks.\n\n***\n\n\\\n **You Will Operate**\n\n**Introduction**\n Caller will most likely call on a load they saw on an online posting.\n\n**Getting load number**\n Ask for the load's _reference number_:\n\n> \u201cDo you see a reference number on that posting?\u201d\n>  Wait for the caller to respond.\n\nIf they don't see a reference number, ask them this:\n\n> \u201cWhat is the lane, and trailer type?\u201d\n\n\n\nConfirm load details with the caller, using the example below as a style guide:\n\n> \u201cAlright, so this is a partial load. Menasha, Wisconsin to Ada, Michigan. Picks up tomorrow in Menasha, Wisconsin at 3 PM, delivers Friday, July 12th in Ada, Michigan, 24 hours, first come, first served. It's freight of all kinds weighing forty thousand pounds. We need a van, trailer needs to be at least 53 feet long. Driver will need load bars, and, um, important, they need TWIC. I have thirteen hundred on this one \u2014 would you like to book the load?\u201d\n\nIf the load works for the caller, transfer them to your colleague.\n\nIf the load does not work, let the caller know that if anything changes, someone from your team will call them back.\n\nRemind them to visit **\u201cHappyRobotLoads.com\u201d** for available loads.\n Wait for the caller to respond.\n\nThank the caller for their time and end the call.\n\n***\n\n### **Style**\n\n* Keep your responses **concise and natural**. \n\n* Speak as if you were **on the phone**. \n\n* Use **simple, conversational language** \u2014 a few filler words are fine (\u201cokay\u201d, \u201calright\u201d, \u201csure thing\u201d). \n\n* Avoid sounding robotic or overly formal.\n\n",
+      "initial_message": [
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "text": "Thank you for calling Happy Robot Logistics, how can I help?"
+            }
+          ]
+        }
+      ],
+      "model": {
+        "type": "static",
+        "static": {
+          "id": "turbo-one",
+          "name": "gpt-4.1",
+          "description": "Latency: ~800ms - Recommended for most scenarios"
+        }
+      }
+    },
+    {
+      "id": "019dc87a-81e8-75ce-b747-d1551e39fa13",
+      "persistent_id": "04f47385-8bb6-4b9d-8103-01ad28c6b223",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": null,
+      "type": "action",
+      "name": "Web call",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "params": [],
+        "samplePayload": {
+          "caller_name": "John Smith",
+          "caller_phone": "+15551234567"
+        }
+      },
+      "node_output": {
+        "id": "019dc8a9-f0f9-7da1-9410-f5aa8f917f8c",
+        "node_id": "019dc87a-81e8-75ce-b747-d1551e39fa13",
+        "type": null,
+        "data": {
+          "data": {
+            "caller_name": "John Smith",
+            "caller_phone": "+15551234567"
+          },
+          "room_name": "48f279dc-97fc-4014-85da-449ec7d9e1df_webcall_1",
+          "to_number": "web",
+          "from_number": "web"
+        },
+        "timestamp": "2026-04-26T07:21:13.719Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "6e32e01e-722f-4b8b-9372-500b845686d1",
+      "integration_id": "0192e48a-81d8-71cb-93dc-efd8ad63d86b",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81ea-7781-bac9-084a995e67e3",
+      "persistent_id": "019dc58d-4c4e-73c1-b136-293bd448006e",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8204-73cd-ada4-258cb16a72cf",
+      "type": "action",
+      "name": "Fetch Loads ",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "limit": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "20"
+              }
+            ]
+          }
+        ],
+        "filters": [
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "acce2213-a328-452d-8197-10c70297e60e",
+                    "variable_id": "origin_state"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "origin_state",
+            "operator": "equals"
+          },
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "acce2213-a328-452d-8197-10c70297e60e",
+                    "variable_id": "origin_city"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "origin_city",
+            "operator": "equals"
+          },
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "acce2213-a328-452d-8197-10c70297e60e",
+                    "variable_id": "destination_state"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "destination_state",
+            "operator": "equals"
+          },
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "acce2213-a328-452d-8197-10c70297e60e",
+                    "variable_id": "destination_city"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "destination_city",
+            "operator": "equals"
+          },
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "acce2213-a328-452d-8197-10c70297e60e",
+                    "variable_id": "equipment_type"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "equipment_type",
+            "operator": "equals"
+          }
+        ],
+        "tableName": "loads",
+        "orderByColumn": "pickup_datetime",
+        "orderByDirection": "asc"
+      },
+      "node_output": {
+        "id": "019dc8a9-f3f9-787a-9182-95b96d7ca01d",
+        "node_id": "019dc87a-81ea-7781-bac9-084a995e67e3",
+        "type": null,
+        "data": {
+          "rows": [],
+          "count": 0
+        },
+        "timestamp": "2026-04-26T07:21:14.488Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "ebd81a7b-ace2-4225-9410-b657ce8ea412",
+      "integration_id": "82409919-9100-4b06-8a52-dfb6eb79fbcb",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81ee-7ccd-8754-3c42c979fcd1",
+      "persistent_id": "019dc69f-e1c5-7183-a6ad-af52e4af8003",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81f5-72f2-ac5f-f22f63c3390c",
+      "type": "action",
+      "name": "Initiate New Contact",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "data": [],
+        "ttl_days": 10,
+        "phone_number": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "MC-pending"
+              }
+            ]
+          }
+        ],
+        "enable_feedback": false,
+        "enable_location": false,
+        "enable_ttl_days": false,
+        "enable_transcript": false,
+        "enable_transfer_summary": false
+      },
+      "node_output": {
+        "id": "019dc8a9-f249-7135-ba00-abaf34bee7bc",
+        "node_id": "019dc87a-81ee-7ccd-8754-3c42c979fcd1",
+        "type": null,
+        "data": {
+          "data": {
+            "error": "Internal server error"
+          }
+        },
+        "timestamp": "2026-04-26T07:21:14.057Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "49d7c629-bf96-47c2-ad84-1a44600b9b6e",
+      "integration_id": "d0e2c0bb-412e-4ff3-8af2-3e7e7725936d",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81f0-7b2c-9c67-2c8111ec527c",
+      "persistent_id": "b988b2f4-5ea6-4575-a9e7-2930d0f2bcf1",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8205-7334-ba08-65f0d8161e53",
+      "type": "action",
+      "name": "GET MC Number",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "url": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "https://mobile.fmcsa.dot.gov/qc/services/carriers/"
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "c1e69591-7877-4b09-b911-7f82d83c76de",
+                "variable_id": "mc_number"
+              },
+              {
+                "text": "?webKey=cdc33e44d693a3a58451898d4ec9df862c65b954"
+              }
+            ]
+          }
+        ],
+        "params": [],
+        "headers": [],
+        "authType": "none",
+        "ignore5XX": true
+      },
+      "node_output": {
+        "id": "019dc8a9-f48d-78d6-a0df-47c43f5188ae",
+        "node_id": "019dc87a-81f0-7b2c-9c67-2c8111ec527c",
+        "type": null,
+        "data": {
+          "_links": {
+            "self": {
+              "href": "https://mobile.fmcsa.dot.gov/qc/services/carriers"
+            },
+            "searchByName": {
+              "href": "https://mobile.fmcsa.dot.gov/qc/services/carriers/name/%7Bname%7D"
+            },
+            "lookupBydotNumber": {
+              "href": "https://mobile.fmcsa.dot.gov/qc/services/carriers/id/%7BdotNumber%7D"
+            }
+          },
+          "content": null,
+          "retrievalDate": "2026-04-26T07:21:14.629+0000"
+        },
+        "timestamp": "2026-04-26T07:21:14.635Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f2a-b1f5-7e65-8203-86c5cd8838b6",
+      "integration_id": "01926a93-064a-7a00-81b2-8ab78d5907e0",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81f1-79f1-a2f4-aa35f25d3a4e",
+      "persistent_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8200-77c6-b038-c615e04928de",
+      "type": "action",
+      "name": "Extract",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "input": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "transcript"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "prompt": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "You are a data extraction assistant. From the completed call transcript, extract the following fields:"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "1. reference_number \u2014 The load reference number discussed (e.g., REF09460). Empty if none was mentioned."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "2. mc_number \u2014 The carrier's MC number provided on the call."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "3. carrier_name \u2014 The legal name of the carrier company as confirmed on the call."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "4. load_origin \u2014 The origin city and state of the load discussed."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "5. load_destination \u2014 The destination city and state of the load discussed."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "6. equipment_type \u2014 The equipment/trailer type discussed (e.g., reefer, dry van, flatbed)."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "7. listed_rate \u2014 The initial rate offered by the agent (as a number, no dollar sign)."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "8. agreed_rate \u2014 The final agreed rate if a deal was made. Empty if no deal."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "9. num_negotiation_rounds \u2014 How many counter-offer rounds occurred (0, 1, 2, or 3)."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "10. counter_offers \u2014 Comma-separated list of counter-offer amounts from the carrier."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "11. booking_decision \u2014 \"yes\" if they agreed to book, \"no\" if not."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "12. decline_reason \u2014 If booking_decision is no, capture why (e.g., rate too high, not interested, not qualified). Empty if booked."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "13. call_outcome \u2014 Summary outcome: booked, negotiation_failed, not_qualified, no_match, declined, or abandoned."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "14. call_duration \u2014 The call duration in seconds from the agent's duration variable."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Provide your answer as JSON with these exact keys."
+              }
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reference_number",
+            "example": "REF09460",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The load reference number discussed on the call."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "mc_number",
+            "example": "1521248",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier's MC number provided on the call."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "carrier_name",
+            "example": "ABC Trucking LLC",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The legal name of the carrier company confirmed on the call."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "load_origin",
+            "example": "Columbus, OH",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The origin city and state of the load discussed."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "load_destination",
+            "example": "Cartersville, GA",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The destination city and state of the load discussed."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "equipment_type",
+            "example": "reefer",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The equipment/trailer type discussed (e.g., reefer, dry van, flatbed)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "listed_rate",
+            "example": "1830",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The initial rate offered by the agent."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "agreed_rate",
+            "example": "1750",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The final agreed rate if a deal was made. Empty if no deal."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "num_negotiation_rounds",
+            "example": "2",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "How many counter-offer rounds occurred (0, 1, 2, or 3)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "counter_offers",
+            "example": "1600, 1700",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Comma-separated list of counter-offer amounts from the carrier."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "booking_decision",
+            "example": "yes",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "\"yes\" if they agreed to book, \"no\" if they declined."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "decline_reason",
+            "example": "rate too high",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "If they said no, the reason. Empty if booked."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "call_outcome",
+            "example": "booked",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Summary outcome: booked, negotiation_failed, not_qualified, no_match, declined, or abandoned."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "call_duration",
+            "example": "120",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The call duration in seconds."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8a9-fbea-70e3-a96d-2d7d4738d85c",
+        "node_id": "019dc87a-81f1-79f1-a2f4-aa35f25d3a4e",
+        "type": null,
+        "data": {
+          "prompt": "You are a data extraction assistant. From the completed call transcript, extract the following fields:\n\n1. reference_number \u2014 The load reference number discussed (e.g., REF09460). Empty if none was mentioned.\n2. mc_number \u2014 The carrier's MC number provided on the call.\n3. carrier_name \u2014 The legal name of the carrier company as confirmed on the call.\n4. load_origin \u2014 The origin city and state of the load discussed.\n5. load_destination \u2014 The destination city and state of the load discussed.\n6. equipment_type \u2014 The equipment/trailer type discussed (e.g., reefer, dry van, flatbed).\n7. listed_rate \u2014 The initial rate offered by the agent (as a number, no dollar sign).\n8. agreed_rate \u2014 The final agreed rate if a deal was made. Empty if no deal.\n9. num_negotiation_rounds \u2014 How many counter-offer rounds occurred (0, 1, 2, or 3).\n10. counter_offers \u2014 Comma-separated list of counter-offer amounts from the carrier.\n11. booking_decision \u2014 \"yes\" if they agreed to book, \"no\" if not.\n12. decline_reason \u2014 If booking_decision is no, capture why (e.g., rate too high, not interested, not qualified). Empty if booked.\n13. call_outcome \u2014 Summary outcome: booked, negotiation_failed, not_qualified, no_match, declined, or abandoned.\n14. call_duration \u2014 The call duration in seconds from the agent's duration variable.\n\nProvide your answer as JSON with these exact keys.",
+          "response": {
+            "mc_number": "",
+            "agreed_rate": "",
+            "listed_rate": "",
+            "load_origin": "",
+            "call_outcome": "abandoned",
+            "carrier_name": "",
+            "call_duration": "",
+            "counter_offers": "",
+            "decline_reason": "",
+            "equipment_type": "",
+            "booking_decision": "no",
+            "load_destination": "",
+            "reference_number": "",
+            "num_negotiation_rounds": "0"
+          },
+          "_llm_usage": {
+            "model": "gpt-4.1",
+            "input_tokens": 2467,
+            "output_tokens": 142,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 0,
+            "uncached_input_tokens": 2467
+          }
+        },
+        "timestamp": "2026-04-26T07:21:16.522Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f30-36a3-7394-8f73-eeead5d7f948",
+      "integration_id": "01926a90-7f9e-785e-891c-51338a7aa70c",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81f9-7796-b845-bc3411e26c77",
+      "persistent_id": "019dbf2d-4518-7b36-9c3c-4c985d8fb0b9",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81fb-77d2-9fa8-962a15505f13",
+      "type": "action",
+      "name": "Case Health Score",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "input": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "transcript"
+              }
+            ]
+          }
+        ],
+        "model": {
+          "type": "static",
+          "static": {
+            "id": "gpt-4.1",
+            "name": "GPT-4.1"
+          }
+        },
+        "prompt": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "You are a call quality analyst for a freight brokerage. Analyze the transcript and call metadata to produce a Case Health Score from 0 to 100."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "## Scoring Framework"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "### Sentiment Trajectory (40% weight) \u2014 THE MOST IMPORTANT FACTOR"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Divide the transcript into thirds (opening, middle, closing) and evaluate the CARRIER's sentiment at each stage. The DIRECTION of sentiment change matters more than the absolute level:"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Starts LOW, ends HIGH (e.g. skeptical carrier who warms up and books): BONUS +15 to +25 points. This is a GOOD call \u2014 the agent recovered a difficult situation."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Stays consistently POSITIVE throughout: +10 to +20 points."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Stays consistently NEUTRAL throughout: +0 points (baseline)."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Starts HIGH, ends LOW (e.g. interested carrier who becomes frustrated or declines): PENALTY -20 to -35 points. This is a RED FLAG \u2014 something went wrong during the call."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Stays consistently NEGATIVE or FRUSTRATED throughout: -15 to -25 points."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "### Call Outcome (30% weight)"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- load_booked: +25 to +30 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- carrier_declined (politely, no friction): +0 to +5 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- no_load_match (carrier satisfied with service, just no match): +5 to +10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- negotiation_failed (respectful back-and-forth): -5 to -10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- negotiation_failed (contentious): -15 to -25 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- carrier_not_qualified: -5 to -10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- abandoned (caller hung up abruptly): -20 to -30 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "### Negotiation Friction (20% weight)"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 0-1 negotiation rounds with agreement: +10 to +15 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 2-3 rounds with eventual agreement: +5 to +10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 3+ rounds with no agreement: -5 to -15 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Counter offers that escalate (carrier getting more aggressive): -10 to -20 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Counter offers that converge (gap narrowing): +5 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "### Engagement Quality (10% weight)"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Carrier was engaged, asked questions, participated: +5 to +10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Short, terse responses from carrier: -5 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Carrier interrupted agent repeatedly or was confrontational: -10 points"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "## Score Calibration"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Start at 50 (neutral baseline) and apply adjustments. Clamp final score between 0 and 100."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 80-100: Excellent \u2014 productive call, positive carrier experience"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 60-79: Good \u2014 reasonable interaction, minor friction"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 40-59: Neutral \u2014 no strong signals either way, or mixed signals"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 20-39: Poor \u2014 significant friction, carrier dissatisfied"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- 0-19: Critical \u2014 abandoned, very hostile, or completely failed interaction"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "## Additional context"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Call outcome from extraction: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.call_outcome"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Booking decision: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.booking_decision"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Decline reason: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.decline_reason"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Negotiation rounds: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.num_negotiation_rounds"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Counter offers: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.counter_offers"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Listed rate: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.listed_rate"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Agreed rate: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.agreed_rate"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "User filler message ratio: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "user_filler_message_ratio"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Assistant cut message ratio: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "assistant_cut_message_ratio"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Call end initiator: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "call_end_initiator"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Call end event: "
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "call_end_event"
+              }
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "case_health_score",
+            "type": "number",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Overall case health score from 0 to 100. Integer only. 50 = neutral baseline."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "sentiment_start",
+            "type": "string",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Carrier sentiment in the opening third of the call. One of: positive, neutral, negative, frustrated"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "sentiment_end",
+            "type": "string",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Carrier sentiment in the closing third of the call. One of: positive, neutral, negative, frustrated"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "sentiment_trajectory",
+            "type": "string",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Arrow notation showing how carrier sentiment evolved. Examples: positive\u2192positive, neutral\u2192frustrated, negative\u2192positive, frustrated\u2192neutral\u2192positive"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "health_score_reasoning",
+            "type": "string",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "2-3 sentence explanation of the score. Reference specific moments in the transcript that drove the score up or down."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8aa-0ca5-7837-8ef3-c9a68d00cdd5",
+        "node_id": "019dc87a-81f9-7796-b845-bc3411e26c77",
+        "type": null,
+        "data": {
+          "prompt": "You are a call quality analyst for a freight brokerage. Analyze the transcript and call metadata to produce a Case Health Score from 0 to 100.\n\n## Scoring Framework\n\n### Sentiment Trajectory (40% weight) \u2014 THE MOST IMPORTANT FACTOR\nDivide the transcript into thirds (opening, middle, closing) and evaluate the CARRIER's sentiment at each stage. The DIRECTION of sentiment change matters more than the absolute level:\n- Starts LOW, ends HIGH (e.g. skeptical carrier who warms up and books): BONUS +15 to +25 points. This is a GOOD call \u2014 the agent recovered a difficult situation.\n- Stays consistently POSITIVE throughout: +10 to +20 points.\n- Stays consistently NEUTRAL throughout: +0 points (baseline).\n- Starts HIGH, ends LOW (e.g. interested carrier who becomes frustrated or declines): PENALTY -20 to -35 points. This is a RED FLAG \u2014 something went wrong during the call.\n- Stays consistently NEGATIVE or FRUSTRATED throughout: -15 to -25 points.\n\n### Call Outcome (30% weight)\n- load_booked: +25 to +30 points\n- carrier_declined (politely, no friction): +0 to +5 points\n- no_load_match (carrier satisfied with service, just no match): +5 to +10 points\n- negotiation_failed (respectful back-and-forth): -5 to -10 points\n- negotiation_failed (contentious): -15 to -25 points\n- carrier_not_qualified: -5 to -10 points\n- abandoned (caller hung up abruptly): -20 to -30 points\n\n### Negotiation Friction (20% weight)\n- 0-1 negotiation rounds with agreement: +10 to +15 points\n- 2-3 rounds with eventual agreement: +5 to +10 points\n- 3+ rounds with no agreement: -5 to -15 points\n- Counter offers that escalate (carrier getting more aggressive): -10 to -20 points\n- Counter offers that converge (gap narrowing): +5 points\n\n### Engagement Quality (10% weight)\n- Carrier was engaged, asked questions, participated: +5 to +10 points\n- Short, terse responses from carrier: -5 points\n- Carrier interrupted agent repeatedly or was confrontational: -10 points\n\n## Score Calibration\nStart at 50 (neutral baseline) and apply adjustments. Clamp final score between 0 and 100.\n- 80-100: Excellent \u2014 productive call, positive carrier experience\n- 60-79: Good \u2014 reasonable interaction, minor friction\n- 40-59: Neutral \u2014 no strong signals either way, or mixed signals\n- 20-39: Poor \u2014 significant friction, carrier dissatisfied\n- 0-19: Critical \u2014 abandoned, very hostile, or completely failed interaction\n\n## Additional context\nCall outcome from extraction: \nBooking decision: \nDecline reason: \nNegotiation rounds: \nCounter offers: \nListed rate: \nAgreed rate: \nUser filler message ratio: \nAssistant cut message ratio: \nCall end initiator: \nCall end event: ",
+          "response": {
+            "sentiment_end": "neutral",
+            "sentiment_start": "neutral",
+            "case_health_score": "50",
+            "sentiment_trajectory": "neutral\u2192neutral",
+            "health_score_reasoning": "No transcript or call metadata was provided, so a neutral baseline score of 50 is assigned. Without details on sentiment, negotiation, or outcome, no positive or negative adjustments can be made."
+          },
+          "_llm_usage": {
+            "model": "gpt-4.1",
+            "input_tokens": 875,
+            "output_tokens": 72,
+            "reasoning_tokens": 0,
+            "cached_input_tokens": 0,
+            "uncached_input_tokens": 875
+          }
+        },
+        "timestamp": "2026-04-26T07:21:20.805Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f30-36a3-7394-8f73-eeead5d7f948",
+      "integration_id": "01926a90-7f9e-785e-891c-51338a7aa70c",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81ec-7ece-8ba7-cf0b3626ae40",
+      "persistent_id": "019dc598-424d-7ac7-88c4-8fb53288c376",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8207-7ec6-ba61-18f30b5a86b1",
+      "type": "action",
+      "name": "Get load",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "filters": [
+          {
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "c7c2dcb2-52f2-4da5-bfe7-c542eaf9569e",
+                    "variable_id": "reference_number"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "column": "load_id",
+            "operator": "equals"
+          }
+        ],
+        "tableName": "loads"
+      },
+      "node_output": {
+        "id": "019dc8a9-f412-7bdf-9f5a-65abc78b84a3",
+        "node_id": "019dc87a-81ec-7ece-8ba7-cf0b3626ae40",
+        "type": null,
+        "data": {
+          "rows": [],
+          "count": 0
+        },
+        "timestamp": "2026-04-26T07:21:14.512Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "ebd81a7b-ace2-4225-9410-b657ce8ea412",
+      "integration_id": "82409919-9100-4b06-8a52-dfb6eb79fbcb",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81fe-7ab7-946c-be2a1ed28355",
+      "persistent_id": "019dc167-68b5-71f9-b6b0-f2c364827cdf",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8204-7d8f-8f2f-0eed8d5279b5",
+      "type": "action",
+      "name": "Calculate Carrier Cost",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "code": "\r\ntry:\r\n    loadboard_rate = float(input_data.get('loadboard_rate', 0) or 0)\r\n    carrier_offer  = float(input_data.get('carrier_offer', 0) or 0)\r\n    round_number   = int(input_data.get('round_number', 1) or 1)\r\n    prior_offers   = input_data.get('prior_broker_offers') or []\r\n    if not isinstance(prior_offers, list):\r\n        prior_offers = []\r\n    load_ref       = str(input_data.get('load_reference') or 'unknown')\r\n    floor_pct      = float(input_data.get('negotiation_floor_pct', 0.10) or 0.10)\r\n    max_rounds     = int(input_data.get('max_negotiation_rounds', 3) or 3)\r\n    parse_ok = True\r\nexcept (ValueError, TypeError):\r\n    parse_ok = False\r\n\r\n# ---------- 2. Edge-case branch ----------\r\nif not parse_ok:\r\n    output = {\r\n        'action': 'ESCALATE',\r\n        'counter_offer': None,\r\n        'round_number_next': 1,\r\n        'scripted_message': \"Hold on a second while I double-check something with my team.\",\r\n        'rationale_code': 'INPUT_PARSE_ERROR'\r\n    }\r\nelif carrier_offer <= 0:\r\n    # Carrier spoke but didn't state a number \u2014 agent should ask for one\r\n    output = {\r\n        'action': 'REQUEST_OFFER',\r\n        'counter_offer': None,\r\n        'round_number_next': round_number,\r\n        'scripted_message': \"I hear you \u2014 what number are you thinking? Give me a rate and I'll see what I can do on my end.\",\r\n        'rationale_code': 'NO_OFFER_PROVIDED'\r\n    }\r\nelif carrier_offer < 0 or loadboard_rate <= 0:\r\n    output = {\r\n        'action': 'ESCALATE',\r\n        'counter_offer': None,\r\n        'round_number_next': round_number,\r\n        'scripted_message': \"Hold on, let me double-check this load with my team real quick.\",\r\n        'rationale_code': 'INVALID_LOAD_OR_OFFER'\r\n    }\r\nelif carrier_offer > loadboard_rate * 3:\r\n    # Likely LLM parse error (e.g., heard \"twenty-four hundred\" as 24000, or cents/dollars confusion)\r\n    output = {\r\n        'action': 'ESCALATE',\r\n        'counter_offer': None,\r\n        'round_number_next': round_number,\r\n        'scripted_message': \"Sorry, could you say that rate one more time? I want to make sure I caught the number right.\",\r\n        'rationale_code': 'OFFER_OUT_OF_RANGE'\r\n    }\r\nelse:\r\n    # ---------- 3. Normal negotiation logic ----------\r\n    round_number = max(1, min(round_number, max_rounds))  # clamp defensively\r\n    floor_rate   = loadboard_rate * (1 - floor_pct)\r\n    round_discounts  = {1: 0.05, 2: 0.08, 3: floor_pct}\r\n    current_discount = round_discounts.get(round_number, floor_pct)\r\n    proposed_counter = int(round(loadboard_rate * (1 - current_discount)))\r\n\r\n    if carrier_offer >= loadboard_rate:\r\n        output = {\r\n            'action': 'ACCEPT',\r\n            'counter_offer': None,\r\n            'round_number_next': round_number,\r\n            'scripted_message': f\"Perfect, we've got a deal at {int(round(carrier_offer))} dollars. Let me transfer you to our booking team to finalize.\",\r\n            'rationale_code': 'CARRIER_MET_ASK'\r\n        }\r\n    elif carrier_offer >= floor_rate:\r\n        if round_number >= max_rounds or carrier_offer >= proposed_counter:\r\n            output = {\r\n                'action': 'ACCEPT',\r\n                'counter_offer': None,\r\n                'round_number_next': round_number,\r\n                'scripted_message': f\"Alright, I can make {int(round(carrier_offer))} work. Let me get you to our booking team.\",\r\n                'rationale_code': 'WITHIN_FLOOR_ACCEPT'\r\n            }\r\n        else:\r\n            output = {\r\n                'action': 'COUNTER',\r\n                'counter_offer': proposed_counter,\r\n                'round_number_next': round_number + 1,\r\n                'scripted_message': f\"I hear you, but the best I can come down to right now is {proposed_counter}. Does that work?\",\r\n                'rationale_code': 'WITHIN_FLOOR_COUNTER'\r\n            }\r\n    elif round_number >= max_rounds:\r\n        output = {\r\n            'action': 'REJECT',\r\n            'counter_offer': None,\r\n            'round_number_next': round_number,\r\n            'scripted_message': \"I appreciate you working with me, but I can't go that low on this one. Keep checking our postings \u2014 we get new loads up every day.\",\r\n            'rationale_code': 'ROUND_CAP_BELOW_FLOOR'\r\n        }\r\n    else:\r\n        output = {\r\n            'action': 'COUNTER',\r\n            'counter_offer': proposed_counter,\r\n            'round_number_next': round_number + 1,\r\n            'scripted_message': f\"That's a little tight for me. I can come in at {proposed_counter}. Can you make that work?\",\r\n            'rationale_code': 'BELOW_FLOOR_COUNTER'\r\n        }",
+        "input_data": [
+          {
+            "key": "load_reference",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+                    "variable_id": "load_reference"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "loadboard_rate",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+                    "variable_id": "loadboard_rate"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "carrier_offer",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+                    "variable_id": "carrier_offer"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "round_number",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+                    "variable_id": "round_number"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "prior_broker_offers",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+                    "variable_id": "prior_broker_offers"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "negotiation_floor_pct",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "use_case_variables",
+                    "variable_id": "negotiation_floor_pct"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "max_negotiation_rounds",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "use_case_variables",
+                    "variable_id": "max_negotiation_rounds"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8a9-f3ff-7e8e-9887-de753545200e",
+        "node_id": "019dc87a-81fe-7ab7-946c-be2a1ed28355",
+        "type": null,
+        "data": {
+          "action": "ESCALATE",
+          "counter_offer": null,
+          "rationale_code": "INPUT_PARSE_ERROR",
+          "scripted_message": "Hold on a second while I double-check something with my team.",
+          "round_number_next": 1
+        },
+        "timestamp": "2026-04-26T07:21:14.495Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f27-3662-771e-817d-54e26f859ba1",
+      "integration_id": "01926a91-fd58-7305-8f41-eea4e4a4cdf9",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-8201-7f69-a4bc-4c67a4ef5654",
+      "persistent_id": "019dc6e1-b5a4-7c2d-a992-8562aeab34cc",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81fa-787a-aeee-1b547fc663c1",
+      "type": "action",
+      "name": "Write to Twin",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "tableName": "calls_log",
+        "columnValues": [
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "current",
+                    "variable_id": "run_id"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "call_id"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.mc_number"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "mc_number"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.carrier_name"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "carrier_name"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.reference_number"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "load_id"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.equipment_type"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "equipment_type"
+          },
+          {
+            "type": "float8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.listed_rate"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "pitched_loadboard_rate"
+          },
+          {
+            "type": "float8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.agreed_rate"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "agreed_rate"
+          },
+          {
+            "type": "int8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.num_negotiation_rounds"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "num_negotiation_rounds"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "63f6b048-9a9e-457d-a8fd-4fcd684405d9",
+                    "variable_id": "response.classification"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "call_outcome"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf39-a0d8-7a12-a038-51f331fd39d2",
+                    "variable_id": "response.classification"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "sentiment"
+          },
+          {
+            "type": "int8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf2d-4518-7b36-9c3c-4c985d8fb0b9",
+                    "variable_id": "response.case_health_score"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "case_health_score"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf2d-4518-7b36-9c3c-4c985d8fb0b9",
+                    "variable_id": "response.health_score_reasoning"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "audit_remarks"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.decline_reason"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "fmcsa_eligibility_failure_reason"
+          },
+          {
+            "type": "int8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                    "variable_id": "duration"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "duration_seconds"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                    "variable_id": "transcript"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "transcript"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf2d-4518-7b36-9c3c-4c985d8fb0b9",
+                    "variable_id": "response.sentiment_start"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "sentiment_start"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf2d-4518-7b36-9c3c-4c985d8fb0b9",
+                    "variable_id": "response.sentiment_trajectory"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "sentiment_trajectory"
+          },
+          {
+            "type": "text",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf38-f679-7de1-9b5e-31738470d536",
+                    "variable_id": "final_offer_position"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "final_offer_position"
+          },
+          {
+            "type": "float8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "019dbf38-f679-7de1-9b5e-31738470d536",
+                    "variable_id": "posted_price_increase"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "posted_price_increase"
+          },
+          {
+            "type": "float8",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                    "variable_id": "p90_latency_ms"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ],
+            "isPrimary": false,
+            "columnName": "p90_latency_ms"
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc6e1-b6bc-71e9-b034-fee0e567dce5",
+        "node_id": "019dc6e1-b5a4-7c2d-a992-8562aeab34cc",
+        "type": null,
+        "data": {
+          "table": "calls_log",
+          "success": true
+        },
+        "timestamp": "2026-04-25T23:02:54.394Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "7021bfff-3e47-459c-b871-b0271ca04d9f",
+      "integration_id": "82409919-9100-4b06-8a52-dfb6eb79fbcb",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-8200-77c6-b038-c615e04928de",
+      "persistent_id": "63f6b048-9a9e-457d-a8fd-4fcd684405d9",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81ee-7ccd-8754-3c42c979fcd1",
+      "type": "action",
+      "name": "Classify",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "tags": [
+          {
+            "name": "load_booked",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier agreed to the rate and was transferred to the booking team."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "negotiation_failed",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier and agent could not agree on rate after negotiation rounds."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "carrier_not_qualified",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier's FMCSA status was not authorized, MC number was invalid, or could not be verified."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "no_load_match",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "No available load matched what the carrier was looking for (lane, equipment type, or reference number not found)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "carrier_declined",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier declined the load for reasons other than rate \u2014 e.g., lane doesn't work, timing, equipment mismatch, or other."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "abandoned",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The call was abandoned, the caller hung up prematurely, or there was no meaningful conversation."
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "input": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "transcript"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "prompt": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "You are a call analytics assistant. Classify the completed call into exactly one of the following outcome categories based on the transcript:"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"load_booked\" \u2014 The carrier agreed to the rate and was transferred to booking."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"negotiation_failed\" \u2014 The carrier and agent could not agree on rate after multiple negotiation rounds."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"carrier_not_qualified\" \u2014 The carrier's operating authority was not active, MC number was invalid, or could not be verified."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"no_load_match\" \u2014 No available load matched the carrier's requested lane, equipment type, or reference number."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"carrier_declined\" \u2014 The carrier declined the load for reasons other than rate (e.g., timing, lane, equipment mismatch)."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- \"abandoned\" \u2014 The call was abandoned, ended prematurely, or had no meaningful conversation."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Return exactly one tag."
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8aa-07da-7b65-a27d-05a0e9bd6e48",
+        "node_id": "019dc87a-8200-77c6-b038-c615e04928de",
+        "type": null,
+        "data": {
+          "input": "",
+          "prompt": "You are a call analytics assistant. Classify the completed call into exactly one of the following outcome categories based on the transcript:\n\n- \"load_booked\" \u2014 The carrier agreed to the rate and was transferred to booking.\n- \"negotiation_failed\" \u2014 The carrier and agent could not agree on rate after multiple negotiation rounds.\n- \"carrier_not_qualified\" \u2014 The carrier's operating authority was not active, MC number was invalid, or could not be verified.\n- \"no_load_match\" \u2014 No available load matched the carrier's requested lane, equipment type, or reference number.\n- \"carrier_declined\" \u2014 The carrier declined the load for reasons other than rate (e.g., timing, lane, equipment mismatch).\n- \"abandoned\" \u2014 The call was abandoned, ended prematurely, or had no meaningful conversation.\n\nReturn exactly one tag.\n\nThese are the available tags and their descriptions:\n- load_booked: The carrier agreed to the rate and was transferred to the booking team.\n- negotiation_failed: The carrier and agent could not agree on rate after negotiation rounds.\n- carrier_not_qualified: The carrier's FMCSA status was not authorized, MC number was invalid, or could not be verified.\n- no_load_match: No available load matched what the carrier was looking for (lane, equipment type, or reference number not found).\n- carrier_declined: The carrier declined the load for reasons other than rate \u2014 e.g., lane doesn't work, timing, equipment mismatch, or other.\n- abandoned: The call was abandoned, the caller hung up prematurely, or there was no meaningful conversation.\n",
+          "response": {
+            "reasoning": "Transcript missing or empty; no conversation to analyze, classify as abandoned due to lack of interaction.",
+            "classification": "abandoned"
+          },
+          "_llm_usage": {
+            "model": "gpt-5-mini",
+            "input_tokens": 519,
+            "output_tokens": 430,
+            "reasoning_tokens": 384,
+            "cached_input_tokens": 0,
+            "uncached_input_tokens": 519
+          }
+        },
+        "timestamp": "2026-04-26T07:21:19.578Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f30-36e3-7f14-9c3a-8d9a1003e532",
+      "integration_id": "01926a90-7f9e-785e-891c-51338a7aa70c",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81fb-77d2-9fa8-962a15505f13",
+      "persistent_id": "019dbf3c-d241-723e-87eb-f09b702e4805",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81f1-79f1-a2f4-aa35f25d3a4e",
+      "type": "action",
+      "name": "Computations",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "code": "# --- Inputs ---\ntry:\n    listed_rate = float(input_data.get('listed_rate', 0) or 0)\nexcept (ValueError, TypeError):\n    listed_rate = 0.0\n\ntry:\n    agreed_rate = float(input_data.get('agreed_rate', 0) or 0)\nexcept (ValueError, TypeError):\n    agreed_rate = 0.0\n\n# --- Calculations ---\n\n# Max buy: the absolute floor (10% below listed rate)\nmax_buy = round(listed_rate * 0.90, 2)\n\n# Discount percentage: how far below listed the agreed rate is\nif listed_rate > 0:\n    discount_pct = round(((listed_rate - agreed_rate) / listed_rate) * 100, 2)\nelse:\n    discount_pct = 0.0\n\n# Add more calculations here as needed\n# e.g. margin, cost_per_mile, etc.\n\n# --- Output ---\noutput = {\n    'max_buy': max_buy,\n    'discount_pct': discount_pct,\n    'listed_rate': listed_rate,\n    'agreed_rate': agreed_rate\n}",
+        "input_data": [
+          {
+            "key": "listed_rate",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.listed_rate"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "agreed_rate",
+            "value": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  },
+                  {
+                    "type": "variable",
+                    "children": [
+                      {
+                        "text": ""
+                      }
+                    ],
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.agreed_rate"
+                  },
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8aa-088e-7f2a-b2c1-6c7da939a99a",
+        "node_id": "019dc87a-81fb-77d2-9fa8-962a15505f13",
+        "type": null,
+        "data": {
+          "max_buy": 0,
+          "agreed_rate": 0,
+          "listed_rate": 0,
+          "discount_pct": 0
+        },
+        "timestamp": "2026-04-26T07:21:19.758Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f27-3662-771e-817d-54e26f859ba1",
+      "integration_id": "01926a91-fd58-7305-8f41-eea4e4a4cdf9",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-81fa-787a-aeee-1b547fc663c1",
+      "persistent_id": "019dbf39-a0d8-7a12-a038-51f331fd39d2",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81fc-7b7b-a4fa-4ffb1e7832b9",
+      "type": "action",
+      "name": "Classify Sentiment",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "tags": [
+          {
+            "name": "positive",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier was friendly, cooperative, satisfied with the outcome, or generally upbeat throughout the call."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "neutral",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier was businesslike and matter-of-fact. No strong positive or negative emotion was expressed."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "negative",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier expressed dissatisfaction, disappointment, or unhappiness \u2014 for example, unhappy with the rate, the service, or the outcome."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "frustrated",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier showed clear frustration, impatience, or irritation during the call \u2014 for example, repeated objections, raised tone indicators, or expressed annoyance."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "mixed",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier's sentiment shifted significantly during the call \u2014 for example, started positive but became negative after negotiation, or started frustrated but ended satisfied."
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "input": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+                "variable_id": "transcript"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "model": {
+          "type": "static",
+          "static": {
+            "id": "gpt-5-mini",
+            "name": "GPT-5 Mini"
+          }
+        },
+        "prompt": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "You are a call sentiment analyst. Classify the overall sentiment of the CARRIER (the caller, not the agent) based on the call transcript."
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Focus on the carrier's tone, word choice, and emotional state throughout the conversation. Consider:"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- How did they react to the rate offered?"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Were they cooperative or combative during negotiation?"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- Did their sentiment change over the course of the call?"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "- How did they end the conversation?"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Return exactly one tag."
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8aa-03e5-7160-9688-bbb942ad4b43",
+        "node_id": "019dc87a-81fa-787a-aeee-1b547fc663c1",
+        "type": null,
+        "data": {
+          "input": "",
+          "prompt": "You are a call sentiment analyst. Classify the overall sentiment of the CARRIER (the caller, not the agent) based on the call transcript.\n\nFocus on the carrier's tone, word choice, and emotional state throughout the conversation. Consider:\n- How did they react to the rate offered?\n- Were they cooperative or combative during negotiation?\n- Did their sentiment change over the course of the call?\n- How did they end the conversation?\n\nReturn exactly one tag.\n\nThese are the available tags and their descriptions:\n- positive: The carrier was friendly, cooperative, satisfied with the outcome, or generally upbeat throughout the call.\n- neutral: The carrier was businesslike and matter-of-fact. No strong positive or negative emotion was expressed.\n- negative: The carrier expressed dissatisfaction, disappointment, or unhappiness \u2014 for example, unhappy with the rate, the service, or the outcome.\n- frustrated: The carrier showed clear frustration, impatience, or irritation during the call \u2014 for example, repeated objections, raised tone indicators, or expressed annoyance.\n- mixed: The carrier's sentiment shifted significantly during the call \u2014 for example, started positive but became negative after negotiation, or started frustrated but ended satisfied.\n",
+          "response": {
+            "reasoning": "No transcript provided; insufficient evidence to judge tone. Defaulting to neutral businesslike classification for carrier.",
+            "classification": "neutral"
+          },
+          "_llm_usage": {
+            "model": "gpt-5-mini",
+            "input_tokens": 422,
+            "output_tokens": 302,
+            "reasoning_tokens": 256,
+            "cached_input_tokens": 0,
+            "uncached_input_tokens": 422
+          }
+        },
+        "timestamp": "2026-04-26T07:21:18.563Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "01926f30-36e3-7f14-9c3a-8d9a1003e532",
+      "integration_id": "01926a90-7f9e-785e-891c-51338a7aa70c",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-8204-73cd-ada4-258cb16a72cf",
+      "persistent_id": "acce2213-a328-452d-8197-10c70297e60e",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8203-72a2-acf4-a5a868eae51b",
+      "type": "tool",
+      "name": "search_loads_by_lane",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {},
+      "node_output": null,
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "function": {
+        "message": {
+          "type": "ai",
+          "example": "Let me search for available loads on that lane for you.",
+          "description": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "Let the caller know you're searching for available loads on that lane and will have results in just a moment."
+                }
+              ]
+            }
+          ]
+        },
+        "parameters": [
+          {
+            "name": "origin_state",
+            "example": "TX",
+            "required": true,
+            "description": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "2-letter US state code where the carrier can pick up"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "origin_city",
+            "example": "Dallas",
+            "required": false,
+            "description": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "City the carrier is in or near, verbatim from speech (e.g. \"Dallas\", \"Houston\"). Optional. Pass empty string if not given."
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "destination_state",
+            "example": "GA",
+            "required": false,
+            "description": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "2-letter US state for delivery (e.g. \"GA\"). Optional \u2014 empty string means \"anywhere\". Don't ask the carrier to narrow if they say \"anywhere\" or a region word."
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "destination_city",
+            "example": "Atlanta",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Specific delivery city if carrier mentioned one (e.g. \"Atlanta\"). Optional, often empty."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "equipment_type",
+            "example": "dry van",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Trailer type. Best-match the carrier's speech to one of: dry van, reefer, flatbed, stepdeck, conestoga. If their equipment doesn't fit any of these (box truck, hotshot, cargo van, RGN, power only, etc.), do NOT call this tool \u2014 first tell the carrier: \"I only have loads for dry van, reefer, flatbed, stepdeck, or conestoga \u2014 which of those works for you?\" Then pass their picked enum value."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "pickup_window",
+            "example": "2026-04-26T08:00",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "When the carrier can pick up, as ISO 8601 datetime (YYYY-MM-DDTHH:MM, e.g. \"2026-04-26T08:00\"). Required. Infer from speech relative to today: \"now\" / \"I'm empty\" \u2192 today's current datetime; \"tomorrow morning\" \u2192 tomorrow 08:00; \"tomorrow afternoon\" \u2192 tomorrow 14:00; \"Tuesday 2pm\" \u2192 next Tuesday 14:00; \"anytime\" / \"flexible\" \u2192 tomorrow 08:00 (default fallback). Always commit to a specific datetime \u2014 analytics depends on it."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "description": [
+          {
+            "type": "p",
+            "children": [
+              {
+                "text": "Search for available loads by lane (origin city/state), optionally filtering by destination and equipment type. Use this when the carrier does not have a specific reference number but describes a lane they saw on a posting."
+              }
+            ]
+          }
+        ],
+        "tool_index_id": "tool:019dc87a-8204-73cd-ada4-258cb16a72cf",
+        "tool_index_hash": "ced05c250150fa5b5f0aab360ce58c36b6ef5f990892df64f6a30ee2ac4f2ad1"
+      }
+    },
+    {
+      "id": "019dc87a-81fc-7b7b-a4fa-4ffb1e7832b9",
+      "persistent_id": "019dbf38-f679-7de1-9b5e-31738470d536",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81f9-7796-b845-bc3411e26c77",
+      "type": "action",
+      "name": "Carrier Sales Auditor",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "max_buy": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "019dbf3c-d241-723e-87eb-f09b702e4805",
+                "variable_id": "max_buy"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "condition": {
+          "id": "auditor-condition",
+          "ors": [
+            {
+              "ands": [
+                {
+                  "field": {
+                    "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                    "variable_id": "response.booking_decision"
+                  },
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "children": [
+                        {
+                          "text": "yes"
+                        }
+                      ]
+                    }
+                  ],
+                  "condition": "equals"
+                }
+              ]
+            }
+          ],
+          "title": "Only run when a deal was made"
+        },
+        "agreed_rate": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.agreed_rate"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ],
+        "posted_rate": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": ""
+              },
+              {
+                "type": "variable",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ],
+                "group_id": "3272b1bf-a18d-4cf4-996c-eac7993ae98e",
+                "variable_id": "response.listed_rate"
+              },
+              {
+                "text": ""
+              }
+            ]
+          }
+        ]
+      },
+      "node_output": {
+        "id": "019dc8aa-0d84-7aff-9c1d-69b9f7369c8c",
+        "node_id": "019dc87a-81fc-7b7b-a4fa-4ffb1e7832b9",
+        "type": null,
+        "data": {
+          "final_offer_position": 0,
+          "posted_price_increase": 0
+        },
+        "timestamp": "2026-04-26T07:21:21.028Z"
+      },
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "event_id": "bb0d1f9b-0334-4988-b0db-0a907c355884",
+      "integration_id": "cc867206-d40a-46eb-817b-0995783037b7",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    },
+    {
+      "id": "019dc87a-8204-7d8f-8f2f-0eed8d5279b5",
+      "persistent_id": "019dc159-ee63-7d0e-aeeb-3c8799f2d2cf",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8203-72a2-acf4-a5a868eae51b",
+      "type": "tool",
+      "name": "negotiate_evaluate",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {},
+      "node_output": null,
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "function": {
+        "message": {
+          "type": "none",
+          "example": "",
+          "description": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        "hold_music": {
+          "type": "static"
+        },
+        "parameters": [
+          {
+            "name": "load_reference",
+            "example": "LOAD-42",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The reference_number of the load currently being negotiated (from the load you just pitched)."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "loadboard_rate",
+            "example": "2400",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The load's listed rate in USD, taken from the pitched load's loadboard_rate field. Pass the exact number the load has, not your pitched number."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "carrier_offer",
+            "example": "1900",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier's most recent dollar counter-offer in USD. Only call this tool if the carrier stated a specific numeric rate. If the carrier said \"too low\" / \"I can't do that\" / \"give me better\" without naming a number, do NOT call this tool \u2014 instead ask them for a number first. If you're unsure what number they said, ask them to repeat. "
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Only after the insist multiple times you might infer a number if none is provided this number will only serve to call the tool"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "round_number",
+            "example": "1",
+            "required": true,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Which round of negotiation this is. Start at 1 on the carrier's first counter-offer. Increment by 1 only after this tool returns action=COUNTER and you've spoken the scripted_message. Never exceed max_negotiation_rounds."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "prior_broker_offers",
+            "example": "[22]\t",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "You (the agent) reconstruct this from your own previous utterances in this conversation. On round 1: pass []. On round 2: pass [<the dollar amount you counter-offered in round 1>]. On round 3: pass [<round 1 counter>, <round 2 counter>]. The tool uses this for logging and Tier-2 strategic decisions (history-based pricing). If you can't remember your prior counters, pass [] \u2014 the tool will still work."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "current_sentiment",
+            "example": "neutral",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Current carrier sentiment from the real-time Carrier Sentiment classifier inside this Voice Agent. Pass one of: positive, neutral, negative, frustrated. If you can't read the classifier, pass neutral."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "pickup_datetime",
+            "example": "2026-04-26T09:00:00Z",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Pickup datetime from the load you pitched (ISO 8601). Read from the load object returned by find_available_loads or search_loads_by_lane. If unknown, leave empty."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "equipment_type",
+            "example": "dry van\t",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Equipment type from the load. Read from the load object. If unknown, leave empty."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "commodity_type",
+            "example": "Electronics",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Commodity type from the load. Used by the tool to apply premium pricing for hazmat/oversize. If unknown, leave empty."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "load_notes",
+            "example": "Tarps required\t",
+            "required": false,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The notes field from the load object. Used to detect flags like TWIC, lumper, hot load. If unknown, leave empty."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "description": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "Evaluate the carrier's rate counter-offer. Returns an action (ACCEPT/COUNTER/REJECT/ESCALATE), our next counter-offer if applicable, and a scripted message to say verbatim. Call this every time the carrier names a number during rate negotiation. Do not try to compute counters yourself \u2014 internal pricing policy lives inside this tool and is not visible to you."
+              }
+            ]
+          }
+        ],
+        "tool_index_id": "tool:019dc87a-8204-7d8f-8f2f-0eed8d5279b5",
+        "tool_index_hash": "bd4274ce600c9c9a2daadeef9658f91bde115eb94971139864463e4873132374"
+      }
+    },
+    {
+      "id": "019dc87a-8205-7334-ba08-65f0d8161e53",
+      "persistent_id": "c1e69591-7877-4b09-b911-7f82d83c76de",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8203-72a2-acf4-a5a868eae51b",
+      "type": "tool",
+      "name": "verify_carrier",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "values": [
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "nemantest@something.com"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "hola"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "myman"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "+12233456787"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "1233445566"
+                }
+              ]
+            }
+          ]
+        ],
+        "worksheet": {
+          "id": "0",
+          "name": "Sheet1"
+        },
+        "updateMode": "single",
+        "spreadsheet": {
+          "id": "1TVJIeJlF8MAMF-DHyEe4R06yMj-U2oiyQDxM96kyOWw",
+          "name": "neman_test"
+        }
+      },
+      "node_output": null,
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "function": {
+        "message": {
+          "type": "ai",
+          "example": "Let me pull that up real quick.",
+          "description": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "Let the caller know you're pulling up their MC number to verify their carrier information. Be brief and natural \u2014 something like \"Let me pull that up real quick.\""
+                }
+              ]
+            }
+          ]
+        },
+        "parameters": [
+          {
+            "name": "mc_number",
+            "required": true,
+            "description": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "The carrier's FMCSA Motor Carrier (MC) number provided by the caller."
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "description": [
+          {
+            "type": "p",
+            "children": [
+              {
+                "text": "Look up the carrier's MC number in the FMCSA database to verify their operating authority. Returns the carrier's legal name, DOT number, operating status, and whether they are authorized to operate. Always confirm the returned company name with the caller before proceeding."
+              }
+            ]
+          }
+        ],
+        "tool_index_id": "tool:019dc87a-8205-7334-ba08-65f0d8161e53",
+        "tool_index_hash": "6c52c792ace19fcf62a0b53abeb7f254f3229873b34dd55cc7c9c16648f883b5"
+      }
+    },
+    {
+      "id": "019dc87a-8207-7ec6-ba61-18f30b5a86b1",
+      "persistent_id": "c7c2dcb2-52f2-4da5-bfe7-c542eaf9569e",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-8203-72a2-acf4-a5a868eae51b",
+      "type": "tool",
+      "name": "find_available_loads",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "values": [
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "nemantest@something.com"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "hola"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "myman"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "+12233456787"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "1233445566"
+                }
+              ]
+            }
+          ]
+        ],
+        "worksheet": {
+          "id": "0",
+          "name": "Sheet1"
+        },
+        "updateMode": "single",
+        "spreadsheet": {
+          "id": "1TVJIeJlF8MAMF-DHyEe4R06yMj-U2oiyQDxM96kyOWw",
+          "name": "neman_test"
+        }
+      },
+      "node_output": null,
+      "timestamp": "2026-04-26T06:29:25.061Z",
+      "function": {
+        "message": {
+          "type": "ai",
+          "example": "Let me pull up that load for you.",
+          "description": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "Let the caller know you're pulling up the load details for that reference number. Be brief and natural."
+                }
+              ]
+            }
+          ]
+        },
+        "parameters": [
+          {
+            "name": "reference_number",
+            "example": "LOAD-0042",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "The carrier's stated load reference number (e.g. \"LOAD-0042\"). Use this when the carrier names a specific load they saw on a posting. Pass exactly as carrier said it; do not strip or normalize."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "description": [
+          {
+            "type": "p",
+            "children": [
+              {
+                "text": "Look up a specific load by its reference number. Returns full load details including origin, destination, pickup/delivery dates, equipment type, rate, commodity, weight, and dimensions. Use this when the carrier provides a reference number from an online posting."
+              }
+            ]
+          }
+        ],
+        "tool_index_id": "tool:019dc87a-8207-7ec6-ba61-18f30b5a86b1",
+        "tool_index_hash": "93fa360fa0b3c897c4e51e7c4701dd7be294db2aabd67ef14edfa909de2b9465"
+      }
+    },
+    {
+      "id": "019dc87a-81f5-72f2-ac5f-f22f63c3390c",
+      "persistent_id": "9f573f87-aa28-4583-973a-a103b519ad9c",
+      "version_id": "019dc87a-81d5-7872-ad38-d191e57c81d9",
+      "workflow_id": "019db77a-0548-741c-9ac8-d713bea1a51f",
+      "org_id": "019db776-fdcb-7925-8891-a79b1fbc6ea0",
+      "parent_id": "019dc87a-81e8-75ce-b747-d1551e39fa13",
+      "type": "action",
+      "name": "Analyze Incoming Conversation",
+      "sort_index": 0,
+      "is_complete": true,
+      "configuration": {
+        "call": {
+          "type": "static",
+          "static": {
+            "id": "04f47385-8bb6-4b9d-8103-01ad28c6b223",
+            "name": "Web call"
+          }
+        },
+        "agent": {
+          "name": [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Paul"
+                }
+              ]
+            }
+          ],
+          "voices": [
+            {
+              "type": "static",
+              "static": {
+                "id": "m357hexpjk2s",
+                "name": "Paul"
+              }
+            }
+          ],
+          "languages": [
+            {
+              "type": "static",
+              "static": {
+                "id": "en",
+                "name": "English"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "es",
+                "name": "Spanish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "pt",
+                "name": "Portuguese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "nl",
+                "name": "Dutch"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "zh",
+                "name": "Chinese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ar",
+                "name": "Arabic"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "bg",
+                "name": "Bulgarian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ca",
+                "name": "Catalan"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "cs",
+                "name": "Czech"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "da",
+                "name": "Danish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "fi",
+                "name": "Finnish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "fr",
+                "name": "French"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "de",
+                "name": "German"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "el",
+                "name": "Greek"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "hi",
+                "name": "Hindi"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "id",
+                "name": "Indonesian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "it",
+                "name": "Italian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ja",
+                "name": "Japanese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ko",
+                "name": "Korean"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ms",
+                "name": "Malay"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "no",
+                "name": "Norwegian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "pl",
+                "name": "Polish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ro",
+                "name": "Romanian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ru",
+                "name": "Russian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "sk",
+                "name": "Slovak"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "sv",
+                "name": "Swedish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "tr",
+                "name": "Turkish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "uk",
+                "name": "Ukrainian"
+              }
+            }
+          ],
+          "language_accents": [
+            {
+              "type": "static",
+              "static": {
+                "id": "en",
+                "name": "English"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "es",
+                "name": "Spanish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "pt",
+                "name": "Portuguese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "nl",
+                "name": "Dutch"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "zh",
+                "name": "Chinese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ar-msa",
+                "name": "Arabic (Modern Standard)"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "bg",
+                "name": "Bulgarian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ca",
+                "name": "Catalan"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "cs",
+                "name": "Czech"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "da",
+                "name": "Danish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "fi",
+                "name": "Finnish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "fr",
+                "name": "French"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "de",
+                "name": "German"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "el",
+                "name": "Greek"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "hi",
+                "name": "Hindi"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "id",
+                "name": "Indonesian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "it",
+                "name": "Italian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ja",
+                "name": "Japanese"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ko",
+                "name": "Korean"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ms",
+                "name": "Malay"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "no",
+                "name": "Norwegian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "pl",
+                "name": "Polish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ro",
+                "name": "Romanian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "ru",
+                "name": "Russian"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "sk",
+                "name": "Slovak"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "sv",
+                "name": "Swedish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "tr",
+                "name": "Turkish"
+              }
+            },
+            {
+              "type": "static",
+              "static": {
+                "id": "uk",
+                "name": "Ukrainian"
+              }
+            }
+          ]
+        },
+        "keyterms": [
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Valdosta"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "San Jose"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Oakland"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Cartersville, Georgia"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Columbus, Ohio"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Boise, Idaho"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Ada, Michigan"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "Menasha, Wisconsin"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "book the load"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "thirty degrees"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "carrier qualification"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "online posting"
+                }
+              ]
+            }
+          ],
+          [
+            {
+              "type": "paragraph",
+              "children": [
+                {
+                  "text": "freight"
+                }
+              ]
+            }
+          ]
+        ],
+        "background": {
+          "type": "static",
+          "static": {
+            "id": "https://storage.googleapis.com/happyrobot-public/backgrounds/call-center.8k.wav",
+            "name": "Call center"
+          }
+        },
+        "enable_memory": true,
+        "interaction_limit": 10,
+        "enable_denoised_stt": true,
+        "real_time_classifiers": [
+          {
+            "name": "Call Outcome",
+            "prompt": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Classify the current call outcome based on how the conversation is progressing. Determine which of the following best describes the state of this call in real time:"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- load_booked: The carrier has agreed to book the load and the deal is confirmed."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- negotiation_failed: The carrier and agent could not agree on rate or terms, and negotiation has broken down."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- carrier_not_qualified: The carrier does not meet the requirements (e.g. invalid MC number, insurance issues, equipment mismatch)."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- no_load_match: There is no available load matching what the carrier is looking for."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- carrier_declined: The carrier has explicitly declined the load offer for any reason."
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "- abandoned: The call was abandoned, the caller hung up prematurely, or there was no meaningful conversation."
+                  }
+                ]
+              }
+            ],
+            "classes": [
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "load_booked"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "negotiation_failed"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "carrier_not_qualified"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "no_load_match"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "carrier_declined"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "type": "paragraph",
+                  "children": [
+                    {
+                      "text": "abandoned"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ],
+        "transcription_context": [
+          {
+            "type": "paragraph",
+            "children": [
+              {
+                "text": "This is an inbound call from a freight carrier looking to book loads. The caller may mention MC numbers (Motor Carrier numbers), DOT numbers, FMCSA (Federal Motor Carrier Safety Administration), freight brokerage terms, equipment types like dry van, flatbed, reefer, step deck, and conestoga. They will reference US city names, state abbreviations, load weights, commodity types, and dollar amounts for rate negotiation."
+              }
+            ]
+          }
+        ],
+        "real_time_sentiment_classifier": true
+      },
+      "node_output": {
+        "id": "019dc8a9-f2a1-7a6d-afd7-7fd6c3fa3840",
+        "node_id": "019dc87a-81f5-72f2-ac5f-f22f63c3390c",
+        "type": null,
+        "data": {
+          "now": {
+            "ts": 1777188074,
+            "day": 26,
+            "iso": "2026-04-26T02:21:14-05:00",
+            "year": 2026,
+            "month": 4,
+            "friendly": "Sunday, April 26, 2026 02:21:14 -0500"
+          },
+          "from": "web",
+          "agent": {
+            "name": "Paul",
+            "voice": {
+              "id": "m357hexpjk2s",
+              "name": "Paul",
+              "language": "en-US",
+              "cloned_language_accents": [
+                {
+                  "locale": "en-US",
+                  "language": "en",
+                  "accent_key": "en-us",
+                  "accent_label": "English (United States)"
+                }
+              ]
+            },
+            "voices": [
+              {
+                "id": "m357hexpjk2s",
+                "name": "Paul",
+                "language": "en-US",
+                "cloned_language_accents": [
+                  {
+                    "locale": "en-US",
+                    "language": "en",
+                    "accent_key": "en-us",
+                    "accent_label": "English (United States)"
+                  }
+                ]
+              }
+            ],
+            "languages": [
+              "en",
+              "es",
+              "pt",
+              "nl",
+              "zh",
+              "ar",
+              "bg",
+              "ca",
+              "cs",
+              "da",
+              "fi",
+              "fr",
+              "de",
+              "el",
+              "hi",
+              "id",
+              "it",
+              "ja",
+              "ko",
+              "ms",
+              "no",
+              "pl",
+              "ro",
+              "ru",
+              "sk",
+              "sv",
+              "tr",
+              "uk"
+            ],
+            "language_accents": [
+              "en",
+              "es",
+              "pt",
+              "nl",
+              "zh",
+              "ar-msa",
+              "bg",
+              "ca",
+              "cs",
+              "da",
+              "fi",
+              "fr",
+              "de",
+              "el",
+              "hi",
+              "id",
+              "it",
+              "ja",
+              "ko",
+              "ms",
+              "no",
+              "pl",
+              "ro",
+              "ru",
+              "sk",
+              "sv",
+              "tr",
+              "uk"
+            ]
+          },
+          "number": "web",
+          "record": true,
+          "redact": null,
+          "status": "in-progress",
+          "duration": 0,
+          "keyterms": "[\"Valdosta\",\"San Jose\",\"Oakland\",\"Cartersville, Georgia\",\"Columbus, Ohio\",\"Boise, Idaho\",\"Ada, Michigan\",\"Menasha, Wisconsin\",\"book the load\",\"thirty degrees\",\"carrier qualification\",\"online posting\",\"freight\"]",
+          "numerals": true,
+          "room_name": "48f279dc-97fc-4014-85da-449ec7d9e1df_webcall_1",
+          "background": "https://storage.googleapis.com/happyrobot-public/backgrounds/call-center.8k.wav",
+          "contact_id": "",
+          "session_id": "5ce7fb5e-e909-4c21-8e77-d5743e37ebe9",
+          "transcript": "[]",
+          "stay_silent": false,
+          "transcriber": "legacy",
+          "contact_intel": {
+            "contact_summary": "example contact summary",
+            "has_tag_example": false,
+            "attr_example_key": "example_value",
+            "recent_interactions": [
+              {
+                "summary": "interaction_0_summary",
+                "memories": "- memory_0_a\n- memory_0_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_1_summary",
+                "memories": "- memory_1_a\n- memory_1_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_2_summary",
+                "memories": "- memory_2_a\n- memory_2_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_3_summary",
+                "memories": "- memory_3_a\n- memory_3_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_4_summary",
+                "memories": "- memory_4_a\n- memory_4_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_5_summary",
+                "memories": "- memory_5_a\n- memory_5_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_6_summary",
+                "memories": "- memory_6_a\n- memory_6_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_7_summary",
+                "memories": "- memory_7_a\n- memory_7_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_8_summary",
+                "memories": "- memory_8_a\n- memory_8_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              },
+              {
+                "summary": "interaction_9_summary",
+                "memories": "- memory_9_a\n- memory_9_b",
+                "timestamp": "2024-01-01T00:00:00Z"
+              }
+            ]
+          },
+          "multi_lingual": false,
+          "call_end_event": "unknown",
+          "num_tool_calls": 0,
+          "num_user_turns": 0,
+          "p70_latency_ms": 0,
+          "p90_latency_ms": 0,
+          "num_total_turns": 0,
+          "max_call_duration": 600,
+          "call_end_initiator": "unknown",
+          "enable_denoised_stt": true,
+          "is_external_account": false,
+          "num_assistant_turns": 0,
+          "disable_time_fillers": false,
+          "messages_per_turn_avg": 0,
+          "real_time_classifiers": [
+            {
+              "name": "Call Outcome",
+              "prompt": "Classify the current call outcome based on how the conversation is progressing. Determine which of the following best describes the state of this call in real time:\n- load_booked: The carrier has agreed to book the load and the deal is confirmed.\n- negotiation_failed: The carrier and agent could not agree on rate or terms, and negotiation has broken down.\n- carrier_not_qualified: The carrier does not meet the requirements (e.g. invalid MC number, insurance issues, equipment mismatch).\n- no_load_match: There is no available load matching what the carrier is looking for.\n- carrier_declined: The carrier has explicitly declined the load offer for any reason.\n- abandoned: The call was abandoned, the caller hung up prematurely, or there was no meaningful conversation.",
+              "classes": [
+                "load_booked",
+                "negotiation_failed",
+                "carrier_not_qualified",
+                "no_load_match",
+                "carrier_declined",
+                "abandoned"
+              ]
+            }
+          ],
+          "transcription_context": "This is an inbound call from a freight carrier looking to book loads. The caller may mention MC numbers (Motor Carrier numbers), DOT numbers, FMCSA (Federal Motor Carrier Safety Administration), freight brokerage terms, equipment types like dry van, flatbed, reefer, step deck, and conestoga. They will reference US city names, state abbreviations, load weights, commodity types, and dollar amounts for rate negotiation.",
+          "play_recording_message": false,
+          "num_user_filler_messages": 0,
+          "user_filler_message_ratio": 0,
+          "num_assistant_cut_messages": 0,
+          "user_messages_per_turn_avg": 0,
+          "assistant_cut_message_ratio": 0,
+          "contact_intelligence_context": "",
+          "disable_auto_contact_context": false,
+          "max_duration_transfer_number": "",
+          "out_of_business_hours_blocked": false,
+          "real_time_sentiment_classifier": true,
+          "assistant_messages_per_turn_avg": 0,
+          "contact_intelligence_collection_enabled": false
+        },
+        "timestamp": "2026-04-26T07:21:14.143Z"
+      },
+      "timestamp": "2026-04-26T06:36:28.332Z",
+      "event_id": "0192e5dc-08df-78bf-a549-f43c6bf9f087",
+      "integration_id": "0192e48a-81d8-71cb-93dc-efd8ad63d86b",
+      "trigger_interval": null,
+      "multi_event_behavior": "parallel"
+    }
+  ],
+  "variables": []
+}

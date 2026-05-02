@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Style 03 — Refined Palettes (gray + green locked)</title>
+<style>
+  :root {
+    --bg: #060607;
+    --panel: #0a0a0c;
+    --border: #1f1f24;
+    --fg: #f4f4f5;
+    --muted: #9a9aa3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  header { padding: 32px 40px 16px; border-bottom: 1px solid var(--border); }
+  h1 { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .subtitle { color: var(--muted); font-size: 13px; margin: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 32px 40px;
+    max-width: 1100px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 26px 26px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; }
+  .card .meta {
+    color: var(--muted);
+    font-size: 11px;
+    margin: 0 0 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .card .desc {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 14px 0 0;
+    line-height: 1.55;
+  }
+  .stacked {
+    display: flex;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+    color: #fff;
+    font-size: 11px;
+  }
+  .seg .pct { font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .seg .lbl { font-size: 9px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.06em; }
+  .swatch-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+  .sw {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .sw .box {
+    width: 18px; height: 18px; border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .sep { color: #2a2a30; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Style 03 — refined palette options</h1>
+  <p class="subtitle">Booked = green (varied tones). Abandoned = gray (locked). No-match + N/Q = distinct, restrained, never gray, never flashy. 10 variations.</p>
+</header>
+
+<div class="grid">
+
+  <!-- 01 -->
+  <section class="card">
+    <h2>01 · Forest green · navy · clay</h2>
+    <p class="meta">Deep muted greens & earth tones · the most "professional" baseline</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #15803d;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #1e3a8a;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #92400e;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #4b5563;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#15803d"></span>Forest</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#1e3a8a"></span>Navy</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#92400e"></span>Clay</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#4b5563"></span>Slate</span>
+    </div>
+    <p class="desc">All darks. Reads serious / industrial. Each hue has clear identity but none demand attention. Most "freight-broker boardroom" of the set.</p>
+  </section>
+
+  <!-- 02 -->
+  <section class="card">
+    <h2>02 · Pine · steel-blue · rust</h2>
+    <p class="meta">Slightly more saturated than #1 · still earth · keeps low-key feel</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #166534;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #1e40af;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #b45309;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #52525b;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#166534"></span>Pine</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#1e40af"></span>Steel blue</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#b45309"></span>Rust</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#52525b"></span>Stone</span>
+    </div>
+    <p class="desc">Same family as #1 with a half-stop more saturation. Better legibility on dark backgrounds; still nowhere near "flashy".</p>
+  </section>
+
+  <!-- 03 -->
+  <section class="card">
+    <h2>03 · Sage · slate-blue · terracotta</h2>
+    <p class="meta">Muted, modern · all hues sit in the same low-saturation band</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #4d7c0f;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #475569;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #9a3412;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #3f3f46;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#4d7c0f"></span>Sage-olive</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#475569"></span>Slate-blue</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#9a3412"></span>Terracotta</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#3f3f46"></span>Charcoal</span>
+    </div>
+    <p class="desc">Caveat: "no match" slate-blue is close to "abandoned" charcoal — the eye may bleed them together. Use only if you're OK conflating "neutral loss" categories.</p>
+  </section>
+
+  <!-- 04 -->
+  <section class="card">
+    <h2>04 · Emerald · indigo · amber-brown</h2>
+    <p class="meta">Slightly brighter green · richer indigo · warm bronze for N/Q</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #047857;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #3730a3;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #78350f;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #4b5563;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#047857"></span>Emerald</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#3730a3"></span>Indigo</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#78350f"></span>Bronze</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#4b5563"></span>Slate</span>
+    </div>
+    <p class="desc">Most balanced contrast across all four. Each segment has clear personality without being loud. Strong default candidate.</p>
+  </section>
+
+  <!-- 05 -->
+  <section class="card">
+    <h2>05 · Hunter green · plum · ochre</h2>
+    <p class="meta">Tertiary palette · all 3 colors are unusual without being weird</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #14532d;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #6b21a8;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #a16207;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #57534e;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#14532d"></span>Hunter</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#6b21a8"></span>Plum</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#a16207"></span>Ochre</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#57534e"></span>Warm gray</span>
+    </div>
+    <p class="desc">Plum is the daring choice — it's a non-obvious "neutral" hue that distinguishes "no match" from anything else without screaming. Most distinctive of the 10.</p>
+  </section>
+
+  <!-- 06 -->
+  <section class="card">
+    <h2>06 · Olive-green · teal-blue · burgundy</h2>
+    <p class="meta">Earthy, slightly warmer · burgundy adds "loss-but-not-failure" tone for N/Q</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #3f6212;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #155e75;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #881337;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #44403c;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#3f6212"></span>Olive</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#155e75"></span>Teal-blue</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#881337"></span>Burgundy</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#44403c"></span>Charcoal</span>
+    </div>
+    <p class="desc">Burgundy implies "this is a soft loss". Teal sits between green and slate without claiming either. Good if you want a subtle wine/library mood.</p>
+  </section>
+
+  <!-- 07 -->
+  <section class="card">
+    <h2>07 · Eucalyptus green · denim · copper</h2>
+    <p class="meta">Slightly desaturated everything · feels handmade / crafted · least corporate</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #2f6e4e;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #2c4a73;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #9c5a30;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #3a3a40;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#2f6e4e"></span>Eucalyptus</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#2c4a73"></span>Denim</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#9c5a30"></span>Copper</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#3a3a40"></span>Graphite</span>
+    </div>
+    <p class="desc">All four hues live in the same "muted/grayed" tonal layer. Looks like editorial print design. Lowest contrast — risk: tough to read on smaller screens.</p>
+  </section>
+
+  <!-- 08 -->
+  <section class="card">
+    <h2>08 · Jade · cobalt · brick</h2>
+    <p class="meta">Solid mid-tones · cleanest separation · easy on eyes long sessions</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #0f766e;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #1d4ed8;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #b91c1c;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #4b5563;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#0f766e"></span>Jade-teal</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#1d4ed8"></span>Cobalt</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#b91c1c"></span>Brick</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#4b5563"></span>Slate</span>
+    </div>
+    <p class="desc">Note: jade-teal for "booked" is GREEN-ADJACENT (slight blue shift) — gives it a more refined feel than emerald. Brick = decisive "this is a lost call".</p>
+  </section>
+
+  <!-- 09 -->
+  <section class="card">
+    <h2>09 · Moss · midnight · mustard</h2>
+    <p class="meta">Vintage / 70s-feel · mustard for N/Q is unusual and warm</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #365314;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #1e1b4b;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #854d0e;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #525252;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#365314"></span>Moss</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#1e1b4b"></span>Midnight</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#854d0e"></span>Mustard</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#525252"></span>Stone</span>
+    </div>
+    <p class="desc">Moodiest of the set. Midnight is so dark it might pass for "almost black on black" — could feel like a missing slice. Best when contrast against bg matters less.</p>
+  </section>
+
+  <!-- 10 -->
+  <section class="card">
+    <h2>10 · Spruce · steel · sienna</h2>
+    <p class="meta">Most balanced "natural materials" palette · all 4 colors feel like a swatch-book</p>
+    <div class="stacked">
+      <div class="seg" style="flex: 20.8; background: #166540;"><span class="pct">20.8%</span><span class="lbl">Booked</span></div>
+      <div class="seg" style="flex: 8.3;  background: #334e68;"><span class="pct">8.3%</span><span class="lbl">No match</span></div>
+      <div class="seg" style="flex: 20.8; background: #a04522;"><span class="pct">20.8%</span><span class="lbl">N/Q</span></div>
+      <div class="seg" style="flex: 50.0; background: #4b4b54;"><span class="pct">50.0%</span><span class="lbl">Abandoned</span></div>
+    </div>
+    <div class="swatch-row">
+      <span class="sw"><span class="box" style="background:#166540"></span>Spruce</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#334e68"></span>Steel</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#a04522"></span>Sienna</span>
+      <span class="sep">·</span>
+      <span class="sw"><span class="box" style="background:#4b4b54"></span>Iron</span>
+    </div>
+    <p class="desc">Designed as a "Pantone-paint-card" set. Each color reads as a real-world material. Best long-term comfort palette of the 10.</p>
+  </section>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Telemetry tab — 10 reactive widget ideas</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --surface: #11151a;
+    --surface-2: #161b22;
+    --border: #1f2630;
+    --border-strong: #2b3340;
+    --fg: #e7ecf2;
+    --muted: #8a96a6;
+    --primary: #f97316;
+    --success: #22c55e;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  header.page {
+    padding: 32px 40px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  header.page h1 {
+    margin: 0 0 6px;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+  header.page p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    max-width: 880px;
+  }
+  .legend {
+    display: inline-flex;
+    gap: 18px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend b { color: var(--fg); font-weight: 600; }
+  main {
+    padding: 32px 40px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+  }
+  .frame {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .frame-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .frame-head .num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #1a0f06;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    margin-right: 10px;
+  }
+  .frame-head .title { font-size: 13px; font-weight: 600; }
+  .frame-head .pick {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .frame-body {
+    padding: 14px;
+    flex: 1;
+    background: var(--bg);
+  }
+  .frame-foot {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  /* ----- shared widget primitives (mock dashboard look) ----- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .card .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .card .big { font-size: 22px; font-weight: 700; font-feature-settings: "tnum"; margin-top: 6px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .chip {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .chip.green { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }
+  .chip.amber { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+  .chip.red   { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+  .chip.blue  { background: color-mix(in srgb, var(--info) 18%, transparent); color: var(--info); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.green { background: var(--success); }
+  .dot.amber { background: var(--warn); }
+  .dot.red   { background: var(--danger); }
+  .bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+  }
+  .delta-up { color: var(--danger); font-feature-settings: "tnum"; }
+  .delta-dn { color: var(--success); font-feature-settings: "tnum"; }
+  .mono { font-family: ui-monospace, "JetBrains Mono", monospace; }
+
+  /* ----- 1: composite gauge ----- */
+  .gauge-wrap { display: flex; align-items: center; gap: 14px; }
+  .gauge {
+    width: 130px; height: 130px; flex-shrink: 0;
+    position: relative;
+  }
+  .gauge svg { transform: rotate(-90deg); }
+  .gauge .center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .gauge .center .num { font-size: 32px; font-weight: 700; }
+  .gauge .center .denom { font-size: 11px; color: var(--muted); }
+
+  /* ----- 2: alerts feed ----- */
+  .alerts { display: flex; flex-direction: column; gap: 8px; }
+  .alert-row {
+    display: grid;
+    grid-template-columns: 12px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    font-size: 12.5px;
+  }
+  .alert-row.red { border-left: 3px solid var(--danger); }
+  .alert-row.amber { border-left: 3px solid var(--warn); }
+  .alert-row.info { border-left: 3px solid var(--info); }
+  .alert-row .when { color: var(--muted); font-size: 10.5px; font-feature-settings: "tnum"; }
+
+  /* ----- 4: leaderboard ----- */
+  .lb { display: flex; flex-direction: column; gap: 8px; }
+  .lb-row { display: grid; grid-template-columns: 110px 1fr 60px; gap: 10px; align-items: center; font-size: 12px; }
+  .lb-row .name { font-family: ui-monospace, monospace; }
+
+  /* ----- 6: error ribbon ----- */
+  .ribbon-bg {
+    height: 56px;
+    background:
+      linear-gradient(to right, transparent 0, transparent 100%),
+      var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ----- 7: funnel heatmap ----- */
+  .heat-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .heat-strip {
+    height: 18px;
+    border-radius: 4px;
+  }
+
+  /* ----- 9: thermometers ----- */
+  .therm-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .therm {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .therm-bar {
+    width: 36px; height: 110px;
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface);
+  }
+  .therm-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    border-radius: 18px;
+  }
+  .therm-tick {
+    position: absolute; left: -4px; right: -4px; height: 1px;
+    background: var(--border-strong);
+  }
+
+  /* ----- 10: provider strip ----- */
+  .providers { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .provider {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface);
+  }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <h1>Telemetry tab — 10 reactive-widget ideas</h1>
+  <p>
+    Mock previews for the left-column reactive widget on the Monitor → Telemetry tab.
+    All numbers are illustrative. Same dashboard palette + tokens as production. Pick one (or stack two) and I'll wire it.
+  </p>
+  <div class="legend">
+    <span><span class="dot green"></span> healthy</span>
+    <span><span class="dot amber"></span> warning</span>
+    <span><span class="dot red"></span> breached</span>
+    <span style="margin-left:auto"><b>Recommendation:</b> #2 + #1 stacked</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1: composite gauge -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">1</span><span class="title">Health score gauge</span></div>
+      <span class="pick">stack-with #2</span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label">System health</div>
+        <div class="gauge-wrap" style="margin-top:10px">
+          <div class="gauge">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="55" stroke="#1f2630" stroke-width="14" fill="none"/>
+              <circle cx="65" cy="65" r="55" stroke="#22c55e" stroke-width="14" fill="none"
+                      stroke-dasharray="345.6" stroke-dashoffset="89" stroke-linecap="round"/>
+            </svg>
+            <div class="center">
+              <div class="num">74</div>
+              <div class="denom">/ 100</div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Drag</div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:12px">
+              <div class="row"><span style="width:90px">p90 latency</span><div class="bar" style="flex:1"><span style="width:55%;background:#ef4444"></span></div><span class="mono">−12</span></div>
+              <div class="row"><span style="width:90px">error rate</span><div class="bar" style="flex:1"><span style="width:30%;background:#f59e0b"></span></div><span class="mono">−8</span></div>
+              <div class="row"><span style="width:90px">tool fail</span><div class="bar" style="flex:1"><span style="width:18%;background:#f59e0b"></span></div><span class="mono">−6</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Composite 0–100 from p90/error/RPM/TPM. Big donut + which factors dragged the score. Most actionable single number.</div>
+  </section>
+
+  <!-- 2: active alerts feed -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">2</span><span class="title">Active alerts feed</span></div>
+      <span class="pick">recommended</span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:10px">
+          <div class="label">Active alerts</div>
+          <span class="chip red">3</span>
+        </div>
+        <div class="alerts">
+          <div class="alert-row red">
+            <span class="dot red"></span>
+            <div><b>p90 &gt; 6s</b> on book_load (last 4 calls)</div>
+            <span class="when">2m</span>
+          </div>
+          <div class="alert-row amber">
+            <span class="dot amber"></span>
+            <div><b>error rate 12%</b> on verify_carrier</div>
+            <span class="when">11m</span>
+          </div>
+          <div class="alert-row amber">
+            <span class="dot amber"></span>
+            <div><b>TPM &gt; 80%</b> of ceiling</div>
+            <span class="when">18m</span>
+          </div>
+          <div class="alert-row info" style="opacity:.6">
+            <span class="dot" style="background:var(--info)"></span>
+            <div>cost burn projected $54/day</div>
+            <span class="when">22m</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Triggered thresholds, severity-colored, click to drilldown. Empty state: ✓ All systems within thresholds. Clean alerting-first answer to "is something on fire?"</div>
+  </section>
+
+  <!-- 3: threshold breach counters -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">3</span><span class="title">Breach counters</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="label">Latency breaches</div>
+          <div class="big">7</div>
+          <div class="delta-up">▲ +3 vs prior</div>
+        </div>
+        <div class="card">
+          <div class="label">Error spikes</div>
+          <div class="big">2</div>
+          <div class="delta-up">▲ +1</div>
+        </div>
+        <div class="card">
+          <div class="label">Token surges</div>
+          <div class="big">0</div>
+          <div class="delta-dn">▼ −2</div>
+        </div>
+        <div class="card">
+          <div class="label">Tool failures</div>
+          <div class="big">4</div>
+          <div class="delta-up">▲ +4</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Pure 2×2 of counts + delta vs prior window. No drilldown — instant scan.</div>
+  </section>
+
+  <!-- 4: tool latency leaderboard -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">4</span><span class="title">Slowest tools</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label" style="margin-bottom:10px">p90 by tool · last hour</div>
+        <div class="lb">
+          <div class="lb-row"><span class="name">book_load</span><div class="bar"><span style="width:92%;background:#ef4444"></span></div><span class="mono" style="text-align:right">6.2s</span></div>
+          <div class="lb-row"><span class="name">verify_carrier</span><div class="bar"><span style="width:60%;background:#f59e0b"></span></div><span class="mono" style="text-align:right">2.1s</span></div>
+          <div class="lb-row"><span class="name">search_loads</span><div class="bar"><span style="width:38%;background:#f59e0b"></span></div><span class="mono" style="text-align:right">1.3s</span></div>
+          <div class="lb-row"><span class="name">calculate_rate</span><div class="bar"><span style="width:18%;background:#22c55e"></span></div><span class="mono" style="text-align:right">420ms</span></div>
+          <div class="lb-row"><span class="name">finalize_call</span><div class="bar"><span style="width:8%;background:#22c55e"></span></div><span class="mono" style="text-align:right">180ms</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Top 5 tools by p90, color-graded. Answers "which tool is slow today?" in 1 second.</div>
+  </section>
+
+  <!-- 5: cost burn -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">5</span><span class="title">Cost burn</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label">Spent this window</div>
+        <div class="big">$18.42</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">~37% of $50/day budget</div>
+        <div class="bar" style="margin:10px 0 12px"><span style="width:37%;background:var(--primary)"></span></div>
+        <div class="grid-2" style="font-size:12px">
+          <div>
+            <div style="color:var(--muted)">Projected hourly</div>
+            <div class="mono" style="font-weight:600;font-size:14px">$2.10/hr</div>
+          </div>
+          <div>
+            <div style="color:var(--muted)">Per call avg</div>
+            <div class="mono" style="font-weight:600;font-size:14px">$0.41</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Live USD from token totals × $/1k_tokens for turbo-one. Projection extrapolates current TPM.</div>
+  </section>
+
+  <!-- 6: error ribbon -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">6</span><span class="title">Error-rate ribbon</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label" style="margin-bottom:10px">Tool errors · last hour</div>
+        <svg viewBox="0 0 300 60" width="100%" height="60" preserveAspectRatio="none">
+          <rect x="0" y="0" width="300" height="60" fill="#161b22"/>
+          <line x1="0" y1="50" x2="300" y2="50" stroke="#22c55e" stroke-width="1.5"/>
+          <line x1="80" y1="50" x2="80" y2="22" stroke="#ef4444" stroke-width="2"/>
+          <line x1="82" y1="50" x2="82" y2="35" stroke="#ef4444" stroke-width="2"/>
+          <line x1="170" y1="50" x2="170" y2="40" stroke="#f59e0b" stroke-width="2"/>
+          <line x1="240" y1="50" x2="240" y2="48" stroke="#f59e0b" stroke-width="2"/>
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px">
+          <span>−60m</span><span>−30m</span><span>now</span>
+        </div>
+        <div style="font-size:12px;margin-top:10px">
+          <span class="mono"><b>3</b> / 142 tool calls failed</span>
+          <span class="chip green" style="margin-left:6px">2.1%</span>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Single sparkline of error% per minute. Flat green = healthy. Spikes catch the eye.</div>
+  </section>
+
+  <!-- 7: funnel heatmap -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">7</span><span class="title">Funnel-stage heatmap</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label" style="margin-bottom:10px">Avg latency by stage</div>
+        <div class="heat-row"><span class="mono">Greeting</span><div class="heat-strip" style="background:#22c55e"></div><span class="mono" style="text-align:right">120ms</span></div>
+        <div class="heat-row"><span class="mono">FMCSA</span><div class="heat-strip" style="background:#f59e0b"></div><span class="mono" style="text-align:right">2.1s</span></div>
+        <div class="heat-row"><span class="mono">Search</span><div class="heat-strip" style="background:#22c55e"></div><span class="mono" style="text-align:right">880ms</span></div>
+        <div class="heat-row"><span class="mono">Negotiation</span><div class="heat-strip" style="background:#22c55e"></div><span class="mono" style="text-align:right">340ms</span></div>
+        <div class="heat-row"><span class="mono">Book</span><div class="heat-strip" style="background:#ef4444"></div><span class="mono" style="text-align:right">6.2s</span></div>
+        <div class="heat-row"><span class="mono">Transfer</span><div class="heat-strip" style="background:#22c55e"></div><span class="mono" style="text-align:right">95ms</span></div>
+      </div>
+    </div>
+    <div class="frame-foot">Vertical stages colored by latency. Hottest stage jumps out; cold ones stay quiet.</div>
+  </section>
+
+  <!-- 8: worst call -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">8</span><span class="title">Worst-call spotlight</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div class="label">Worst call this window</div>
+          <span class="chip red">flagged</span>
+        </div>
+        <div class="mono" style="font-size:12.5px;margin-top:8px;color:var(--muted)">15df5c2f-6338-4edc-8cda-d00ea2887e0e</div>
+        <div class="big" style="font-size:18px">p90 = 8.3s</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">on <span class="mono">book_load</span> · MC 632498</div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:12px">
+          <a href="#" style="color:var(--primary);text-decoration:none">→ View call detail</a>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Single concrete outlier with one-click drilldown. Updates as outliers dethrone each other.</div>
+  </section>
+
+  <!-- 9: capacity / saturation -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">9</span><span class="title">Capacity gauges</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label" style="margin-bottom:14px">Saturation vs ceiling</div>
+        <div class="therm-wrap">
+          <div class="therm">
+            <div class="therm-bar">
+              <div class="therm-fill" style="height:62%;background:linear-gradient(180deg,var(--warn),#fbbf24)"></div>
+            </div>
+            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">RPM</div>
+            <div class="mono" style="font-size:13px;font-weight:700">62%</div>
+          </div>
+          <div class="therm">
+            <div class="therm-bar">
+              <div class="therm-fill" style="height:34%;background:var(--success)"></div>
+            </div>
+            <div style="font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">TPM</div>
+            <div class="mono" style="font-size:13px;font-weight:700">34%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Two thermometers showing current vs configured ceiling. Early-warning before rate-limit hits.</div>
+  </section>
+
+  <!-- 10: provider health -->
+  <section class="frame">
+    <div class="frame-head">
+      <div class="row"><span class="num">10</span><span class="title">Provider health strip</span></div>
+      <span class="pick"></span>
+    </div>
+    <div class="frame-body">
+      <div class="card">
+        <div class="label" style="margin-bottom:10px">Upstream services</div>
+        <div class="providers">
+          <div class="provider"><span class="dot green"></span>OpenAI</div>
+          <div class="provider"><span class="dot green"></span>FMCSA</div>
+          <div class="provider"><span class="dot amber"></span>Twin</div>
+          <div class="provider"><span class="dot green"></span>HR</div>
+          <div class="provider"><span class="dot red"></span>Cloudflare</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;margin-top:4px">
+          Last failure · <span class="mono">Twin · 14:22</span> — connection reset
+        </div>
+      </div>
+    </div>
+    <div class="frame-foot">Per-provider dots colored by recent error rate / latency for THIS workflow's deps.</div>
+  </section>
+
+</main>
+
+</body>
+</html>

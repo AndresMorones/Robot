@@ -1,0 +1,49 @@
+# Fly.io config for Robot API.
+# Deploy from repo root: `fly deploy --app robot-api-andres-morones`
+# Build context = repo root (Dockerfile lives at api/Dockerfile and references `api/...` paths).
+#
+# First-time setup (manual, one-time):
+#   1. Install flyctl: https://fly.io/docs/hands-on/install-flyctl/
+#   2. fly auth login
+#   3. fly launch --no-deploy   (creates the app on Fly; pick app name = robot-api-<your-handle>; pick IAD region)
+#      Update the `app = "..."` line below with the chosen name.
+#   4. fly secrets set API_BEARER_TOKEN=<your-strong-token> HAPPYROBOT_API_KEY=<your-sk_live_...> FMCSA_WEB_KEY=<key>
+#   5. fly deploy
+#   6. fly status   (verify machine running + healthchecks green)
+#   7. curl https://<app>.fly.dev/healthz   (verify HTTPS + Let's Encrypt)
+#
+# NOTE (post-v15): no persistent volume needed. HR Twin (managed Postgres) owns
+# calls_log + bookings; the legacy data/calls.json + /data mount are gone.
+
+app = "robot-api-andres-morones"      # change after the first `fly launch` if you want a different one
+primary_region = "iad"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+
+[build]
+  dockerfile = "api/Dockerfile"
+
+[env]
+  # loads.csv is bundled into the image at /app/loads.csv by Dockerfile.
+  LOADS_CSV_PATH = "/app/loads.csv"
+  HR_BASE_URL = "https://platform.happyrobot.ai/api/v2"
+  LOG_LEVEL = "INFO"
+
+[http_service]
+  internal_port = 8000
+  force_https = true                  # spec: HTTPS required
+  auto_stop_machines = false          # MVP: keep the machine warm; HR webhooks need fast cold-start avoidance
+  auto_start_machines = true
+  min_machines_running = 1            # one machine is enough for take-home; scale later
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/healthz"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "512mb"

@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Quality Score Trend — Scatter Batch A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0A0E15;
+    --panel: #11161F;
+    --border: #1F2733;
+    --ink: #E6EBF2;
+    --muted: #94A3B8;
+    --muted-2: #64748B;
+    --forest: #15803d;
+    --amber: #b45309;
+    --brick: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .page-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+  .page-subtitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 32px;
+    color: var(--ink);
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px 24px;
+    margin-bottom: 24px;
+  }
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--muted-2);
+    text-transform: uppercase;
+  }
+  .card-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 18px;
+    max-width: 640px;
+  }
+  .chart-frame {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+  svg { display: block; }
+  .axis-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    fill: var(--muted-2);
+    letter-spacing: 0.06em;
+  }
+  .axis-tick {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    fill: var(--muted-2);
+  }
+  .grid-line { stroke: #1A2230; stroke-width: 1; }
+  .grid-line-strong { stroke: #232C3A; stroke-width: 1; }
+  .threshold-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="page-title">Quality Tab • Widget Batch A</p>
+  <h1 class="page-subtitle">Quality Score Trend — Scatter Concepts</h1>
+
+  <!-- ============= SHARED DATA + UTILS ============= -->
+  <script>
+    // Deterministic LCG so previews are reproducible
+    function mulberry32(seed) {
+      let t = seed >>> 0;
+      return function() {
+        t = (t + 0x6D2B79F5) >>> 0;
+        let r = Math.imul(t ^ (t >>> 15), 1 | t);
+        r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    const DAYS = 30;
+    const N = 60;
+    const rand = mulberry32(20260501);
+
+    // Build distribution: 70% [80,100], 20% [70,85], 10% [<70]; 5 outliers in [30,40]
+    const POINTS = [];
+    for (let i = 0; i < N; i++) {
+      const r = rand();
+      const day = rand() * DAYS;
+      let chs;
+      if (r < 0.70) {
+        chs = 80 + Math.floor(rand() * 21); // 80..100
+      } else if (r < 0.90) {
+        chs = 70 + Math.floor(rand() * 16); // 70..85
+      } else {
+        chs = 50 + Math.floor(rand() * 20); // 50..69
+      }
+      POINTS.push({ day, chs });
+    }
+    // Force 5 outliers in 30..40
+    for (let k = 0; k < 5; k++) {
+      const idx = Math.floor(rand() * POINTS.length);
+      POINTS[idx] = { day: rand() * DAYS, chs: 30 + Math.floor(rand() * 11) };
+    }
+
+    // Sort by day for trend-line math
+    POINTS.sort((a, b) => a.day - b.day);
+
+    function tierColor(chs) {
+      if (chs < 70) return '#b91c1c';
+      if (chs < 85) return '#b45309';
+      return '#15803d';
+    }
+
+    // 7-day centered moving average over the day axis
+    function movingAvg(points, windowDays) {
+      const half = windowDays / 2;
+      // Sample at 60 evenly spaced day positions
+      const samples = [];
+      for (let i = 0; i <= 60; i++) {
+        const x = (i / 60) * DAYS;
+        const lo = x - half, hi = x + half;
+        let sum = 0, n = 0;
+        for (const p of points) {
+          if (p.day >= lo && p.day <= hi) { sum += p.chs; n++; }
+        }
+        if (n >= 2) samples.push({ x, y: sum / n });
+      }
+      return samples;
+    }
+    const MA = movingAvg(POINTS, 7);
+
+    // Day-bin counts for histogram rail
+    const BIN_COUNT = 30;
+    const BINS = new Array(BIN_COUNT).fill(0);
+    POINTS.forEach(p => {
+      const bi = Math.min(BIN_COUNT - 1, Math.floor((p.day / DAYS) * BIN_COUNT));
+      BINS[bi]++;
+    });
+    const BIN_MAX = Math.max(...BINS);
+
+    // Chart geometry
+    const W = 700, H = 260;
+    const M = { top: 18, right: 22, bottom: 32, left: 38 };
+    const PW = W - M.left - M.right;
+    const PH = H - M.top - M.bottom;
+
+    function xScale(day) { return M.left + (day / DAYS) * PW; }
+    function yScale(chs) { return M.top + (1 - chs / 100) * PH; }
+
+    // Hash horizontal jitter (deterministic per index)
+    function jitterFor(i) {
+      const v = ((i * 2654435761) >>> 0) / 4294967296;
+      return (v - 0.5) * 8; // ±4px
+    }
+  </script>
+
+  <!-- ============= CONCEPT A1 ============= -->
+  <div class="card">
+    <div class="card-head">
+      <h2 class="card-title">A1 — Traditional Clean Scatter</h2>
+      <span class="card-tag">tier-color • MA-7 trend</span>
+    </div>
+    <p class="card-desc">Standard time-vs-CHS scatter with dashed pass / excellent thresholds and a 7-day centered moving-average ribbon for drift. Tier-colored points read instantly: brick fail, amber warn, forest pass.</p>
+    <div class="chart-frame" id="a1"></div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#b91c1c"></span>&lt; 70 flagged</span>
+      <span><span class="legend-dot" style="background:#b45309"></span>70 – 85 warn</span>
+      <span><span class="legend-dot" style="background:#15803d"></span>85 – 100 excellent</span>
+      <span><span class="legend-dot" style="background:#94A3B8"></span>7-day moving avg</span>
+    </div>
+  </div>
+
+  <!-- ============= CONCEPT A2 ============= -->
+  <div class="card">
+    <div class="card-head">
+      <h2 class="card-title">A2 — Dense Dot-Plot with Jitter</h2>
+      <span class="card-tag">swarm • density rail</span>
+    </div>
+    <p class="card-desc">Smaller, semi-transparent dots with horizontal jitter create cluster intensity — overlapping calls form denser blobs. The bottom rail is a per-day count histogram so a slow day is obvious without a trend line.</p>
+    <div class="chart-frame" id="a2"></div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#15803d;opacity:0.6"></span>each call (jittered)</span>
+      <span><span class="legend-dot" style="background:#64748B;border-radius:1px"></span>calls / day</span>
+    </div>
+  </div>
+
+  <!-- ============= CONCEPT A3 ============= -->
+  <div class="card">
+    <div class="card-head">
+      <h2 class="card-title">A3 — Radiant Scatter with Threshold Zones</h2>
+      <span class="card-tag">traffic-light • glow rings</span>
+    </div>
+    <p class="card-desc">Faint color-coded gradient bands paint the pass / warn / fail regions across the plot. Larger points wear glow rings matching their tier — at-a-glance telemetry where a single brick dot in the red band reads as urgent.</p>
+    <div class="chart-frame" id="a3"></div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:#15803d;box-shadow:0 0 6px #15803d"></span>excellent zone</span>
+      <span><span class="legend-dot" style="background:#b45309;box-shadow:0 0 6px #b45309"></span>warn zone</span>
+      <span><span class="legend-dot" style="background:#b91c1c;box-shadow:0 0 6px #b91c1c"></span>fail zone</span>
+    </div>
+  </div>
+
+  <!-- ============= RENDERERS ============= -->
+  <script>
+    // Shared axis builders --------------------------------------------------
+    function buildYAxis(svg, ticks = [0, 25, 50, 70, 85, 100]) {
+      ticks.forEach(t => {
+        const y = yScale(t);
+        const isThreshold = (t === 70 || t === 85);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', M.left);
+        line.setAttribute('x2', M.left + PW);
+        line.setAttribute('y1', y);
+        line.setAttribute('y2', y);
+        line.setAttribute('class', isThreshold ? 'grid-line-strong' : 'grid-line');
+        if (isThreshold) {
+          line.setAttribute('stroke-dasharray', '4 4');
+          line.setAttribute('stroke', t === 70 ? '#b45309' : '#15803d');
+          line.setAttribute('stroke-opacity', '0.55');
+        }
+        svg.appendChild(line);
+
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lbl.setAttribute('x', M.left - 8);
+        lbl.setAttribute('y', y + 3);
+        lbl.setAttribute('text-anchor', 'end');
+        lbl.setAttribute('class', 'axis-tick');
+        lbl.textContent = t;
+        svg.appendChild(lbl);
+
+        if (isThreshold) {
+          const flag = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          flag.setAttribute('x', M.left + PW - 4);
+          flag.setAttribute('y', y - 4);
+          flag.setAttribute('text-anchor', 'end');
+          flag.setAttribute('class', 'threshold-label');
+          flag.setAttribute('fill', t === 70 ? '#b45309' : '#15803d');
+          flag.textContent = t === 70 ? 'PASS 70' : 'EXCELLENT 85';
+          svg.appendChild(flag);
+        }
+      });
+    }
+    function buildXAxis(svg, label = 'days ago') {
+      const ticks = [0, 5, 10, 15, 20, 25, 30];
+      ticks.forEach(d => {
+        const x = xScale(d);
+        const tk = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tk.setAttribute('x', x);
+        tk.setAttribute('y', M.top + PH + 14);
+        tk.setAttribute('text-anchor', 'middle');
+        tk.setAttribute('class', 'axis-tick');
+        tk.textContent = '−' + (DAYS - d) + 'd';
+        svg.appendChild(tk);
+      });
+      const cap = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      cap.setAttribute('x', M.left);
+      cap.setAttribute('y', M.top - 6);
+      cap.setAttribute('class', 'axis-label');
+      cap.textContent = 'CHS';
+      svg.appendChild(cap);
+    }
+    function svgEl(id) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', H);
+      document.getElementById(id).appendChild(svg);
+      return svg;
+    }
+
+    // -------- A1 --------
+    (function renderA1() {
+      const svg = svgEl('a1');
+      buildYAxis(svg);
+      buildXAxis(svg);
+
+      // Trend ribbon (MA)
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      let d = '';
+      MA.forEach((s, i) => {
+        d += (i === 0 ? 'M' : 'L') + xScale(s.x).toFixed(2) + ',' + yScale(s.y).toFixed(2) + ' ';
+      });
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#94A3B8');
+      path.setAttribute('stroke-width', '1.6');
+      path.setAttribute('stroke-opacity', '0.7');
+      path.setAttribute('stroke-dasharray', '0');
+      svg.appendChild(path);
+
+      POINTS.forEach(p => {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', xScale(p.day));
+        c.setAttribute('cy', yScale(p.chs));
+        c.setAttribute('r', '3.5');
+        c.setAttribute('fill', tierColor(p.chs));
+        c.setAttribute('fill-opacity', '0.92');
+        c.setAttribute('stroke', '#0A0E15');
+        c.setAttribute('stroke-width', '0.8');
+        svg.appendChild(c);
+      });
+    })();
+
+    // -------- A2 --------
+    (function renderA2() {
+      const svg = svgEl('a2');
+
+      // Carve out 36px at the bottom for histogram rail; shrink plotting area
+      const RAIL_H = 30;
+      const PH2 = PH - RAIL_H - 6;
+      function yScale2(chs) { return M.top + (1 - chs / 100) * PH2; }
+
+      // Y axis
+      [0, 25, 50, 70, 85, 100].forEach(t => {
+        const y = yScale2(t);
+        const isThreshold = (t === 70 || t === 85);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', M.left);
+        line.setAttribute('x2', M.left + PW);
+        line.setAttribute('y1', y);
+        line.setAttribute('y2', y);
+        line.setAttribute('class', isThreshold ? 'grid-line-strong' : 'grid-line');
+        if (isThreshold) {
+          line.setAttribute('stroke-dasharray', '3 5');
+          line.setAttribute('stroke', t === 70 ? '#b45309' : '#15803d');
+          line.setAttribute('stroke-opacity', '0.45');
+        }
+        svg.appendChild(line);
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lbl.setAttribute('x', M.left - 8);
+        lbl.setAttribute('y', y + 3);
+        lbl.setAttribute('text-anchor', 'end');
+        lbl.setAttribute('class', 'axis-tick');
+        lbl.textContent = t;
+        svg.appendChild(lbl);
+      });
+
+      // Jittered points
+      POINTS.forEach((p, i) => {
+        const cx = xScale(p.day) + jitterFor(i);
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', cx);
+        c.setAttribute('cy', yScale2(p.chs));
+        c.setAttribute('r', '3');
+        c.setAttribute('fill', tierColor(p.chs));
+        c.setAttribute('fill-opacity', '0.6');
+        svg.appendChild(c);
+      });
+
+      // CHS axis cap
+      const cap = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      cap.setAttribute('x', M.left);
+      cap.setAttribute('y', M.top - 6);
+      cap.setAttribute('class', 'axis-label');
+      cap.textContent = 'CHS';
+      svg.appendChild(cap);
+
+      // Histogram rail at the bottom
+      const railTop = M.top + PH2 + 8;
+      // separator line
+      const sep = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      sep.setAttribute('x1', M.left);
+      sep.setAttribute('x2', M.left + PW);
+      sep.setAttribute('y1', railTop - 3);
+      sep.setAttribute('y2', railTop - 3);
+      sep.setAttribute('stroke', '#1F2733');
+      sep.setAttribute('stroke-width', '1');
+      svg.appendChild(sep);
+
+      const binW = PW / BIN_COUNT;
+      BINS.forEach((n, i) => {
+        const h = BIN_MAX === 0 ? 0 : (n / BIN_MAX) * RAIL_H;
+        const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        r.setAttribute('x', M.left + i * binW + 0.6);
+        r.setAttribute('y', railTop + (RAIL_H - h));
+        r.setAttribute('width', Math.max(1, binW - 1.2));
+        r.setAttribute('height', h);
+        r.setAttribute('fill', '#64748B');
+        r.setAttribute('fill-opacity', '0.55');
+        svg.appendChild(r);
+      });
+
+      // Rail label
+      const rl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      rl.setAttribute('x', M.left);
+      rl.setAttribute('y', railTop + RAIL_H + 12);
+      rl.setAttribute('class', 'axis-label');
+      rl.textContent = 'calls / day';
+      svg.appendChild(rl);
+
+      // X ticks
+      [0, 5, 10, 15, 20, 25, 30].forEach(d => {
+        const x = xScale(d);
+        const tk = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        tk.setAttribute('x', x);
+        tk.setAttribute('y', railTop + RAIL_H + 12);
+        tk.setAttribute('text-anchor', 'middle');
+        tk.setAttribute('class', 'axis-tick');
+        tk.textContent = '−' + (DAYS - d) + 'd';
+        svg.appendChild(tk);
+      });
+    })();
+
+    // -------- A3 --------
+    (function renderA3() {
+      const svg = svgEl('a3');
+
+      // Gradient defs
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      function makeBandGradient(id, color) {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        g.setAttribute('id', id);
+        g.setAttribute('x1', '0'); g.setAttribute('y1', '0');
+        g.setAttribute('x2', '0'); g.setAttribute('y2', '1');
+        const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        s1.setAttribute('offset', '0%');
+        s1.setAttribute('stop-color', color);
+        s1.setAttribute('stop-opacity', '0.10');
+        const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        s2.setAttribute('offset', '100%');
+        s2.setAttribute('stop-color', color);
+        s2.setAttribute('stop-opacity', '0.04');
+        g.appendChild(s1); g.appendChild(s2);
+        defs.appendChild(g);
+      }
+      makeBandGradient('grad-forest', '#15803d');
+      makeBandGradient('grad-amber', '#b45309');
+      makeBandGradient('grad-brick', '#b91c1c');
+
+      // Glow filters per tier
+      function makeGlow(id, color) {
+        const f = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        f.setAttribute('id', id);
+        f.setAttribute('x', '-50%'); f.setAttribute('y', '-50%');
+        f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+        f.innerHTML = `
+          <feGaussianBlur stdDeviation="2.4" result="blur"/>
+          <feFlood flood-color="${color}" flood-opacity="0.85"/>
+          <feComposite in2="blur" operator="in" result="glow"/>
+          <feMerge>
+            <feMergeNode in="glow"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>`;
+        defs.appendChild(f);
+      }
+      makeGlow('glow-forest', '#15803d');
+      makeGlow('glow-amber', '#b45309');
+      makeGlow('glow-brick', '#b91c1c');
+      svg.appendChild(defs);
+
+      // Threshold bands
+      const bands = [
+        { lo: 85, hi: 100, fill: 'url(#grad-forest)' },
+        { lo: 70, hi: 85,  fill: 'url(#grad-amber)' },
+        { lo: 0,  hi: 70,  fill: 'url(#grad-brick)' },
+      ];
+      bands.forEach(b => {
+        const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        const yTop = yScale(b.hi);
+        const yBot = yScale(b.lo);
+        r.setAttribute('x', M.left);
+        r.setAttribute('y', yTop);
+        r.setAttribute('width', PW);
+        r.setAttribute('height', yBot - yTop);
+        r.setAttribute('fill', b.fill);
+        svg.appendChild(r);
+      });
+
+      // Y axis (with threshold dashes)
+      buildYAxis(svg);
+      buildXAxis(svg);
+
+      // Points with glow
+      POINTS.forEach(p => {
+        const color = tierColor(p.chs);
+        const filterId = p.chs < 70 ? 'glow-brick' : (p.chs < 85 ? 'glow-amber' : 'glow-forest');
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', xScale(p.day));
+        c.setAttribute('cy', yScale(p.chs));
+        c.setAttribute('r', '4.2');
+        c.setAttribute('fill', color);
+        c.setAttribute('fill-opacity', '0.95');
+        c.setAttribute('stroke', '#0A0E15');
+        c.setAttribute('stroke-width', '0.6');
+        c.setAttribute('filter', `url(#${filterId})`);
+        svg.appendChild(c);
+      });
+    })();
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Freight Terminal — composite theme tokens (LOCKED 2026-04-30 night).
+   Source: docs/design-explorations/themes-v2-modern-saas-lens.md §3 +
+   themes-v2-fintech-lens.md §B (Pit) + themes-v2-bi-lens.md §4 (Sigma).
+   Composition: Freight Terminal base + Bloomberg Pit on .pit-surface +
+   Sigma on .sigma-grid. Tokens stored as HSL components so they compose
+   cleanly with shadcn primitives that use `hsl(var(--token) / <alpha>)`.
+
+   Replaces the prior Dark Ops Console palette (amber primary). The
+   night composite-lock supersedes that earlier branding decision.
+*/
+
+@layer base {
+  :root {
+    /* Light fallback — kept minimal; app boots in dark via <html class="dark">.
+       Numbers below are HSL components without `hsl()`. */
+    --background: 0 0% 100%;
+    --foreground: 240 6% 3%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 3%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 3%;
+
+    --primary: 240 6% 3%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 3%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 38%;
+
+    --accent: 240 5% 90%;
+    --accent-foreground: 240 6% 3%;
+
+    --destructive: 0 65% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 158 100% 43%;
+    --success-foreground: 240 6% 3%;
+
+    --warning: 38 90% 55%;
+    --warning-foreground: 240 6% 3%;
+
+    --info: 200 70% 64%;
+    --info-foreground: 240 6% 3%;
+
+    --border: 240 5% 90%;
+    --input: 240 5% 90%;
+    --ring: 158 100% 43%;
+
+    /* Beacon brand tokens — pure-white wordmark + emerald "live" glow.
+       Replaces Freightline (safety-orange + slate-navy) per locked theme
+       composite. Beacon's palette IS Freight Terminal's. */
+    --brand-fg: 0 0% 98%;
+    --brand-glow: 158 65% 52%;
+
+    --radius: 0.5rem;
+
+    /* Chart palette — white series + emerald accent; amber + cyan + violet
+       supporting. Vercel signature: white IS the primary series color. */
+    --chart-1: 0 0% 100%;
+    --chart-2: 158 100% 43%;
+    --chart-3: 38 90% 55%;
+    --chart-4: 200 90% 74%;
+    --chart-5: 270 80% 76%;
+  }
+
+  .dark {
+    /* Freight Terminal (Vercel × Apple Developer) — base composition.
+       --bg #060607 / --surface #0E0E10 / --primary white / --accent emerald.
+       Border-strong used for KPI tile inner-top-highlight via box-shadow. */
+    --background: 240 14% 3%;        /* #060607 */
+    --foreground: 0 0% 98%;          /* #FAFAFA */
+
+    --card: 240 8% 6%;               /* #0E0E10 */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 8% 9%;            /* #16161A */
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 100%;            /* #FFFFFF — Vercel primary */
+    --primary-foreground: 240 14% 3%;
+
+    --secondary: 240 8% 14%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 7% 14%;
+    --muted-foreground: 240 4% 62%;  /* #9A9AA3 */
+
+    --accent: 240 7% 18%;            /* slate hover surface (was electric green; user locked) */
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 65% 60%;       /* muted brick red — less flashy than #FF5C5C */
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 158 100% 43%;         /* #00DC82 */
+    --success-foreground: 240 14% 3%;
+
+    --warning: 38 90% 55%;           /* #F5A524 */
+    --warning-foreground: 240 14% 3%;
+
+    --info: 200 90% 74%;             /* #7DD3FC */
+    --info-foreground: 240 14% 3%;
+
+    --border: 240 7% 16%;            /* #232328 */
+    --border-strong: 240 5% 25%;     /* #3A3A42 */
+    --input: 240 7% 16%;
+    --ring: 158 100% 43%;
+
+    /* Beacon brand tokens — repointed to Freight Terminal palette.
+       Wordmark tint + emerald glow accent for the lighthouse mark. */
+    --brand-fg: 0 0% 98%;
+    --brand-glow: 158 65% 52%;       /* #34D399 — emerald-400 glow */
+
+    /* Chart palette: white primary, emerald "good", amber, cyan, violet. */
+    --chart-1: 0 0% 100%;
+    --chart-2: 158 100% 43%;
+    --chart-3: 38 90% 55%;
+    --chart-4: 200 90% 74%;
+    --chart-5: 270 80% 76%;
+  }
+
+  /* Bloomberg Pit (TELEMETRY tab) — scope-swap class. Applies amber primary,
+     0 radius, IBM Plex Mono. Per dashboard-widget-integration-plan.md +
+     themes-v2-fintech-lens.md §B. Does NOT rebrand to FT accent-green —
+     amber stays as the deliberate "instrumentation area" signal.
+
+     Apply via `<div className="pit-surface">…</div>` on the Telemetry tab
+     panel. Tokens cascade to descendants; non-Pit surfaces unaffected. */
+  .pit-surface {
+    --background: 0 0% 4%;           /* #0A0A0A */
+    --foreground: 0 0% 90%;          /* #E6E6E6 */
+
+    --card: 0 0% 6%;                 /* #0F0F0F */
+    --card-foreground: 0 0% 90%;
+
+    --popover: 0 0% 9%;              /* #161616 */
+    --popover-foreground: 0 0% 90%;
+
+    --primary: 41 100% 50%;          /* #FFB800 — Bloomberg amber */
+    --primary-foreground: 0 0% 4%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 48%;    /* #7A7A7A */
+
+    --accent: 41 100% 50%;
+    --accent-foreground: 0 0% 4%;
+
+    --success: 142 100% 41%;         /* #00D26A */
+    --warning: 41 100% 50%;
+    --danger: 0 100% 61%;            /* #FF3838 */
+    --destructive: 0 100% 61%;
+
+    --border: 0 0% 16%;              /* #2A2A2A */
+    --border-strong: 0 0% 24%;       /* #3D3D3D */
+    --input: 0 0% 16%;
+    --ring: 41 100% 50%;
+
+    --chart-1: 41 100% 50%;
+    --chart-2: 142 100% 41%;
+    --chart-3: 0 100% 61%;
+    --chart-4: 200 70% 64%;          /* #5BC0EB */
+    --chart-5: 0 0% 90%;
+
+    --radius: 0;                     /* Square corners — Pit signature. */
+
+    color: hsl(var(--foreground));
+    background: hsl(var(--background));
+    font-family:
+      "IBM Plex Mono", "Berkeley Mono", "JetBrains Mono", ui-monospace,
+      Menlo, Consolas, monospace;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Pit-scope element overrides — uppercase labels, no shadows. */
+  .pit-surface *,
+  .pit-surface *::before,
+  .pit-surface *::after {
+    box-shadow: none !important;
+  }
+  .pit-surface .pit-label,
+  .pit-surface h2,
+  .pit-surface h3 {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* Sigma Spreadsheet primitive — for Calls + Carriers tabs.
+   themes-v2-bi-lens.md §4: 22px row height, 4px×8px cell padding, gridlines
+   on `--border`, in-cell data bars in success/danger, CHS color scale at
+   14% bg opacity. Row 32 on Freight Terminal (locked sub-q5); Sigma keeps
+   the Excel-tight 22 inside the .sigma-grid scope. */
+@layer components {
+  .sigma-grid {
+    --row-h: 32px;
+    --cell-px: 8px;
+    --cell-py: 4px;
+  }
+  .sigma-grid table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .sigma-grid thead th {
+    height: var(--row-h);
+    padding: var(--cell-py) var(--cell-px);
+    border-bottom: 1px solid hsl(var(--border));
+    border-right: 1px solid hsl(var(--border));
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: hsl(var(--muted-foreground));
+  }
+  .sigma-grid tbody td {
+    height: var(--row-h);
+    padding: var(--cell-py) var(--cell-px);
+    border-bottom: 1px solid hsl(var(--border));
+    border-right: 1px solid hsl(var(--border));
+    font-size: 12px;
+    font-feature-settings: "tnum" 1;
+    vertical-align: middle;
+  }
+  .sigma-grid tbody tr:hover {
+    background: hsl(var(--muted) / 0.4);
+  }
+  /* In-cell horizontal data bar — overlaid behind cell content.
+     Use `<div class="sigma-bar" data-pos="true|false" style="--bar:0.6">`. */
+  .sigma-grid .sigma-bar {
+    position: relative;
+  }
+  .sigma-grid .sigma-bar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: calc(var(--bar, 0) * 100%);
+    background: hsl(var(--success) / 0.18);
+    z-index: 0;
+  }
+  .sigma-grid .sigma-bar[data-pos="false"]::before {
+    background: hsl(var(--destructive) / 0.18);
+  }
+  .sigma-grid .sigma-bar > * {
+    position: relative;
+    z-index: 1;
+  }
+  /* CHS background scale — applied via data-chs="0-100" attribute. */
+  .sigma-grid .sigma-chs[data-tier="bad"] {
+    background: hsl(var(--destructive) / 0.14);
+  }
+  .sigma-grid .sigma-chs[data-tier="warn"] {
+    background: hsl(var(--warning) / 0.14);
+  }
+  .sigma-grid .sigma-chs[data-tier="good"] {
+    background: hsl(var(--success) / 0.14);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
+  }
+  /* Force tabular numerals on every monospace surface — the Vercel signature
+     for "every number is a number" alignment in tables + KPIs. */
+  code,
+  kbd,
+  pre,
+  samp,
+  .tabular-nums {
+    font-feature-settings: "tnum" 1, "calt" 0;
+  }
+}

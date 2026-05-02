@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ACME LOGISTICS — Wordmark Batch B (Color & Treatment)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0A0E15;
+    --card: #11161F;
+    --border: #1F2733;
+    --white: #FAFAFA;
+    --slate: #94A3B8;
+    --orange: #F97316;
+    --navy: #1E3A8A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 48px 32px;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 0 0 8px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #64748B;
+    margin: 0 0 40px;
+    max-width: 720px;
+    line-height: 1.5;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 920px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--orange);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .meta {
+    font-size: 11px;
+    color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stage {
+    /* Mimics the dashboard top bar — wordmark centered between two flank elements */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 36px 28px;
+    background:
+      radial-gradient(ellipse at center, rgba(30, 58, 138, 0.06), transparent 70%),
+      var(--bg);
+    min-height: 120px;
+  }
+
+  .flank-left,
+  .flank-right {
+    font-size: 12px;
+    color: #334155;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .flank-left { justify-self: start; }
+  .flank-right { justify-self: end; }
+
+  .wordmark-slot {
+    /* Width budget 280-360px, height 28-40px */
+    min-width: 280px;
+    max-width: 360px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .desc {
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--slate);
+    border-top: 1px solid var(--border);
+    background: #0D1219;
+  }
+
+  .desc strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ============================================================ */
+  /* CONCEPT B1 — Cool Slate → DOT-Orange Gradient                */
+  /* ============================================================ */
+  .b1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    background: linear-gradient(90deg, #94A3B8 0%, #94A3B8 55%, #F97316 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    white-space: nowrap;
+  }
+
+  /* ============================================================ */
+  /* CONCEPT B2 — Two-tone with mid-dot separator                 */
+  /* ============================================================ */
+  .b2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--white);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .b2 .sep {
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1;
+    transform: translateY(-1px);
+  }
+  .b2 .light {
+    color: var(--slate);
+    font-weight: 500;
+  }
+
+  /* ============================================================ */
+  /* CONCEPT B3 — Outlined wordmark inside translucent navy pill  */
+  /* ============================================================ */
+  .b3-wrap {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(30, 58, 138, 0.18);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(10, 14, 21, 0.4);
+  }
+  .b3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--white);
+    white-space: nowrap;
+  }
+  .b3 .accent {
+    -webkit-text-stroke: 1px var(--orange);
+  }
+</style>
+</head>
+<body>
+
+  <h1>ACME Logistics — Wordmark Exploration · Batch B</h1>
+  <p class="subtitle">
+    Color &amp; treatment concepts. Pure typography only — no icons, no graphic marks.
+    Each concept is shown in its dashboard context: page title on the left, date picker on the right, wordmark centered in a 280–360px × 28–40px slot.
+  </p>
+
+  <div class="grid">
+
+    <!-- ========================== B1 ========================== -->
+    <section class="card">
+      <header class="card-header">
+        <span class="label">Concept B1 — Slate → Ember Gradient</span>
+        <span class="meta">Bebas Neue · 30px · 0.14em</span>
+      </header>
+      <div class="stage">
+        <div class="flank-left">Monitor</div>
+        <div class="wordmark-slot">
+          <span class="b1">ACME LOGISTICS</span>
+        </div>
+        <div class="flank-right">Apr 24 — May 01</div>
+      </div>
+      <p class="desc">
+        <strong>Cool-to-warm gradient</strong> sweeps from slate on the left into DOT-orange on the right edge of the wordmark — reads as neutral information at first glance, with a subtle thermal &ldquo;active terminal&rdquo; energy that ramps toward the date picker.
+      </p>
+    </section>
+
+    <!-- ========================== B2 ========================== -->
+    <section class="card">
+      <header class="card-header">
+        <span class="label">Concept B2 — Mid-dot Two-tone</span>
+        <span class="meta">Inter · 18px · 0.22em · interpunct separator</span>
+      </header>
+      <div class="stage">
+        <div class="flank-left">Monitor</div>
+        <div class="wordmark-slot">
+          <span class="b2">
+            <span>ACME</span>
+            <span class="sep">·</span>
+            <span class="light">LOGISTICS</span>
+          </span>
+        </div>
+        <div class="flank-right">Apr 24 — May 01</div>
+      </div>
+      <p class="desc">
+        <strong>Bold ACME · muted LOGISTICS</strong> with a single DOT-orange interpunct as the only color accent. Establishes a visual hierarchy (brand → category) and feels native to ops/CLI tooling without any graphic element.
+      </p>
+    </section>
+
+    <!-- ========================== B3 ========================== -->
+    <section class="card">
+      <header class="card-header">
+        <span class="label">Concept B3 — Outlined in Navy Pill</span>
+        <span class="meta">Oswald · 18px stroked · navy-tinted pill</span>
+      </header>
+      <div class="stage">
+        <div class="flank-left">Monitor</div>
+        <div class="wordmark-slot">
+          <span class="b3-wrap">
+            <span class="b3">ACME&nbsp;<span class="accent">LOGISTICS</span></span>
+          </span>
+        </div>
+        <div class="flank-right">Apr 24 — May 01</div>
+      </div>
+      <p class="desc">
+        <strong>Stroked (transparent-fill) wordmark</strong> sitting inside a faint deep-navy pill with a hairline slate border. ACME stroked in white, LOGISTICS stroked in DOT-orange — gives the brand a contained, badge-like presence without ever introducing an icon.
+      </p>
+    </section>
+
+  </div>
+
+</body>
+</html>

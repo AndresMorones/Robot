@@ -1,0 +1,41 @@
+# Fly.io config for the Robot dashboard (Next.js 15).
+# Deploy from this directory: `fly deploy` (after `fly launch --no-deploy` first).
+#
+# First-time setup (manual, one-time):
+#   1. cd dashboard
+#   2. fly launch --no-deploy --name robot-dashboard-andres-morones --region iad
+#   3. fly secrets set API_BEARER_TOKEN=<same-token-as-api> API_BASE_URL=https://robot-api-andres-morones.fly.dev
+#   4. fly deploy
+#   5. curl https://robot-dashboard-andres-morones.fly.dev/dashboard
+
+app = "robot-dashboard-andres-morones"
+primary_region = "iad"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+  HOSTNAME = "0.0.0.0"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false                # always-warm for demo; ~$1/wk
+  auto_start_machines = true
+  min_machines_running = 1                  # match API posture; no cold-start
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "15s"
+    method = "GET"
+    path = "/api/health"                    # bypasses signed-link middleware
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "512mb"

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Library Cut — Visual Comparison</title>
+<style>
+  :root {
+    --background: 222 24% 8%;
+    --background-2: 222 22% 10%;
+    --card: 222 22% 11%;
+    --card-2: 222 20% 14%;
+    --border: 222 18% 22%;
+    --border-strong: 222 18% 30%;
+    --foreground: 220 14% 96%;
+    --muted-foreground: 220 10% 64%;
+    --primary: 36 95% 56%;
+    --primary-soft: 36 95% 56% / 0.15;
+    --success: 142 71% 45%;
+    --success-soft: 142 71% 45% / 0.15;
+    --destructive: 0 72% 55%;
+    --destructive-soft: 0 72% 55% / 0.18;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: ui-monospace, "SF Mono", Consolas, "Liberation Mono", monospace; }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: hsl(var(--muted-foreground));
+    max-width: 820px;
+    margin: 0 0 32px;
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    letter-spacing: -0.005em;
+  }
+
+  .section {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .section-summary {
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 20px;
+    font-size: 13px;
+  }
+
+  /* AB grid */
+  .ab {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ab-pane {
+    background: hsl(var(--background-2));
+    border: 1px solid hsl(var(--border));
+    border-radius: 8px;
+    padding: 18px;
+    position: relative;
+    min-height: 260px;
+  }
+
+  .ab-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 14px;
+  }
+
+  .ab-label.with { color: hsl(var(--primary)); }
+  .ab-label.without { color: hsl(var(--success)); }
+
+  /* Verdict box */
+  .verdict {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: hsl(var(--card-2));
+    border-left: 3px solid hsl(var(--primary));
+    border-radius: 4px;
+    font-size: 13px;
+    color: hsl(var(--foreground));
+  }
+
+  .verdict strong {
+    color: hsl(var(--primary));
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  /* ---------- KPI CARD ---------- */
+  .kpi-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 8px;
+    padding: 16px 18px;
+    width: 280px;
+  }
+
+  .kpi-label {
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  .kpi-value {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground));
+    margin: 0 0 10px;
+  }
+
+  .kpi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* Tremor-style BadgeDelta */
+  .tremor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: hsl(var(--success-soft));
+    color: hsl(var(--success));
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 999px;
+    line-height: 1;
+  }
+
+  .tremor-badge svg { width: 12px; height: 12px; }
+
+  /* Custom pill (without lib) — visually equivalent */
+  .custom-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: hsl(var(--success-soft));
+    color: hsl(var(--success));
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 999px;
+    line-height: 1;
+  }
+
+  .custom-pill svg { width: 12px; height: 12px; }
+
+  .sparkline { display: block; }
+
+  /* ---------- DATE PICKER ---------- */
+  .picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border-strong));
+    color: hsl(var(--foreground));
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    margin-bottom: 12px;
+  }
+
+  .picker-trigger .chev { color: hsl(var(--muted-foreground)); font-size: 10px; }
+
+  .popover {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border-strong));
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+    width: max-content;
+  }
+
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .preset-chip {
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    cursor: default;
+  }
+
+  .preset-chip.active {
+    background: hsl(var(--primary-soft));
+    color: hsl(var(--primary));
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
+  /* Calendar grid */
+  .cal-wrap {
+    display: flex;
+    gap: 18px;
+  }
+
+  .cal {
+    width: 220px;
+  }
+
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .cal-nav {
+    color: hsl(var(--muted-foreground));
+    font-size: 11px;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .cal-dow {
+    font-size: 10px;
+    color: hsl(var(--muted-foreground));
+    text-align: center;
+    padding: 4px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .cal-day {
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 4px;
+    color: hsl(var(--foreground));
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cal-day.muted { color: hsl(var(--muted-foreground)); opacity: 0.45; }
+  .cal-day.range { background: hsl(var(--primary-soft)); color: hsl(var(--primary)); }
+  .cal-day.range-end { background: hsl(var(--primary)); color: hsl(222 24% 8%); font-weight: 600; }
+
+  /* Native input fallback */
+  .native-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .native-field label {
+    display: block;
+    font-size: 11px;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .native-field input[type="date"] {
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border-strong));
+    color: hsl(var(--foreground));
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+    width: 200px;
+    color-scheme: dark;
+  }
+
+  /* ---------- BUNDLE ---------- */
+  .bundle-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .bundle-summary .ab-pane { min-height: 0; }
+
+  .bundle-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .bundle-bar {
+    flex: 1;
+    height: 18px;
+    background: hsl(var(--card-2));
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+  }
+
+  .bundle-bar-fill {
+    height: 100%;
+    background: hsl(var(--destructive));
+    border-radius: 3px;
+  }
+
+  .bundle-bar-fill.green { background: hsl(var(--success)); }
+
+  .bundle-bar-label {
+    width: 80px;
+    text-align: right;
+    font-size: 12px;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .breakdown {
+    margin-top: 6px;
+  }
+
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 60px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .breakdown-name {
+    color: hsl(var(--foreground));
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 12px;
+  }
+
+  .breakdown-bar {
+    height: 12px;
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border));
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .breakdown-bar-fill {
+    height: 100%;
+    background: hsl(var(--destructive) / 0.7);
+  }
+
+  .breakdown-size {
+    text-align: right;
+    color: hsl(var(--muted-foreground));
+    font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    font-size: 12px;
+  }
+
+  .keep-panel {
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border));
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 18px;
+    color: hsl(var(--muted-foreground));
+    font-size: 13px;
+  }
+
+  .keep-panel strong { color: hsl(var(--foreground)); font-weight: 600; }
+
+  /* ---------- RECOMMENDATION ---------- */
+  .recommendation {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--primary) / 0.4);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .recommendation h2 {
+    color: hsl(var(--primary));
+    margin-bottom: 8px;
+  }
+
+  .recommendation p {
+    color: hsl(var(--muted-foreground));
+    margin: 0 0 18px;
+  }
+
+  .rec-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .rec-btn {
+    background: hsl(var(--card-2));
+    border: 1px solid hsl(var(--border-strong));
+    color: hsl(var(--foreground));
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .rec-btn.primary {
+    background: hsl(var(--primary));
+    color: hsl(222 24% 8%);
+    border-color: hsl(var(--primary));
+    font-weight: 600;
+  }
+
+  .rec-btn.muted {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .footnote {
+    text-align: center;
+    color: hsl(var(--muted-foreground));
+    font-size: 12px;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Library Cut — Visual Comparison</h1>
+  <p class="subtitle">
+    A side-by-side mockup of the Acme Logistics ops console with five candidate libraries
+    (<span class="mono">nuqs</span>, <span class="mono">@tremor/react</span>, <span class="mono">react-day-picker</span>,
+    <span class="mono">date-fns</span>, <span class="mono">@radix-ui/react-popover</span>) versus a hand-rolled
+    equivalent. Each section shows what you keep, what you lose, and how visible the difference actually is.
+    Total potential savings: ~62 KB gz.
+  </p>
+
+  <!-- ======================================================== -->
+  <!-- SECTION 1 — KPI CARD                                     -->
+  <!-- ======================================================== -->
+  <section class="section">
+    <h2>1. KPI Card — Tremor BadgeDelta + SparkAreaChart vs. custom</h2>
+    <p class="section-summary">
+      The delta pill and sparkline render almost identically. Tremor adds ~10 KB gz for two components we
+      can replicate in ~30 lines of JSX + an inline SVG.
+    </p>
+
+    <div class="ab">
+      <!-- WITH TREMOR -->
+      <div class="ab-pane">
+        <span class="ab-label with">With @tremor/react</span>
+
+        <div class="kpi-card">
+          <p class="kpi-label">Booked Revenue</p>
+          <p class="kpi-value mono">$24,830</p>
+          <div class="kpi-row">
+            <span class="tremor-badge">
+              <!-- Tremor uses a triangle-up glyph -->
+              <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+                <path d="M6 2 L11 9 L1 9 Z"/>
+              </svg>
+              +12.3%
+            </span>
+            <!-- SparkAreaChart 60×24 -->
+            <svg class="sparkline" width="60" height="24" viewBox="0 0 60 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="tremorGrad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="hsl(142 71% 45%)" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="hsl(142 71% 45%)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,18 L10,16 L20,17 L30,12 L40,10 L50,7 L60,4 L60,24 L0,24 Z"
+                    fill="url(#tremorGrad)"/>
+              <path d="M0,18 L10,16 L20,17 L30,12 L40,10 L50,7 L60,4"
+                    fill="none" stroke="hsl(142 71% 45%)" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- WITHOUT (custom) -->
+      <div class="ab-pane">
+        <span class="ab-label without">Without — custom pill + Lucide icon + inline SVG</span>
+
+        <div class="kpi-card">
+          <p class="kpi-label">Booked Revenue</p>
+          <p class="kpi-value mono">$24,830</p>
+          <div class="kpi-row">
+            <span class="custom-pill">
+              <!-- Lucide TrendingUp (from spec: M22 7L13.5 15.5 8.5 10.5 2 17) -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 7L13.5 15.5 8.5 10.5 2 17"/>
+                <path d="M16 7h6v6"/>
+              </svg>
+              +12.3%
+            </span>
+            <svg class="sparkline" width="60" height="24" viewBox="0 0 60 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="customGrad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="hsl(142 71% 45%)" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="hsl(142 71% 45%)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,19 L10,17 L20,18 L30,13 L40,9 L50,7 L60,4 L60,24 L0,24 Z"
+                    fill="url(#customGrad)"/>
+              <path d="M0,19 L10,17 L20,18 L30,13 L40,9 L50,7 L60,4"
+                    fill="none" stroke="hsl(142 71% 45%)" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <strong>Verdict:</strong> Visual difference ~5%. The cut is essentially free — both pills and sparklines
+      use the same palette, geometry, and density. ~10 KB saved with no design loss.
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- SECTION 2 — DATE PICKER                                  -->
+  <!-- ======================================================== -->
+  <section class="section">
+    <h2>2. Date Picker — shadcn Calendar (in popover) vs. native date inputs</h2>
+    <p class="section-summary">
+      This is the real visual cost. <span class="mono">react-day-picker</span> + Radix Popover power the
+      polished two-month range picker; native <span class="mono">&lt;input type="date"&gt;</span> works but
+      looks utilitarian and varies by browser.
+    </p>
+
+    <div class="ab">
+      <!-- WITH shadcn Calendar -->
+      <div class="ab-pane">
+        <span class="ab-label with">With shadcn Calendar + Radix Popover (~37 KB)</span>
+
+        <button class="picker-trigger" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Apr 22 → Apr 28
+          <span class="chev">▾</span>
+        </button>
+
+        <div class="popover">
+          <div class="preset-row">
+            <span class="preset-chip">Today</span>
+            <span class="preset-chip">1d</span>
+            <span class="preset-chip active">7d</span>
+            <span class="preset-chip">12w</span>
+            <span class="preset-chip">1m</span>
+            <span class="preset-chip">6m</span>
+            <span class="preset-chip">1y</span>
+            <span class="preset-chip">Custom</span>
+          </div>
+
+          <div class="cal-wrap">
+            <!-- April 2026 -->
+            <div class="cal">
+              <div class="cal-header">
+                <span class="cal-nav">‹</span>
+                <span>April 2026</span>
+                <span class="cal-nav">&nbsp;</span>
+              </div>
+              <div class="cal-grid">
+                <div class="cal-dow">Su</div><div class="cal-dow">Mo</div><div class="cal-dow">Tu</div>
+                <div class="cal-dow">We</div><div class="cal-dow">Th</div><div class="cal-dow">Fr</div>
+                <div class="cal-dow">Sa</div>
+
+                <!-- April 1 was a Wed -->
+                <div class="cal-day muted">29</div>
+                <div class="cal-day muted">30</div>
+                <div class="cal-day muted">31</div>
+                <div class="cal-day">1</div>
+                <div class="cal-day">2</div>
+                <div class="cal-day">3</div>
+                <div class="cal-day">4</div>
+
+                <div class="cal-day">5</div>
+                <div class="cal-day">6</div>
+                <div class="cal-day">7</div>
+                <div class="cal-day">8</div>
+                <div class="cal-day">9</div>
+                <div class="cal-day">10</div>
+                <div class="cal-day">11</div>
+
+                <div class="cal-day">12</div>
+                <div class="cal-day">13</div>
+                <div class="cal-day">14</div>
+                <div class="cal-day">15</div>
+                <div class="cal-day">16</div>
+                <div class="cal-day">17</div>
+                <div class="cal-day">18</div>
+
+                <div class="cal-day">19</div>
+                <div class="cal-day">20</div>
+                <div class="cal-day">21</div>
+                <div class="cal-day range">22</div>
+                <div class="cal-day range">23</div>
+                <div class="cal-day range">24</div>
+                <div class="cal-day range">25</div>
+
+                <div class="cal-day range">26</div>
+                <div class="cal-day range">27</div>
+                <div class="cal-day range-end">28</div>
+                <div class="cal-day">29</div>
+                <div class="cal-day">30</div>
+                <div class="cal-day muted">1</div>
+                <div class="cal-day muted">2</div>
+              </div>
+            </div>
+
+            <!-- May 2026 -->
+            <div class="cal">
+              <div class="cal-header">
+                <span class="cal-nav">&nbsp;</span>
+                <span>May 2026</span>
+                <span class="cal-nav">›</span>
+              </div>
+              <div class="cal-grid">
+                <div class="cal-dow">Su</div><div class="cal-dow">Mo</div><div class="cal-dow">Tu</div>
+                <div class="cal-dow">We</div><div class="cal-dow">Th</div><div class="cal-dow">Fr</div>
+                <div class="cal-dow">Sa</div>
+
+                <div class="cal-day muted">26</div>
+                <div class="cal-day muted">27</div>
+                <div class="cal-day muted">28</div>
+                <div class="cal-day muted">29</div>
+                <div class="cal-day muted">30</div>
+                <div class="cal-day">1</div>
+                <div class="cal-day">2</div>
+
+                <div class="cal-day">3</div>
+                <div class="cal-day">4</div>
+                <div class="cal-day">5</div>
+                <div class="cal-day">6</div>
+                <div class="cal-day">7</div>
+                <div class="cal-day">8</div>
+                <div class="cal-day">9</div>
+
+                <div class="cal-day">10</div>
+                <div class="cal-day">11</div>
+                <div class="cal-day">12</div>
+                <div class="cal-day">13</div>
+                <div class="cal-day">14</div>
+                <div class="cal-day">15</div>
+                <div class="cal-day">16</div>
+
+                <div class="cal-day">17</div>
+                <div class="cal-day">18</div>
+                <div class="cal-day">19</div>
+                <div class="cal-day">20</div>
+                <div class="cal-day">21</div>
+                <div class="cal-day">22</div>
+                <div class="cal-day">23</div>
+
+                <div class="cal-day">24</div>
+                <div class="cal-day">25</div>
+                <div class="cal-day">26</div>
+                <div class="cal-day">27</div>
+                <div class="cal-day">28</div>
+                <div class="cal-day">29</div>
+                <div class="cal-day">30</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WITHOUT (native) -->
+      <div class="ab-pane">
+        <span class="ab-label without">Without — preset chips + native &lt;input type="date"&gt;</span>
+
+        <button class="picker-trigger" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Apr 22 → Apr 28
+          <span class="chev">▾</span>
+        </button>
+
+        <div class="popover" style="width: 320px;">
+          <div class="preset-row">
+            <span class="preset-chip">Today</span>
+            <span class="preset-chip">1d</span>
+            <span class="preset-chip active">7d</span>
+            <span class="preset-chip">12w</span>
+            <span class="preset-chip">1m</span>
+            <span class="preset-chip">6m</span>
+            <span class="preset-chip">1y</span>
+            <span class="preset-chip">Custom</span>
+          </div>
+
+          <div class="native-row">
+            <div class="native-field">
+              <label for="from">From</label>
+              <input type="date" id="from" value="2026-04-22" />
+            </div>
+            <div class="native-field">
+              <label for="to">To</label>
+              <input type="date" id="to" value="2026-04-28" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <strong>Verdict:</strong> Native inputs are visibly more utilitarian — no two-month grid, no range
+      highlighting, browser-default chrome. ~37 KB saved but the polish loss is the most visible of the
+      three. Keep the calendar if dashboard is a customer-facing deliverable.
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- SECTION 3 — BUNDLE SIZE                                  -->
+  <!-- ======================================================== -->
+  <section class="section">
+    <h2>3. Bundle size — total &amp; per library</h2>
+    <p class="section-summary">
+      Approximate gzipped sizes. Cuts compound: removing all 5 saves ~62 KB on every page load.
+    </p>
+
+    <!-- Top-level WITH vs WITHOUT -->
+    <div class="bundle-summary">
+      <div class="ab-pane" style="min-height: 0;">
+        <span class="ab-label with">With all 5 libraries</span>
+        <div class="bundle-bar-wrap">
+          <div class="bundle-bar"><div class="bundle-bar-fill" style="width: 100%;"></div></div>
+          <div class="bundle-bar-label mono">~62 KB</div>
+        </div>
+      </div>
+      <div class="ab-pane" style="min-height: 0;">
+        <span class="ab-label without">Without (cut all 5)</span>
+        <div class="bundle-bar-wrap">
+          <div class="bundle-bar"><div class="bundle-bar-fill green" style="width: 1%;"></div></div>
+          <div class="bundle-bar-label mono">~0 KB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-library breakdown -->
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <span class="breakdown-name">nuqs</span>
+        <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width: 8%;"></div></div>
+        <span class="breakdown-size">5 KB</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-name">@tremor/react</span>
+        <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width: 16%;"></div></div>
+        <span class="breakdown-size">10 KB</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-name">react-day-picker</span>
+        <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width: 40%;"></div></div>
+        <span class="breakdown-size">25 KB</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-name">date-fns</span>
+        <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width: 16%;"></div></div>
+        <span class="breakdown-size">10 KB</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-name">@radix-ui/react-popover</span>
+        <div class="breakdown-bar"><div class="breakdown-bar-fill" style="width: 19%;"></div></div>
+        <span class="breakdown-size">12 KB</span>
+      </div>
+    </div>
+
+    <div class="keep-panel">
+      <strong>What you keep either way:</strong> React 19, Next 15, Tailwind 4, shadcn Radix primitives
+      (Dialog / Tooltip / etc.), Recharts. The Recharts library alone (~95 KB) is unaffected by these cuts —
+      it dominates the bundle and is needed for every chart on the dashboard.
+    </div>
+
+    <div class="verdict">
+      <strong>Verdict:</strong> The biggest single win is <span class="mono">react-day-picker</span> at
+      25 KB — but it's also the cut with the most visible cost. The other four are mostly free wins.
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- RECOMMENDATION                                            -->
+  <!-- ======================================================== -->
+  <div class="recommendation">
+    <h2>Recommendation</h2>
+    <p>
+      Cut nuqs, Tremor, and date-fns (~25 KB) — visually free. Keep react-day-picker + Radix Popover
+      unless dashboard polish is non-negotiable for the take-home demo.
+    </p>
+    <div class="rec-buttons">
+      <div class="rec-btn">Cut all 5</div>
+      <div class="rec-btn primary">Cut 3 (keep nuqs + Tremor)</div>
+      <div class="rec-btn muted">Keep all</div>
+    </div>
+  </div>
+
+  <p class="footnote">
+    Sizes are approximate gzipped tree-shaken estimates from npm bundle analyzers — verify with
+    <span class="mono">@next/bundle-analyzer</span> on your branch before final decision.
+  </p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "happyrobot": {
+      "command": "npx",
+      "args": ["-y", "@happyrobot-ai/mcp"],
+      "env": {
+        "HAPPYROBOT_API_KEY": "${HAPPYROBOT_API_KEY}"
+      }
+    }
+  }
+}

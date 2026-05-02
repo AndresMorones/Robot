@@ -2,6 +2,8 @@
 
 Working notes Andres uses while building the inbound-carrier voice-agent workflow in the HappyRobot UI. The two prompts pasted into HR (voice-agent system prompt + post-call extraction prompt) are versioned in their own files since they configure different parts of the HR UI.
 
+> **For deep platform reference** (everything HR can do, every node type, every node config, every API endpoint), see the full-platform KB at `C:\Users\Andre\happyrobot-kb\` — start at `MANIFEST.md`. Files under `docs/references/happyrobot/` are **project-scoped** (our workflow, our prompts, our tests, our decisions); the KB is vendor-scoped and exhaustive.
+
 ## Files
 
 | File | Purpose | When to read |

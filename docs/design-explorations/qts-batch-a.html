@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>QTS Batch A — daily-mean Quality Score scatter</title>
+<style>
+  :root {
+    --bg-page: #0B0F16;
+    --panel: #11161F;
+    --border: #1F2733;
+    --ink: #E6EBF2;
+    --muted: #8A93A3;
+    --slate: #94A3B8;
+    --forest: #15803d;
+    --amber: #b45309;
+    --brick: #b91c1c;
+    --orange: #d97706;
+  }
+  html, body {
+    background: var(--bg-page);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Inter", sans-serif;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .page-title {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin: 0 0 4px;
+  }
+  .page-sub {
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 16px;
+    font-weight: 500;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    border-radius: 2px;
+  }
+  .card-variant {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 0 0 6px;
+  }
+  .card-concept {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    margin: 0 0 14px;
+    letter-spacing: 0.01em;
+  }
+  .card-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 6px;
+  }
+  .card-meta {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 16px;
+  }
+  .card-desc {
+    margin: 14px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .chart-wrap {
+    width: 100%;
+    overflow: hidden;
+  }
+  svg.chart {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Axis text */
+  .tick {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 9px;
+    fill: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .right-label {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div>
+    <div class="page-title">Design Exploration · Batch A</div>
+    <div class="page-sub">Quality Score · daily mean · 30-day scatter — 3 chart-canvas variants</div>
+  </div>
+
+  <!-- Variant A1 -->
+  <section class="card" id="card-a1">
+    <div class="card-variant">Variant A1</div>
+    <div class="card-concept">Graph Paper</div>
+    <div class="card-title">Quality Score · Daily Mean</div>
+    <div class="card-meta">Last 30 Days · CHS 0–100 · Pass 70 · Goal 85</div>
+    <div class="chart-wrap">
+      <svg class="chart" id="chart-a1" viewBox="0 0 700 260" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <p class="card-desc">Faint amber graph-paper grid, forest-green smooth spline through 30 tier-colored points, dashed thresholds with right-edge labels.</p>
+  </section>
+
+  <!-- Variant A2 -->
+  <section class="card" id="card-a2">
+    <div class="card-variant">Variant A2</div>
+    <div class="card-concept">Minimal Ink</div>
+    <div class="card-title">Quality Score · Daily Mean</div>
+    <div class="card-meta">Last 30 Days · CHS 0–100 · Pass 70 · Goal 85</div>
+    <div class="chart-wrap">
+      <svg class="chart" id="chart-a2" viewBox="0 0 700 260" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <p class="card-desc">No grid, no trend line — pure ink dots in space. Sub-70 days flip to brick. Solid hairline thresholds, no labels.</p>
+  </section>
+
+  <!-- Variant A3 -->
+  <section class="card" id="card-a3">
+    <div class="card-variant">Variant A3</div>
+    <div class="card-concept">Threshold Bands</div>
+    <div class="card-title">Quality Score · Daily Mean</div>
+    <div class="card-meta">Last 30 Days · CHS 0–100 · Pass 70 · Goal 85</div>
+    <div class="chart-wrap">
+      <svg class="chart" id="chart-a3" viewBox="0 0 700 260" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <p class="card-desc">Three faint horizontal tier-bands replace thresholds, dotted slate gridlines every 10 CHS, dashed slate 7-day moving-average line.</p>
+  </section>
+</div>
+
+<script>
+  // -------- shared data + geometry --------
+  const DAILY_MEAN = [88, 91, 84, 79, 92, 95, 87, 73, 68, 82, 89, 94, 91, 76, 65, 78, 85, 90, 93, 86, 72, 81, 88, 92, 79, 70, 84, 89, 91, 87];
+
+  const VB_W = 700;
+  const VB_H = 260;
+  const PAD_L = 38;
+  const PAD_R = 56;
+  const PAD_T = 16;
+  const PAD_B = 28;
+  const PLOT_W = VB_W - PAD_L - PAD_R; // 606
+  const PLOT_H = VB_H - PAD_T - PAD_B; // 216
+
+  const N = DAILY_MEAN.length; // 30
+
+  // X scale: index 0 -> -30d (left), index 29 -> -1d-ish, but spec says day labels at every 5th day
+  // We'll map index i -> x position evenly across PLOT_W. Day "0d" is the right edge (index 29 == -1d, treat last position as 0d in the label set).
+  function xAt(i) {
+    return PAD_L + (i / (N - 1)) * PLOT_W;
+  }
+  function yAt(v) {
+    return PAD_T + (1 - v / 100) * PLOT_H;
+  }
+
+  function tierColor(v) {
+    if (v >= 85) return "#15803d";
+    if (v >= 70) return "#b45309";
+    return "#b91c1c";
+  }
+
+  // X axis day labels: -30d, -25d, -20d, -15d, -10d, -5d, 0d (7 labels at every 5th day)
+  const X_LABELS = [
+    { i: 0,  text: "-30D" },
+    { i: 5,  text: "-25D" },
+    { i: 10, text: "-20D" },
+    { i: 15, text: "-15D" },
+    { i: 20, text: "-10D" },
+    { i: 25, text: "-5D"  },
+    { i: 29, text: "0D"   }
+  ];
+  const Y_TICKS = [0, 25, 50, 75, 100];
+
+  // 7-day moving average (centered or trailing? trailing — index i averages [i-6 .. i])
+  function trailingMA(arr, win) {
+    const out = [];
+    for (let i = 0; i < arr.length; i++) {
+      const start = Math.max(0, i - win + 1);
+      const slice = arr.slice(start, i + 1);
+      const m = slice.reduce((a, b) => a + b, 0) / slice.length;
+      out.push(m);
+    }
+    return out;
+  }
+
+  // Catmull-Rom -> bezier path for smooth spline
+  function smoothPath(points) {
+    if (points.length < 2) return "";
+    let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[i - 1] || points[i];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2] || p2;
+      const c1x = p1.x + (p2.x - p0.x) / 6;
+      const c1y = p1.y + (p2.y - p0.y) / 6;
+      const c2x = p2.x - (p3.x - p1.x) / 6;
+      const c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+    }
+    return d;
+  }
+
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (const k in attrs) {
+      if (attrs[k] !== undefined && attrs[k] !== null) el.setAttribute(k, attrs[k]);
+    }
+    return el;
+  }
+
+  function drawAxes(svg) {
+    // baseline (x axis tick line)
+    svg.appendChild(svgEl("line", {
+      x1: PAD_L, x2: PAD_L + PLOT_W,
+      y1: PAD_T + PLOT_H + 0.5, y2: PAD_T + PLOT_H + 0.5,
+      stroke: "#1F2733", "stroke-width": 1
+    }));
+    // y tick labels (left)
+    Y_TICKS.forEach(v => {
+      const y = yAt(v);
+      const t = svgEl("text", {
+        x: PAD_L - 8, y: y + 3,
+        "text-anchor": "end",
+        class: "tick"
+      });
+      t.textContent = String(v);
+      svg.appendChild(t);
+    });
+    // x tick labels (bottom)
+    X_LABELS.forEach(({ i, text }) => {
+      const x = xAt(i);
+      const t = svgEl("text", {
+        x: x, y: PAD_T + PLOT_H + 16,
+        "text-anchor": "middle",
+        class: "tick"
+      });
+      t.textContent = text;
+      svg.appendChild(t);
+    });
+  }
+
+  // -------- Variant A1: Graph Paper --------
+  (function renderA1() {
+    const svg = document.getElementById("chart-a1");
+
+    // 1) Faint amber graph-paper grid. Vertical lines every 10 CHS units. Horizontal lines every day.
+    // Vertical (every 10 CHS = at y for v=0,10,20,...,100). These are HORIZONTAL lines on screen (constant y).
+    // Wait: "lines every 10 CHS units vertical" = vertical spacing of 10 CHS = horizontal lines at each 10-unit mark.
+    // "every day horizontal" = horizontal spacing one-per-day = vertical lines at each day index.
+    const gridGroup = svgEl("g", { opacity: "0.075" });
+
+    // Horizontal CHS lines (every 10 units)
+    for (let v = 0; v <= 100; v += 10) {
+      const y = yAt(v);
+      gridGroup.appendChild(svgEl("line", {
+        x1: PAD_L, x2: PAD_L + PLOT_W,
+        y1: y, y2: y,
+        stroke: "#b45309", "stroke-width": 1
+      }));
+    }
+    // Vertical day lines
+    for (let i = 0; i < N; i++) {
+      const x = xAt(i);
+      gridGroup.appendChild(svgEl("line", {
+        x1: x, x2: x,
+        y1: PAD_T, y2: PAD_T + PLOT_H,
+        stroke: "#b45309", "stroke-width": 1
+      }));
+    }
+    svg.appendChild(gridGroup);
+
+    // 2) Smooth forest spline through points
+    const pts = DAILY_MEAN.map((v, i) => ({ x: xAt(i), y: yAt(v) }));
+    svg.appendChild(svgEl("path", {
+      d: smoothPath(pts),
+      fill: "none",
+      stroke: "#15803d",
+      "stroke-width": 1.6,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      opacity: "0.85"
+    }));
+
+    // 3) Threshold dashed lines + right-edge labels
+    // 70 — amber-rust dashed
+    svg.appendChild(svgEl("line", {
+      x1: PAD_L, x2: PAD_L + PLOT_W,
+      y1: yAt(70), y2: yAt(70),
+      stroke: "#b45309", "stroke-width": 1,
+      "stroke-dasharray": "4 4",
+      opacity: "0.85"
+    }));
+    // 85 — forest dashed
+    svg.appendChild(svgEl("line", {
+      x1: PAD_L, x2: PAD_L + PLOT_W,
+      y1: yAt(85), y2: yAt(85),
+      stroke: "#15803d", "stroke-width": 1,
+      "stroke-dasharray": "4 4",
+      opacity: "0.9"
+    }));
+
+    // Right-edge labels
+    const lbl70 = svgEl("text", {
+      x: PAD_L + PLOT_W + 6,
+      y: yAt(70) + 3,
+      class: "right-label",
+      fill: "#b45309"
+    });
+    lbl70.textContent = "PASS 70";
+    svg.appendChild(lbl70);
+
+    const lbl85 = svgEl("text", {
+      x: PAD_L + PLOT_W + 6,
+      y: yAt(85) + 3,
+      class: "right-label",
+      fill: "#15803d"
+    });
+    lbl85.textContent = "GOAL 85";
+    svg.appendChild(lbl85);
+
+    // 4) Tier-colored filled circles
+    DAILY_MEAN.forEach((v, i) => {
+      svg.appendChild(svgEl("circle", {
+        cx: xAt(i), cy: yAt(v),
+        r: 2.8,
+        fill: tierColor(v),
+        stroke: "#11161F",
+        "stroke-width": 1
+      }));
+    });
+
+    drawAxes(svg);
+  })();
+
+  // -------- Variant A2: Minimal Ink --------
+  (function renderA2() {
+    const svg = document.getElementById("chart-a2");
+
+    // 1) Transparent canvas — no grid
+
+    // 2) No trend line
+
+    // 3) Solid hairline thresholds (no labels)
+    svg.appendChild(svgEl("line", {
+      x1: PAD_L, x2: PAD_L + PLOT_W,
+      y1: yAt(70), y2: yAt(70),
+      stroke: "#b45309", "stroke-width": 0.75,
+      opacity: "0.7"
+    }));
+    svg.appendChild(svgEl("line", {
+      x1: PAD_L, x2: PAD_L + PLOT_W,
+      y1: yAt(85), y2: yAt(85),
+      stroke: "#15803d", "stroke-width": 0.75,
+      opacity: "0.7"
+    }));
+
+    // 4) Points: ink (#E6EBF2) by default; brick fill when sub-70
+    DAILY_MEAN.forEach((v, i) => {
+      const fill = v < 70 ? "#b91c1c" : "#E6EBF2";
+      svg.appendChild(svgEl("circle", {
+        cx: xAt(i), cy: yAt(v),
+        r: 2.6,
+        fill: fill
+      }));
+    });
+
+    drawAxes(svg);
+  })();
+
+  // -------- Variant A3: Threshold Bands --------
+  (function renderA3() {
+    const svg = document.getElementById("chart-a3");
+
+    // 1) Three horizontal band fills
+    // brick band 0..70
+    svg.appendChild(svgEl("rect", {
+      x: PAD_L, y: yAt(70),
+      width: PLOT_W,
+      height: yAt(0) - yAt(70),
+      fill: "#b91c1c", opacity: "0.04"
+    }));
+    // amber band 70..85
+    svg.appendChild(svgEl("rect", {
+      x: PAD_L, y: yAt(85),
+      width: PLOT_W,
+      height: yAt(70) - yAt(85),
+      fill: "#b45309", opacity: "0.04"
+    }));
+    // forest band 85..100
+    svg.appendChild(svgEl("rect", {
+      x: PAD_L, y: yAt(100),
+      width: PLOT_W,
+      height: yAt(85) - yAt(100),
+      fill: "#15803d", opacity: "0.04"
+    }));
+
+    // 2) Dotted slate gridlines every 10 CHS units, opacity 6%
+    const gridGroup = svgEl("g", { opacity: "0.06" });
+    for (let v = 0; v <= 100; v += 10) {
+      const y = yAt(v);
+      gridGroup.appendChild(svgEl("line", {
+        x1: PAD_L, x2: PAD_L + PLOT_W,
+        y1: y, y2: y,
+        stroke: "#94A3B8",
+        "stroke-width": 1,
+        "stroke-dasharray": "1 3"
+      }));
+    }
+    svg.appendChild(gridGroup);
+
+    // 3) 7-day moving average — dashed slate
+    const ma = trailingMA(DAILY_MEAN, 7);
+    const maPts = ma.map((v, i) => ({ x: xAt(i), y: yAt(v) }));
+    svg.appendChild(svgEl("path", {
+      d: smoothPath(maPts),
+      fill: "none",
+      stroke: "#94A3B8",
+      "stroke-width": 1.4,
+      "stroke-dasharray": "5 4",
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      opacity: "0.85"
+    }));
+
+    // 4) Tier-colored filled circles (no extra threshold lines — bands ARE the thresholds)
+    DAILY_MEAN.forEach((v, i) => {
+      svg.appendChild(svgEl("circle", {
+        cx: xAt(i), cy: yAt(v),
+        r: 2.8,
+        fill: tierColor(v),
+        stroke: "#11161F",
+        "stroke-width": 1
+      }));
+    });
+
+    drawAxes(svg);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+import { CarriersListWithFilters } from "@/components/carriers-filters/carriers-list-with-filters";
+import { KpiCard } from "@/components/kpi-card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  getCarriers,
+  parseFilterParams,
+  type DashboardFilters,
+} from "@/lib/api-client";
+import { fmtNumber } from "@/lib/format";
+
+// Aligned with /dashboard/calls + /dashboard/sales — 30s ISR feels live during
+// demos without hammering Twin per request. Webhook+SSE still drives push
+// freshness on the rest of the dashboard surface (ADR-009).
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+type Props = { searchParams: Promise<{ from?: string; to?: string }> };
+
+export default async function CarriersPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const filters: DashboardFilters = parseFilterParams(sp);
+
+  const rollup = await getCarriers(filters);
+  const rows = rollup.top_carriers;
+
+  // KPI strip — derive aggregates from the rollup we already fetched. No
+  // separate API call needed; total_unique_carriers comes from the same
+  // endpoint, totals sum cheaply over <= a few hundred rows.
+  const totalCalls = rows.reduce((acc, r) => acc + r.call_count, 0);
+  const totalBookings = rows.reduce((acc, r) => acc + r.booked_count, 0);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <KpiCard
+          label="Unique carriers"
+          value={fmtNumber(rollup.total_unique_carriers)}
+        />
+        <KpiCard label="Total calls" value={fmtNumber(totalCalls)} />
+        <KpiCard label="Total bookings" value={fmtNumber(totalBookings)} />
+      </div>
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm">Carriers</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {rows.length === 0 ? (
+            <div className="flex h-32 items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground">
+              No carriers in this window.
+            </div>
+          ) : (
+            <CarriersListWithFilters rows={rows} />
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

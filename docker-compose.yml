@@ -1,0 +1,52 @@
+# Local-run orchestration for the Robot inbound-carrier-sales POC.
+#
+# Usage:
+#   1. cp .env.example .env
+#   2. Fill in API_BEARER_TOKEN + HAPPYROBOT_API_KEY (3 lines)
+#   3. docker compose up --build
+#   4. API at http://localhost:8000  ·  Dashboard at http://localhost:3000
+#
+# The dashboard reaches the API via the internal Docker network at http://api:8000
+# (no localhost binding required between them).
+#
+# Spec: FDE Sec.2.b — reviewer must be able to access AND reproduce the deployment.
+# This compose file is the manual-steps reproduction path. See docs/iac/reproduce.md
+# for full Fly redeploy.
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: robot-api
+    ports:
+      - "8000:8000"
+    environment:
+      API_BEARER_TOKEN: ${API_BEARER_TOKEN:?set in .env — protects /v1/* endpoints}
+      HAPPYROBOT_API_KEY: ${HAPPYROBOT_API_KEY:?set in .env — sk_live_... for HR Twin reads}
+      FMCSA_WEB_KEY: ${FMCSA_WEB_KEY:-cdc33e44d693a3a58451898d4ec9df862c65b954}
+      HR_BASE_URL: ${HR_BASE_URL:-https://platform.happyrobot.ai/api/v2}
+      HR_WORKFLOW_ID: ${HR_WORKFLOW_ID:-}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: robot-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      API_BEARER_TOKEN: ${API_BEARER_TOKEN:?set in .env — must match the API value}
+      API_BASE_URL: http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

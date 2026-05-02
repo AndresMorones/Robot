@@ -1,0 +1,13 @@
+{
+  "identifier": "MC-666777",
+  "identifier_type": "MC",
+  "eligible": false,
+  "manual_review_required": false,
+  "carrier_name": "Halted Transport",
+  "dot_number": "6890123",
+  "entity_type": "CARRIER",
+  "operating_status": "OUT_OF_SERVICE",
+  "insurance_on_file": true,
+  "safety_rating": "UNSATISFACTORY",
+  "reason_codes": ["OUT_OF_SERVICE"]
+}

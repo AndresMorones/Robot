@@ -1,88 +1,81 @@
 """Test fixtures.
 
-Each test gets a fresh fixture loads.json in a tmp dir + a known bearer token.
+The post-pivot architecture reads everything from HR Twin via `twin_client`. We
+swap a fake twin_client into both the sync and async paths so tests don't hit
+the network.
 """
 
-import json
 from collections.abc import Iterator
-from pathlib import Path
+from typing import Any
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from fastapi.testclient import TestClient
 
 from app.config import settings
-from app.main import app
-from app.services.load_store import load_store
 
 TEST_TOKEN = "test-bearer-token-do-not-use-in-prod"
 
-_TEST_LOADS = [
-    {
-        "load_id": "L-T1",
-        "origin": "Dallas, TX",
-        "destination": "Houston, TX",
-        "origin_state": "TX",
-        "destination_state": "TX",
-        "pickup_datetime": "2026-04-25T08:00:00Z",
-        "delivery_datetime": "2026-04-25T18:00:00Z",
-        "equipment_type": "DRY_VAN",
-        "loadboard_rate": 2500,
-        "notes": None,
-        "weight": 42000,
-        "commodity_type": "GENERAL_MERCHANDISE",
-        "num_of_pieces": 24,
-        "miles": 240,
-        "dimensions": "53x8x9 ft",
-    },
-    {
-        "load_id": "L-T2",
-        "origin": "Atlanta, GA",
-        "destination": "Miami, FL",
-        "origin_state": "GA",
-        "destination_state": "FL",
-        "pickup_datetime": "2026-04-26T08:00:00Z",
-        "delivery_datetime": "2026-04-27T12:00:00Z",
-        "equipment_type": "REEFER",
-        "loadboard_rate": 1800,
-        "notes": "Frozen produce.",
-        "weight": 38000,
-        "commodity_type": "PRODUCE_FROZEN",
-        "num_of_pieces": 18,
-        "miles": 660,
-        "dimensions": "53x8x9 ft",
-    },
-    {
-        "load_id": "L-T3",
-        "origin": "Los Angeles, CA",
-        "destination": "Phoenix, AZ",
-        "origin_state": "CA",
-        "destination_state": "AZ",
-        "pickup_datetime": "2026-04-25T14:00:00Z",
-        "delivery_datetime": "2026-04-26T08:00:00Z",
-        "equipment_type": "FLATBED",
-        "loadboard_rate": 1450,
-        "notes": "Construction materials.",
-        "weight": 45000,
-        "commodity_type": "BUILDING_MATERIALS",
-        "num_of_pieces": 6,
-        "miles": 372,
-        "dimensions": "48x8.5x4 ft",
-    },
-]
+
+@pytest.fixture(autouse=True)
+def setup_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(settings, "api_bearer_token", TEST_TOKEN)
 
 
 @pytest.fixture(autouse=True)
-def setup_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    fixture_path = tmp_path / "loads.json"
-    fixture_path.write_text(json.dumps(_TEST_LOADS))
-    monkeypatch.setattr(settings, "loads_json_path", str(fixture_path))
-    monkeypatch.setattr(settings, "api_bearer_token", TEST_TOKEN)
-    # Force a reload (lifespan also loads, but tests can call before lifespan runs).
-    load_store.load(str(fixture_path))
+def _clear_dashboard_cache() -> Iterator[None]:
+    """Wipe the in-process TTL cache between tests so a cached aggregation
+    result from one test doesn't bleed into the next one's mocked twin."""
+    from app.services.dashboard_aggregations import invalidate_dashboard_cache
+
+    invalidate_dashboard_cache()
+    yield
+    invalidate_dashboard_cache()
 
 
 @pytest.fixture
-def client() -> Iterator[TestClient]:
+def fake_twin(monkeypatch: pytest.MonkeyPatch) -> MagicMock:
+    """Replace the singleton `twin_client` with a MagicMock spying on every call.
+
+    Tests configure `fake_twin.query.return_value = [...]` for SQL responses or
+    `fake_twin.get_rows.return_value = [...]` for table reads.
+    """
+    fake = MagicMock()
+    fake.query = AsyncMock(return_value=[])
+    fake.get_rows = MagicMock(return_value=[])
+    fake.insert_row = MagicMock(return_value=None)
+    fake.close = MagicMock()
+    fake.aclose = AsyncMock()
+
+    # Patch every import path we know about.
+    import app.routers.calls as calls_mod
+    import app.routers.carriers as carriers_mod
+    import app.routers.dashboard as dash_mod
+    import app.services.bookings_store as bk_mod
+    import app.services.calls_store as cs_mod
+    import app.services.dashboard_aggregations as agg_mod
+    import app.services.load_store as ld_mod
+    import app.services.twin_client as twin_mod
+
+    monkeypatch.setattr(twin_mod, "twin_client", fake)
+    monkeypatch.setattr(bk_mod, "twin_client", fake)
+    monkeypatch.setattr(cs_mod, "twin_client", fake)
+    monkeypatch.setattr(agg_mod, "twin_client", fake)
+    monkeypatch.setattr(ld_mod, "twin_client", fake)
+    # Routers that import twin_client directly need explicit re-binding.
+    monkeypatch.setattr(calls_mod, "twin_client", fake)
+    monkeypatch.setattr(carriers_mod, "twin_client", fake)
+    # dashboard.py imports `agg` and uses agg.* — already patched on agg_mod.
+    # twin_query_audit_sample imports twin_client at call time; patch via import.
+    if hasattr(dash_mod, "twin_client"):
+        monkeypatch.setattr(dash_mod, "twin_client", fake, raising=False)
+    return fake
+
+
+@pytest.fixture
+def client(fake_twin: Any) -> Iterator[TestClient]:  # noqa: ARG001
+    from app.main import app
+
     with TestClient(app) as c:
         yield c
 

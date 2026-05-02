@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Quality Score Trend — Scatter Batch B</title>
+<style>
+  :root {
+    --bg: #0A0E15;
+    --panel: #11161F;
+    --border: #1F2733;
+    --ink: #E6EBF2;
+    --muted: #8A93A3;
+    --slate: #94A3B8;
+    --forest: #15803d;
+    --amber: #b45309;
+    --brick: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .page-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+  .page-subtitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 32px;
+    color: var(--ink);
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  .card-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .card-meta {
+    font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+  .variant-tag {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .concept-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .chart-host { width: 100%; }
+  .chart-host svg { display: block; width: 100%; height: auto; }
+  .desc {
+    margin: 14px 0 0;
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+  text {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 9px;
+    fill: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="page-title">Design exploration — batch B</p>
+  <h1 class="page-subtitle">Quality Score Trend — 3 chart-area treatments</h1>
+
+  <!-- ============================================================ -->
+  <!-- VARIANT B1 -->
+  <!-- ============================================================ -->
+  <div class="card">
+    <p class="variant-tag">Variant B1</p>
+    <p class="concept-name">Open Rings + Step Line</p>
+    <p class="card-title">Quality Score — Daily Mean</p>
+    <p class="card-meta">Last 30 days · Composite CHS · n = 30</p>
+    <div id="chart-b1" class="chart-host"></div>
+    <p class="desc">Open rings keep ink minimal so individual days breathe; the forest step-line emphasizes 7-day MA jumps over smooth flow.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- VARIANT B2 -->
+  <!-- ============================================================ -->
+  <div class="card">
+    <p class="variant-tag">Variant B2</p>
+    <p class="concept-name">Diamond Markers + Vignette</p>
+    <p class="card-title">Quality Score — Daily Mean</p>
+    <p class="card-meta">Last 30 days · Composite CHS · n = 30</p>
+    <div id="chart-b2" class="chart-host"></div>
+    <p class="desc">Radial vignette focuses the eye to chart center; diamonds + a faint forest excellence band signal the goal zone without lines.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- VARIANT B3 -->
+  <!-- ============================================================ -->
+  <div class="card">
+    <p class="variant-tag">Variant B3</p>
+    <p class="concept-name">Plus Markers + Area Fill</p>
+    <p class="card-title">Quality Score — Daily Mean</p>
+    <p class="card-meta">Last 30 days · Composite CHS · n = 30</p>
+    <div id="chart-b3" class="chart-host"></div>
+    <p class="desc">Slate dot-grid replaces line gridlines; the forest area fill grounds the trend visually while plus markers stay neutral ink.</p>
+  </div>
+</div>
+
+<script>
+  // Shared dataset — defined ONCE
+  const DAILY_MEAN = [88, 91, 84, 79, 92, 95, 87, 73, 68, 82, 89, 94, 91, 76, 65, 78, 85, 90, 93, 86, 72, 81, 88, 92, 79, 70, 84, 89, 91, 87];
+
+  // Shared geometry
+  const W = 700, H = 260;
+  const M = { top: 14, right: 56, bottom: 28, left: 36 };
+  const innerW = W - M.left - M.right;
+  const innerH = H - M.top - M.bottom;
+  const N = DAILY_MEAN.length;
+
+  function xAt(i) { return M.left + (i / (N - 1)) * innerW; }
+  function yAt(v) { return M.top + (1 - v / 100) * innerH; }
+
+  function tierColor(v) {
+    if (v >= 85) return '#15803d';
+    if (v >= 70) return '#b45309';
+    return '#b91c1c';
+  }
+
+  // 7-day moving average (trailing). Anchors first 6 days from available window.
+  function movingAvg(data, win) {
+    const out = [];
+    for (let i = 0; i < data.length; i++) {
+      const start = Math.max(0, i - win + 1);
+      const slice = data.slice(start, i + 1);
+      out.push(slice.reduce((a, b) => a + b, 0) / slice.length);
+    }
+    return out;
+  }
+  const MA7 = movingAvg(DAILY_MEAN, 7);
+
+  // Day labels at every 5th day from -30d to 0d
+  const X_TICKS = [0, 5, 10, 15, 20, 25, 29].map(i => ({
+    i,
+    label: i === 29 ? '0d' : `-${30 - i}d`
+  }));
+
+  // Catmull-Rom -> cubic bezier path for smooth splines
+  function spline(points) {
+    if (points.length < 2) return '';
+    let d = `M ${points[0][0]} ${points[0][1]}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[i - 1] || points[i];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2] || p2;
+      const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C ${c1x} ${c1y} ${c2x} ${c2y} ${p2[0]} ${p2[1]}`;
+    }
+    return d;
+  }
+
+  // ============================================================
+  // VARIANT B1 — Open Rings + Step Line
+  // ============================================================
+  (function () {
+    const svg = [];
+    svg.push(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`);
+
+    // Dotted hairlines at 70 and 85 only
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(70)}" y2="${yAt(70)}" stroke="#94A3B8" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="1 3" />`);
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(85)}" y2="${yAt(85)}" stroke="#94A3B8" stroke-opacity="0.08" stroke-width="1" stroke-dasharray="1 3" />`);
+
+    // Threshold solid hairlines
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(70)}" y2="${yAt(70)}" stroke="#b45309" stroke-width="1" />`);
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(85)}" y2="${yAt(85)}" stroke="#15803d" stroke-width="1" />`);
+    // Right-edge labels
+    svg.push(`<text x="${M.left + innerW + 6}" y="${yAt(70) + 3}" fill="#b45309">70 PASS</text>`);
+    svg.push(`<text x="${M.left + innerW + 6}" y="${yAt(85) + 3}" fill="#15803d">85 GOAL</text>`);
+
+    // Step line for MA7 (horizontal then vertical jumps)
+    let stepD = `M ${xAt(0)} ${yAt(MA7[0])}`;
+    for (let i = 1; i < N; i++) {
+      stepD += ` L ${xAt(i)} ${yAt(MA7[i - 1])} L ${xAt(i)} ${yAt(MA7[i])}`;
+    }
+    svg.push(`<path d="${stepD}" fill="none" stroke="#15803d" stroke-width="1.5" stroke-linejoin="miter" stroke-linecap="butt" />`);
+
+    // Open rings — tier-colored stroke, transparent fill
+    for (let i = 0; i < N; i++) {
+      const v = DAILY_MEAN[i];
+      svg.push(`<circle cx="${xAt(i)}" cy="${yAt(v)}" r="3" fill="none" stroke="${tierColor(v)}" stroke-width="1.5" />`);
+    }
+
+    // Y axis ticks (0, 50, 100)
+    [0, 50, 100].forEach(v => {
+      svg.push(`<text x="${M.left - 8}" y="${yAt(v) + 3}" text-anchor="end">${v}</text>`);
+    });
+
+    // X axis ticks
+    X_TICKS.forEach(t => {
+      svg.push(`<text x="${xAt(t.i)}" y="${M.top + innerH + 16}" text-anchor="middle">${t.label}</text>`);
+    });
+
+    svg.push(`</svg>`);
+    document.getElementById('chart-b1').innerHTML = svg.join('');
+  })();
+
+  // ============================================================
+  // VARIANT B2 — Diamond Markers + Vignette
+  // ============================================================
+  (function () {
+    const svg = [];
+    svg.push(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`);
+
+    // Defs — radial vignette gradient
+    svg.push(`<defs>
+      <radialGradient id="b2-vignette" cx="50%" cy="50%" r="70%">
+        <stop offset="0%" stop-color="#000000" stop-opacity="0" />
+        <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
+      </radialGradient>
+    </defs>`);
+    svg.push(`<rect x="${M.left}" y="${M.top}" width="${innerW}" height="${innerH}" fill="url(#b2-vignette)" />`);
+
+    // Faint horizontal grid every 20 units
+    for (let v = 0; v <= 100; v += 20) {
+      svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(v)}" y2="${yAt(v)}" stroke="#94A3B8" stroke-opacity="0.05" stroke-width="1" />`);
+    }
+
+    // Forest excellence band 85→100
+    svg.push(`<rect x="${M.left}" y="${yAt(100)}" width="${innerW}" height="${yAt(85) - yAt(100)}" fill="#15803d" fill-opacity="0.05" />`);
+
+    // 7-day MA spline
+    const maPts = MA7.map((v, i) => [xAt(i), yAt(v)]);
+    svg.push(`<path d="${spline(maPts)}" fill="none" stroke="#15803d" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" />`);
+
+    // Diamond markers
+    for (let i = 0; i < N; i++) {
+      const v = DAILY_MEAN[i];
+      const cx = xAt(i), cy = yAt(v);
+      const s = 3.5;
+      svg.push(`<polygon points="${cx},${cy - s} ${cx + s},${cy} ${cx},${cy + s} ${cx - s},${cy}" fill="${tierColor(v)}" />`);
+    }
+
+    // Y axis ticks
+    [0, 50, 100].forEach(v => {
+      svg.push(`<text x="${M.left - 8}" y="${yAt(v) + 3}" text-anchor="end">${v}</text>`);
+    });
+
+    // X axis ticks
+    X_TICKS.forEach(t => {
+      svg.push(`<text x="${xAt(t.i)}" y="${M.top + innerH + 16}" text-anchor="middle">${t.label}</text>`);
+    });
+
+    svg.push(`</svg>`);
+    document.getElementById('chart-b2').innerHTML = svg.join('');
+  })();
+
+  // ============================================================
+  // VARIANT B3 — Plus Markers + Area Fill
+  // ============================================================
+  (function () {
+    const svg = [];
+    svg.push(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`);
+
+    // Defs — area fill gradient
+    svg.push(`<defs>
+      <linearGradient id="b3-area" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#15803d" stop-opacity="0.06" />
+        <stop offset="100%" stop-color="#15803d" stop-opacity="0" />
+      </linearGradient>
+    </defs>`);
+
+    // Slate dot-grid: every day × every 10 CHS
+    for (let i = 0; i < N; i++) {
+      for (let v = 0; v <= 100; v += 10) {
+        svg.push(`<circle cx="${xAt(i)}" cy="${yAt(v)}" r="0.7" fill="#94A3B8" fill-opacity="0.08" />`);
+      }
+    }
+
+    // Threshold dashed lines (NO labels)
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(70)}" y2="${yAt(70)}" stroke="#b45309" stroke-width="1" stroke-dasharray="4 3" />`);
+    svg.push(`<line x1="${M.left}" x2="${M.left + innerW}" y1="${yAt(85)}" y2="${yAt(85)}" stroke="#15803d" stroke-width="1" stroke-dasharray="4 3" />`);
+
+    // 7-day MA spline + area fill below to y=0
+    const maPts = MA7.map((v, i) => [xAt(i), yAt(v)]);
+    const areaD = spline(maPts) + ` L ${xAt(N - 1)} ${yAt(0)} L ${xAt(0)} ${yAt(0)} Z`;
+    svg.push(`<path d="${areaD}" fill="url(#b3-area)" stroke="none" />`);
+    svg.push(`<path d="${spline(maPts)}" fill="none" stroke="#15803d" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" />`);
+
+    // Plus markers — 4px arms, neutral ink
+    for (let i = 0; i < N; i++) {
+      const v = DAILY_MEAN[i];
+      const cx = xAt(i), cy = yAt(v);
+      svg.push(`<line x1="${cx - 4}" x2="${cx + 4}" y1="${cy}" y2="${cy}" stroke="#E6EBF2" stroke-width="1.2" stroke-linecap="round" />`);
+      svg.push(`<line x1="${cx}" x2="${cx}" y1="${cy - 4}" y2="${cy + 4}" stroke="#E6EBF2" stroke-width="1.2" stroke-linecap="round" />`);
+    }
+
+    // Y axis ticks
+    [0, 50, 100].forEach(v => {
+      svg.push(`<text x="${M.left - 8}" y="${yAt(v) + 3}" text-anchor="end">${v}</text>`);
+    });
+
+    // X axis ticks
+    X_TICKS.forEach(t => {
+      svg.push(`<text x="${xAt(t.i)}" y="${M.top + innerH + 16}" text-anchor="middle">${t.label}</text>`);
+    });
+
+    svg.push(`</svg>`);
+    document.getElementById('chart-b3').innerHTML = svg.join('');
+  })();
+</script>
+</body>
+</html>

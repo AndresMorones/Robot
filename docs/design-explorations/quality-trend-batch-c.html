@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Quality Score Trend — Batch C (Non-Scatter)</title>
+<style>
+  :root {
+    --bg: #0A0E15;
+    --panel: #11161F;
+    --border: #1F2733;
+    --ink: #E6EBF2;
+    --slate-1: #94A3B8;
+    --slate-2: #64748B;
+    --forest: #15803d;
+    --amber: #b45309;
+    --brick: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 32px;
+  }
+  h1 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate-1);
+    margin: 0 0 24px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1500px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate-1);
+    margin: 0 0 4px;
+  }
+  .card-sub {
+    font-size: 12px;
+    color: var(--slate-2);
+    margin: 0 0 16px;
+  }
+  .legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--slate-1);
+    align-items: center;
+  }
+  .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  text { font-family: inherit; }
+</style>
+</head>
+<body>
+  <h1>Quality Score Trend — Batch C (Non-Scatter Concepts)</h1>
+
+  <div class="grid">
+
+    <!-- ===================== C1 — DAILY HEATMAP / CALENDAR GRID ===================== -->
+    <div class="card">
+      <div class="card-title">C1 — Daily Quality Heatmap</div>
+      <div class="card-sub">30 days · cell color = mean CHS · count of calls inset</div>
+      <svg id="c1" width="700" height="260" viewBox="0 0 700 260"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:#b91c1c"></span>&lt; 70</span>
+        <span><span class="swatch" style="background:#b45309"></span>70–85</span>
+        <span><span class="swatch" style="background:#15803d"></span>85–100</span>
+        <span><span class="swatch" style="background:#1F2733"></span>no data</span>
+      </div>
+    </div>
+
+    <!-- ===================== C2 — RIDGELINE / KDE ===================== -->
+    <div class="card">
+      <div class="card-title">C2 — Daily Score Density</div>
+      <div class="card-sub">vertical KDE per day · 70 / 85 reference lines</div>
+      <svg id="c2" width="700" height="260" viewBox="0 0 700 260"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:#b91c1c"></span>flag tier</span>
+        <span><span class="swatch" style="background:#b45309"></span>warn tier</span>
+        <span><span class="swatch" style="background:#15803d"></span>pass tier</span>
+        <span style="color:var(--slate-2)">— threshold @ 70 / 85</span>
+      </div>
+    </div>
+
+    <!-- ===================== C3 — DUAL-METRIC AREA + BAR ===================== -->
+    <div class="card">
+      <div class="card-title">C3 — Pass Rate &amp; Flag Volume</div>
+      <div class="card-sub">% calls ≥ 70 (top) · count of CHS &lt; 70 (bottom)</div>
+      <svg id="c3" width="700" height="260" viewBox="0 0 700 260"></svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:#15803d"></span>pass rate</span>
+        <span><span class="swatch" style="background:#b91c1c"></span>flagged calls</span>
+        <span><span class="swatch" style="background:#b45309;opacity:.35"></span>pass rate &lt; 80%</span>
+      </div>
+    </div>
+
+    <!-- ===================== C4 — RADIAL TIMELINE ===================== -->
+    <div class="card">
+      <div class="card-title">C4 — Radial Timeline</div>
+      <div class="card-sub">angle = day · radius = CHS · rings @ 70 / 85</div>
+      <div style="display:flex;align-items:center;gap:24px">
+        <svg id="c4" width="280" height="280" viewBox="0 0 280 280"></svg>
+        <div style="font-size:11px;color:var(--slate-1);line-height:1.7">
+          <div><span class="swatch" style="background:#15803d"></span>excellent ≥ 85</div>
+          <div><span class="swatch" style="background:#b45309"></span>pass 70–85</div>
+          <div><span class="swatch" style="background:#b91c1c"></span>flagged &lt; 70</div>
+          <div style="color:var(--slate-2);margin-top:8px">— dashed @ 70</div>
+          <div style="color:var(--slate-2)">— dashed @ 85</div>
+          <div style="color:var(--slate-2);margin-top:8px">center = 0 · edge = 100</div>
+          <div style="color:var(--slate-2)">12 o'clock = day 1</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* ---------- Deterministic seeded synth dataset ---------- */
+function mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(20260501);
+
+function gauss(mu, sigma) {
+  // Box-Muller via seeded rand
+  const u = Math.max(rand(), 1e-9), v = Math.max(rand(), 1e-9);
+  return mu + sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+const DAYS = 30;
+const N = 60;
+const calls = [];
+
+// 70% in 80-100, 20% in 70-85, 10% under 70, plus 5 outliers
+// Construct 55 base + 5 outliers = 60
+const baseN = N - 5;
+for (let i = 0; i < baseN; i++) {
+  const r = rand();
+  let chs;
+  if (r < 0.70)        chs = clamp(gauss(90, 5),  80, 100);
+  else if (r < 0.90)   chs = clamp(gauss(77, 4),  70, 85);
+  else                 chs = clamp(gauss(62, 5),  45, 70);
+  const day = Math.floor(rand() * DAYS); // 0..29
+  calls.push({ day, chs: Math.round(chs) });
+}
+// 5 outliers around 30-40
+for (let i = 0; i < 5; i++) {
+  calls.push({ day: Math.floor(rand() * DAYS), chs: Math.round(clamp(gauss(35, 3), 28, 42)) });
+}
+calls.sort((a, b) => a.day - b.day);
+
+/* ---------- Color helpers ---------- */
+const C_FOREST = "#15803d";
+const C_AMBER  = "#b45309";
+const C_BRICK  = "#b91c1c";
+const C_SLATE  = "#64748B";
+const C_BORDER = "#1F2733";
+const C_INK    = "#E6EBF2";
+
+function tierColor(score) {
+  if (score == null || isNaN(score)) return "#1F2733";
+  if (score < 70)  return C_BRICK;
+  if (score < 85)  return C_AMBER;
+  return C_FOREST;
+}
+
+/* ============================================================
+   C1 — DAILY HEATMAP (5 cols × 6 rows = 30 days)
+============================================================ */
+(function renderC1(){
+  const svg = document.getElementById("c1");
+  const W = 700, H = 260;
+  const cols = 6, rows = 5; // 30 cells, landscape
+  const pad = { l: 28, r: 18, t: 18, b: 28 };
+  const gw = W - pad.l - pad.r;
+  const gh = H - pad.t - pad.b;
+  const cellW = gw / cols;
+  const cellH = gh / rows;
+  const gap = 4;
+
+  // Aggregate by day
+  const byDay = new Map();
+  for (const c of calls) {
+    if (!byDay.has(c.day)) byDay.set(c.day, []);
+    byDay.get(c.day).push(c.chs);
+  }
+
+  // Day labels along top (week markers)
+  const weekTicks = [1, 8, 15, 22, 29];
+  // Just render simple "Day 1" label at top-left
+  let html = "";
+  html += `<text x="${pad.l}" y="12" font-size="10" fill="${C_SLATE}" letter-spacing="1.2">DAY 1</text>`;
+  html += `<text x="${W - pad.r}" y="12" text-anchor="end" font-size="10" fill="${C_SLATE}" letter-spacing="1.2">DAY 30</text>`;
+
+  for (let d = 0; d < DAYS; d++) {
+    const col = d % cols;
+    const row = Math.floor(d / cols);
+    const x = pad.l + col * cellW + gap / 2;
+    const y = pad.t + row * cellH + gap / 2;
+    const w = cellW - gap;
+    const h = cellH - gap;
+
+    const arr = byDay.get(d) || [];
+    const n = arr.length;
+    const mean = n ? arr.reduce((a, b) => a + b, 0) / n : null;
+    const fill = tierColor(mean);
+    const opacity = n === 0 ? 0.55 : (0.45 + Math.min(0.55, n / 6 * 0.55));
+
+    html += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" ry="3"
+              fill="${fill}" fill-opacity="${opacity}"
+              stroke="${C_BORDER}" stroke-width="1"/>`;
+
+    // Day number (top-left of cell)
+    html += `<text x="${x + 8}" y="${y + 16}" font-size="11" font-weight="600" fill="${C_INK}" fill-opacity="0.92">${d + 1}</text>`;
+
+    // Mean score (big, center-right)
+    if (n > 0) {
+      html += `<text x="${x + w - 8}" y="${y + 22}" font-size="14" font-weight="700" text-anchor="end" fill="${C_INK}">${Math.round(mean)}</text>`;
+      // count tag bottom-left
+      html += `<text x="${x + 8}" y="${y + h - 8}" font-size="9" fill="${C_INK}" fill-opacity="0.7" letter-spacing="0.5">${n} call${n>1?"s":""}</text>`;
+    } else {
+      html += `<text x="${x + w/2}" y="${y + h/2 + 4}" font-size="10" text-anchor="middle" fill="${C_SLATE}" fill-opacity="0.6">—</text>`;
+    }
+  }
+
+  svg.innerHTML = html;
+})();
+
+/* ============================================================
+   C2 — RIDGELINE / KDE per day, vertical violins
+============================================================ */
+(function renderC2(){
+  const svg = document.getElementById("c2");
+  const W = 700, H = 260;
+  const pad = { l: 36, r: 16, t: 14, b: 24 };
+  const gw = W - pad.l - pad.r;
+  const gh = H - pad.t - pad.b;
+
+  const yScale = chs => pad.t + (1 - chs / 100) * gh; // 0 -> bottom, 100 -> top
+  const xForDay = d => pad.l + (d + 0.5) / DAYS * gw;
+  const slotW = gw / DAYS;
+
+  // Build per-day KDE samples
+  const byDay = new Map();
+  for (const c of calls) {
+    if (!byDay.has(c.day)) byDay.set(c.day, []);
+    byDay.get(c.day).push(c.chs);
+  }
+
+  // KDE evaluator (gaussian, bandwidth ~6)
+  function kde(values, evalAt, bw=6) {
+    if (!values.length) return 0;
+    let s = 0;
+    for (const v of values) {
+      const z = (evalAt - v) / bw;
+      s += Math.exp(-0.5 * z * z);
+    }
+    return s / (values.length * bw * Math.sqrt(2 * Math.PI));
+  }
+
+  let html = "";
+
+  // Background grid: y-axis ticks at 0 / 50 / 70 / 85 / 100
+  const ticks = [0, 25, 50, 70, 85, 100];
+  for (const t of ticks) {
+    const y = yScale(t);
+    const isThresh = (t === 70 || t === 85);
+    const stroke = isThresh ? (t === 70 ? C_AMBER : C_FOREST) : C_BORDER;
+    const dash = isThresh ? "4 4" : "2 4";
+    const op = isThresh ? 0.9 : 0.5;
+    html += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y}" y2="${y}"
+              stroke="${stroke}" stroke-width="1" stroke-dasharray="${dash}" opacity="${op}"/>`;
+    html += `<text x="${pad.l - 6}" y="${y + 3}" font-size="9" fill="${C_SLATE}" text-anchor="end">${t}</text>`;
+  }
+
+  // X axis labels
+  for (const d of [0, 9, 19, 29]) {
+    const x = xForDay(d);
+    html += `<text x="${x}" y="${H - 8}" font-size="9" fill="${C_SLATE}" text-anchor="middle">${d + 1}</text>`;
+  }
+
+  // For each day with data: build violin path
+  const halfW = Math.max(2, slotW * 0.42);
+  // Find global max density for normalization
+  let maxDens = 0;
+  const evalGrid = [];
+  for (let s = 0; s <= 100; s += 2) evalGrid.push(s);
+  const dayDens = new Map();
+  for (const [d, arr] of byDay) {
+    const ys = evalGrid.map(s => kde(arr, s, 5));
+    dayDens.set(d, ys);
+    for (const v of ys) if (v > maxDens) maxDens = v;
+  }
+
+  for (const [d, ys] of dayDens) {
+    const arr = byDay.get(d);
+    const mean = arr.reduce((a,b)=>a+b,0) / arr.length;
+    const color = tierColor(mean);
+    const cx = xForDay(d);
+
+    // Build symmetric path: down right side then up left side
+    let pathR = "", pathL = "";
+    for (let i = 0; i < evalGrid.length; i++) {
+      const s = evalGrid[i];
+      const dens = ys[i];
+      const w = (dens / maxDens) * halfW;
+      const y = yScale(s);
+      pathR += (i === 0 ? "M" : "L") + (cx + w) + "," + y + " ";
+    }
+    for (let i = evalGrid.length - 1; i >= 0; i--) {
+      const s = evalGrid[i];
+      const dens = ys[i];
+      const w = (dens / maxDens) * halfW;
+      const y = yScale(s);
+      pathL += "L" + (cx - w) + "," + y + " ";
+    }
+    const fullPath = pathR + pathL + "Z";
+    html += `<path d="${fullPath}" fill="${color}" fill-opacity="0.55" stroke="${color}" stroke-width="0.8" stroke-opacity="0.9"/>`;
+
+    // Mean tick (small horizontal line)
+    const my = yScale(mean);
+    html += `<line x1="${cx - halfW * 0.7}" x2="${cx + halfW * 0.7}" y1="${my}" y2="${my}" stroke="${C_INK}" stroke-width="1" opacity="0.85"/>`;
+  }
+
+  svg.innerHTML = html;
+})();
+
+/* ============================================================
+   C3 — DUAL-METRIC: pass rate area (top) + flagged bars (bottom)
+============================================================ */
+(function renderC3(){
+  const svg = document.getElementById("c3");
+  const W = 700, H = 260;
+  const pad = { l: 36, r: 16, t: 14, b: 24 };
+  const splitGap = 14;
+  const topH = 150;
+  const botH = H - pad.t - pad.b - topH - splitGap;
+  const topY0 = pad.t;
+  const topY1 = pad.t + topH;
+  const botY0 = topY1 + splitGap;
+  const botY1 = H - pad.b;
+  const gw = W - pad.l - pad.r;
+
+  // Aggregate per day
+  const stats = [];
+  for (let d = 0; d < DAYS; d++) {
+    const arr = calls.filter(c => c.day === d);
+    const n = arr.length;
+    const passed = arr.filter(c => c.chs >= 70).length;
+    const flagged = arr.filter(c => c.chs < 70).length;
+    const passRate = n ? passed / n : null;
+    stats.push({ day: d, n, passRate, flagged });
+  }
+
+  const xForDay = d => pad.l + (d + 0.5) / DAYS * gw;
+  const slotW = gw / DAYS;
+
+  // Top: pass rate area scaled 50%-100%
+  const topYScale = pr => {
+    // map [0.5, 1.0] -> [topY1, topY0]
+    const v = clamp(pr, 0.5, 1.0);
+    return topY1 - (v - 0.5) / 0.5 * topH;
+  };
+
+  let html = "";
+
+  // Background bands for top panel — amber when pass rate < 80%
+  for (const s of stats) {
+    if (s.passRate !== null && s.passRate < 0.80) {
+      const x = pad.l + s.day / DAYS * gw;
+      html += `<rect x="${x}" y="${topY0}" width="${slotW}" height="${topH + splitGap + botH}"
+                fill="${C_AMBER}" fill-opacity="0.10"/>`;
+    }
+  }
+
+  // Top panel border + gridlines
+  html += `<rect x="${pad.l}" y="${topY0}" width="${gw}" height="${topH}" fill="none" stroke="${C_BORDER}" stroke-width="1"/>`;
+  for (const v of [0.5, 0.7, 0.8, 0.9, 1.0]) {
+    const y = topYScale(v);
+    html += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y}" y2="${y}"
+              stroke="${C_BORDER}" stroke-width="1" stroke-dasharray="2 4" opacity="0.7"/>`;
+    html += `<text x="${pad.l - 6}" y="${y + 3}" font-size="9" fill="${C_SLATE}" text-anchor="end">${Math.round(v * 100)}%</text>`;
+  }
+  // 80% target line emphasis
+  html += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${topYScale(0.80)}" y2="${topYScale(0.80)}"
+            stroke="${C_AMBER}" stroke-width="1" stroke-dasharray="3 3" opacity="0.85"/>`;
+
+  // Build smooth pass-rate area: interpolate missing days
+  let lastPr = 1.0;
+  const series = stats.map(s => {
+    const pr = s.passRate ?? lastPr;
+    if (s.passRate !== null) lastPr = s.passRate;
+    return { day: s.day, pr };
+  });
+
+  // smooth via simple 3-point moving average
+  const smoothed = series.map((p, i) => {
+    const a = series[Math.max(0, i - 1)].pr;
+    const b = p.pr;
+    const c = series[Math.min(series.length - 1, i + 1)].pr;
+    return { day: p.day, pr: (a + b + c) / 3 };
+  });
+
+  let areaPath = `M${pad.l},${topY1} `;
+  for (const p of smoothed) {
+    areaPath += `L${xForDay(p.day)},${topYScale(p.pr)} `;
+  }
+  areaPath += `L${W - pad.r},${topY1} Z`;
+  html += `<path d="${areaPath}" fill="${C_FOREST}" fill-opacity="0.25"/>`;
+
+  // line on top of area
+  let linePath = "";
+  smoothed.forEach((p, i) => {
+    linePath += (i === 0 ? "M" : "L") + xForDay(p.day) + "," + topYScale(p.pr) + " ";
+  });
+  html += `<path d="${linePath}" fill="none" stroke="${C_FOREST}" stroke-width="1.6"/>`;
+
+  // Top label
+  html += `<text x="${pad.l}" y="${topY0 - 2}" font-size="10" fill="${C_SLATE}" letter-spacing="1">PASS RATE (CHS ≥ 70)</text>`;
+
+  // Bottom panel: bars for flagged count
+  const maxFlagged = Math.max(1, ...stats.map(s => s.flagged));
+  html += `<text x="${pad.l}" y="${botY0 - 2}" font-size="10" fill="${C_SLATE}" letter-spacing="1">FLAGGED CALLS (CHS &lt; 70)</text>`;
+  // baseline
+  html += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${botY1}" y2="${botY1}" stroke="${C_BORDER}" stroke-width="1"/>`;
+
+  const barW = Math.max(3, slotW * 0.6);
+  for (const s of stats) {
+    if (s.flagged > 0) {
+      const h = (s.flagged / maxFlagged) * (botY1 - botY0 - 4);
+      const x = xForDay(s.day) - barW / 2;
+      const y = botY1 - h;
+      html += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="1.5" fill="${C_BRICK}" fill-opacity="0.9"/>`;
+      if (s.flagged >= 2) {
+        html += `<text x="${xForDay(s.day)}" y="${y - 3}" font-size="9" fill="${C_BRICK}" text-anchor="middle">${s.flagged}</text>`;
+      }
+    }
+  }
+
+  // Shared x labels
+  for (const d of [0, 9, 19, 29]) {
+    const x = xForDay(d);
+    html += `<text x="${x}" y="${H - 6}" font-size="9" fill="${C_SLATE}" text-anchor="middle">Day ${d + 1}</text>`;
+  }
+
+  svg.innerHTML = html;
+})();
+
+/* ============================================================
+   C4 — RADIAL TIMELINE (polar)
+============================================================ */
+(function renderC4(){
+  const svg = document.getElementById("c4");
+  const W = 280, H = 280;
+  const cx = W / 2, cy = H / 2;
+  const Rmax = 110;
+
+  // angle: 0 = top (12 o'clock), clockwise
+  const angleForDay = d => -Math.PI / 2 + (d / DAYS) * Math.PI * 2;
+  const radiusForChs = chs => (chs / 100) * Rmax;
+
+  let html = "";
+
+  // Outer disk background
+  html += `<circle cx="${cx}" cy="${cy}" r="${Rmax + 12}" fill="#0e131c" stroke="${C_BORDER}" stroke-width="1"/>`;
+
+  // Concentric guide rings (every 25)
+  for (const v of [25, 50, 75, 100]) {
+    html += `<circle cx="${cx}" cy="${cy}" r="${radiusForChs(v)}"
+              fill="none" stroke="${C_BORDER}" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>`;
+  }
+
+  // Threshold rings: 70 amber, 85 forest
+  html += `<circle cx="${cx}" cy="${cy}" r="${radiusForChs(70)}"
+            fill="none" stroke="${C_AMBER}" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.9"/>`;
+  html += `<circle cx="${cx}" cy="${cy}" r="${radiusForChs(85)}"
+            fill="none" stroke="${C_FOREST}" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.9"/>`;
+
+  // Day spokes — light, every 5 days
+  for (let d = 0; d < DAYS; d += 5) {
+    const a = angleForDay(d);
+    const x2 = cx + Math.cos(a) * (Rmax + 6);
+    const y2 = cy + Math.sin(a) * (Rmax + 6);
+    html += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}"
+              stroke="${C_BORDER}" stroke-width="1" opacity="0.5"/>`;
+    // label
+    const lx = cx + Math.cos(a) * (Rmax + 16);
+    const ly = cy + Math.sin(a) * (Rmax + 16) + 3;
+    html += `<text x="${lx}" y="${ly}" font-size="8" fill="${C_SLATE}" text-anchor="middle">D${d + 1}</text>`;
+  }
+
+  // Connect calls in chronological order with a faint trace (mean per day connected)
+  const byDay = new Map();
+  for (const c of calls) {
+    if (!byDay.has(c.day)) byDay.set(c.day, []);
+    byDay.get(c.day).push(c.chs);
+  }
+  let tracePath = "";
+  let started = false;
+  for (let d = 0; d < DAYS; d++) {
+    const arr = byDay.get(d);
+    if (!arr) continue;
+    const mean = arr.reduce((a,b)=>a+b,0) / arr.length;
+    const a = angleForDay(d);
+    const r = radiusForChs(mean);
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    tracePath += (started ? "L" : "M") + x + "," + y + " ";
+    started = true;
+  }
+  html += `<path d="${tracePath}" fill="none" stroke="${C_INK}" stroke-width="0.8" opacity="0.25"/>`;
+
+  // Plot dots — radius scaled, color by tier, alpha for density
+  for (const c of calls) {
+    const a = angleForDay(c.day);
+    const r = radiusForChs(c.chs);
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    const fill = tierColor(c.chs);
+    html += `<circle cx="${x}" cy="${y}" r="3.2" fill="${fill}" fill-opacity="0.78" stroke="${fill}" stroke-width="0.6"/>`;
+  }
+
+  // Center dot + label
+  html += `<circle cx="${cx}" cy="${cy}" r="3" fill="${C_SLATE}" opacity="0.7"/>`;
+  html += `<text x="${cx}" y="${cy - Rmax - 18}" font-size="8" fill="${C_SLATE}" text-anchor="middle" letter-spacing="1.5">DAY 1 →</text>`;
+
+  svg.innerHTML = html;
+})();
+</script>
+</body>
+</html>

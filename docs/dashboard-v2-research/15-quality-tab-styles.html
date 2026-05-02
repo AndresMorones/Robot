@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quality tab — 10 layout concepts</title>
+<style>
+  :root {
+    --bg: #060607;
+    --panel: #0a0a0c;
+    --panel2: #101014;
+    --border: #1f1f24;
+    --border2: #2a2a31;
+    --fg: #f4f4f5;
+    --muted: #9a9aa3;
+    --muted2: #6b6b74;
+    --good: #15803d;       /* Forest */
+    --good-soft: #166534;
+    --neutral: #1e3a8a;    /* Navy */
+    --neutral-soft: #1e40af;
+    --warn: #92400e;       /* Clay */
+    --warn-soft: #78350f;
+    --bad: #4b5563;        /* Slate */
+    --bad-strong: #374151;
+    --grid-line: #1c1c22;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  header { padding: 32px 40px 16px; border-bottom: 1px solid var(--border); }
+  h1 { margin: 0 0 8px; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .subtitle { color: var(--muted); font-size: 13px; margin: 0; max-width: 820px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 32px 40px 64px;
+    max-width: 1280px;
+  }
+
+  .layout-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .layout-card .head {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .layout-card .head .num {
+    font-variant-numeric: tabular-nums;
+    color: var(--muted2);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .layout-card .head h2 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; }
+  .layout-card .head .widgets {
+    color: var(--muted); font-size: 12px; flex-basis: 100%; margin-top: 4px;
+  }
+
+  .tab-canvas {
+    padding: 22px 24px 26px;
+    background: var(--bg);
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px 24px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .pros-cons .lbl {
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted2);
+    margin: 0 0 4px;
+  }
+  .pros-cons p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* shared widget primitives */
+  .widget {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .w-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin: 0 0 12px; font-weight: 500;
+  }
+  .w-title .right { float: right; color: var(--muted2); font-weight: 400; letter-spacing: 0.04em; text-transform: none; font-size: 11px; }
+  .big-number {
+    font-size: 36px; font-weight: 600; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .delta { color: var(--muted); font-size: 12px; }
+  .pill {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    border: 1px solid var(--border2); color: var(--muted);
+  }
+  .pill.good { color: #86efac; border-color: #14532d; background: rgba(21,128,61,0.08); }
+  .pill.warn { color: #fcd34d; border-color: var(--warn); background: rgba(146,64,14,0.10); }
+  .pill.bad  { color: #d1d5db; border-color: var(--bad); background: rgba(75,85,99,0.10); }
+
+  table.q-table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  table.q-table th {
+    text-align: left; font-weight: 500; color: var(--muted2);
+    padding: 6px 8px; border-bottom: 1px solid var(--border);
+    text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em;
+  }
+  table.q-table td {
+    padding: 7px 8px; border-bottom: 1px solid var(--border);
+    color: var(--fg);
+  }
+  table.q-table td.muted { color: var(--muted); }
+  table.q-table tr:last-child td { border-bottom: none; }
+
+  /* SVG axis text */
+  .ax { fill: var(--muted2); font-size: 10px; }
+  .ax-title { fill: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .grid-line { stroke: var(--grid-line); stroke-width: 1; }
+
+  /* Layout-specific grids */
+  .lg-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lg-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .lg-2-1  { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .lg-1-2  { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+  .lg-stack { display: flex; flex-direction: column; gap: 16px; }
+  .lg-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .lg-row4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+  .kpi-card { padding: 14px 16px; }
+  .kpi-card .w-title { margin-bottom: 8px; }
+  .kpi-card .big-number { font-size: 28px; }
+
+  /* Calendar heatmap cells */
+  .cal-cell { stroke: var(--border); stroke-width: 1; }
+  .legend-row {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--muted2); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .legend-row .swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--border); }
+
+  /* Stoplight column */
+  .stoplight {
+    display: grid; grid-template-columns: 1fr 80px 80px 80px; gap: 8px;
+    align-items: center; padding: 10px 8px; border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .stoplight:last-child { border-bottom: none; }
+  .stoplight .name { color: var(--fg); }
+  .stoplight .val { font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+  .stoplight .light {
+    width: 14px; height: 14px; border-radius: 50%; margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* horizontal bar */
+  .hbar {
+    display: grid; grid-template-columns: 130px 1fr 50px; gap: 10px;
+    align-items: center; font-size: 11px; padding: 5px 0;
+  }
+  .hbar .lbl { color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-size: 10px; }
+  .hbar .track { height: 14px; background: var(--panel2); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+  .hbar .fill { height: 100%; }
+  .hbar .val { text-align: right; font-variant-numeric: tabular-nums; color: var(--fg); }
+
+  /* word cloud */
+  .wc { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; padding: 6px 0; }
+  .wc .term { color: var(--muted); cursor: default; line-height: 1.2; }
+  .wc .term.s1 { font-size: 28px; color: var(--fg); font-weight: 600; }
+  .wc .term.s2 { font-size: 22px; color: #d4d4d8; }
+  .wc .term.s3 { font-size: 18px; color: #c4c4c9; }
+  .wc .term.s4 { font-size: 14px; color: var(--muted); }
+  .wc .term.s5 { font-size: 12px; color: var(--muted2); }
+
+  /* gauge */
+  .gauge-num { fill: var(--fg); font-size: 38px; font-weight: 600; }
+  .gauge-sub { fill: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* matrix */
+  .matrix { border-collapse: collapse; width: 100%; font-size: 11px; font-variant-numeric: tabular-nums; }
+  .matrix th, .matrix td { padding: 8px 6px; text-align: center; border: 1px solid var(--border); }
+  .matrix th { color: var(--muted2); font-weight: 500; text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em; }
+  .matrix td { color: var(--fg); }
+  .matrix .row-h { color: var(--muted); text-align: left; padding-left: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Quality tab — 10 layout concepts</h1>
+  <p class="subtitle">Pick-list of full-tab compositions for the carrier-ops Quality view. Same dark Freight Terminal palette throughout (Forest / Navy / Clay / Slate). Mock data: avg CHS 86.8, distribution {1, 2, 3, 5, 14}, ~12 flagged calls, ~7 days of trend.</p>
+</header>
+
+<div class="grid">
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 01 — SCORE-CARD HERO + TREND -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">01</span>
+      <h2>Score-card hero</h2>
+      <p class="widgets">Three KPI tiles (avg CHS · pass-rate · flagged) → trend line full-width → flagged-calls table</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="lg-row3" style="margin-bottom: 16px;">
+        <div class="widget kpi-card">
+          <p class="w-title">avg case-health score</p>
+          <div class="big-number">86.8</div>
+          <span class="delta">goal 85 · <span style="color:#86efac">+1.8</span></span>
+        </div>
+        <div class="widget kpi-card">
+          <p class="w-title">pass rate (CHS ≥ 70)</p>
+          <div class="big-number">76.0%</div>
+          <span class="delta">19 / 25 calls · last 7d</span>
+        </div>
+        <div class="widget kpi-card">
+          <p class="w-title">flagged (CHS &lt; 70)</p>
+          <div class="big-number">12</div>
+          <span class="delta">3 critical · 9 review</span>
+        </div>
+      </div>
+
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">avg case-health · last 7 days <span class="right">target 85 · pass 70</span></p>
+        <svg viewBox="0 0 800 220" width="100%" height="220">
+          <!-- gridlines -->
+          <line x1="60" y1="30"  x2="780" y2="30"  class="grid-line"/>
+          <line x1="60" y1="80"  x2="780" y2="80"  class="grid-line"/>
+          <line x1="60" y1="130" x2="780" y2="130" class="grid-line"/>
+          <line x1="60" y1="180" x2="780" y2="180" class="grid-line"/>
+          <text x="50" y="34"  class="ax" text-anchor="end">100</text>
+          <text x="50" y="84"  class="ax" text-anchor="end">85</text>
+          <text x="50" y="134" class="ax" text-anchor="end">70</text>
+          <text x="50" y="184" class="ax" text-anchor="end">50</text>
+          <!-- target/pass dashed -->
+          <line x1="60" y1="80"  x2="780" y2="80"  stroke="#15803d" stroke-dasharray="3 4" stroke-width="1"/>
+          <line x1="60" y1="130" x2="780" y2="130" stroke="#92400e" stroke-dasharray="3 4" stroke-width="1"/>
+          <!-- area + line -->
+          <path d="M 80 110 L 200 95 L 320 105 L 440 70 L 560 90 L 680 60 L 760 75 L 760 200 L 80 200 Z" fill="rgba(21,128,61,0.10)"/>
+          <path d="M 80 110 L 200 95 L 320 105 L 440 70 L 560 90 L 680 60 L 760 75" stroke="#15803d" stroke-width="2" fill="none"/>
+          <!-- points -->
+          <g fill="#15803d">
+            <circle cx="80"  cy="110" r="3"/><circle cx="200" cy="95"  r="3"/>
+            <circle cx="320" cy="105" r="3"/><circle cx="440" cy="70"  r="3"/>
+            <circle cx="560" cy="90"  r="3"/><circle cx="680" cy="60"  r="3"/>
+            <circle cx="760" cy="75"  r="3"/>
+          </g>
+          <!-- x-axis -->
+          <text x="80"  y="210" class="ax" text-anchor="middle">04-24</text>
+          <text x="200" y="210" class="ax" text-anchor="middle">04-25</text>
+          <text x="320" y="210" class="ax" text-anchor="middle">04-26</text>
+          <text x="440" y="210" class="ax" text-anchor="middle">04-27</text>
+          <text x="560" y="210" class="ax" text-anchor="middle">04-28</text>
+          <text x="680" y="210" class="ax" text-anchor="middle">04-29</text>
+          <text x="760" y="210" class="ax" text-anchor="middle">04-30</text>
+        </svg>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">flagged calls (CHS &lt; 70) <span class="right">12 total</span></p>
+        <table class="q-table">
+          <thead><tr><th>Time</th><th>MC</th><th>Outcome</th><th>Sentiment</th><th>CHS</th><th>Audit remark</th></tr></thead>
+          <tbody>
+            <tr><td class="muted">04-30 14:22</td><td>MC-781234</td><td>Abandoned</td><td><span class="pill bad">negative</span></td><td>32</td><td>Carrier hung up after rate quote</td></tr>
+            <tr><td class="muted">04-30 11:08</td><td>MC-559010</td><td>No match</td><td><span class="pill warn">neutral</span></td><td>48</td><td>Lane mismatch · agent gave up early</td></tr>
+            <tr><td class="muted">04-29 17:44</td><td>MC-220114</td><td>Abandoned</td><td><span class="pill bad">negative</span></td><td>54</td><td>FMCSA decline · transfer not offered</td></tr>
+            <tr><td class="muted">04-29 09:51</td><td>MC-118822</td><td>Not qualified</td><td><span class="pill warn">neutral</span></td><td>61</td><td>Did not verify carrier identity twice</td></tr>
+            <tr><td class="muted">04-28 16:02</td><td>MC-905661</td><td>Abandoned</td><td><span class="pill warn">neutral</span></td><td>68</td><td>Negotiation loop exceeded 3 rounds</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Daily ops scan — operator sees pass-rate and flagged count above the fold, drills into trend, opens flagged list.</p></div>
+      <div><p class="lbl">Worst at</p><p>Distribution shape — buries CHS bucket spread; can't see whether failures cluster low or just below threshold.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 02 — CALENDAR HEATMAP -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">02</span>
+      <h2>Calendar heatmap</h2>
+      <p class="widgets">28-day calendar (cells tinted by avg CHS) → distribution histogram + sentiment split side by side</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">avg CHS per day · last 28 days <span class="right">86.8 rolling avg · 12 flagged days</span></p>
+        <svg viewBox="0 0 800 200" width="100%" height="200">
+          <!-- weekday labels -->
+          <text x="20" y="32" class="ax">Mon</text>
+          <text x="20" y="56" class="ax">Tue</text>
+          <text x="20" y="80" class="ax">Wed</text>
+          <text x="20" y="104" class="ax">Thu</text>
+          <text x="20" y="128" class="ax">Fri</text>
+          <text x="20" y="152" class="ax">Sat</text>
+          <text x="20" y="176" class="ax">Sun</text>
+          <!-- 4 weeks x 7 days = 28 cells. Tints from slate→clay→navy→good -->
+          <g>
+            <!-- Week 1 -->
+            <rect x="60"  y="20" width="22" height="22" rx="3" class="cal-cell" fill="#1f3a2a"/>
+            <rect x="60"  y="44" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="60"  y="68" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <rect x="60"  y="92" width="22" height="22" rx="3" class="cal-cell" fill="#1e3a8a"/>
+            <rect x="60"  y="116" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="60"  y="140" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <rect x="60"  y="164" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <!-- Week 2 -->
+            <rect x="92"  y="20" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="92"  y="44" width="22" height="22" rx="3" class="cal-cell" fill="#92400e"/>
+            <rect x="92"  y="68" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <rect x="92"  y="92" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="92"  y="116" width="22" height="22" rx="3" class="cal-cell" fill="#1e3a8a"/>
+            <rect x="92"  y="140" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="92"  y="164" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <!-- Week 3 -->
+            <rect x="124" y="20" width="22" height="22" rx="3" class="cal-cell" fill="#1e3a8a"/>
+            <rect x="124" y="44" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="124" y="68" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="124" y="92" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <rect x="124" y="116" width="22" height="22" rx="3" class="cal-cell" fill="#92400e"/>
+            <rect x="124" y="140" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="124" y="164" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <!-- Week 4 (current) -->
+            <rect x="156" y="20" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="156" y="44" width="22" height="22" rx="3" class="cal-cell" fill="#166534"/>
+            <rect x="156" y="68" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="156" y="92" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+            <rect x="156" y="116" width="22" height="22" rx="3" class="cal-cell" fill="#92400e"/>
+            <rect x="156" y="140" width="22" height="22" rx="3" class="cal-cell" fill="#4b5563"/>
+            <rect x="156" y="164" width="22" height="22" rx="3" class="cal-cell" fill="#15803d"/>
+          </g>
+          <!-- legend -->
+          <g transform="translate(280,20)">
+            <text x="0" y="-4" class="ax-title">CHS scale</text>
+            <rect x="0"   y="0" width="22" height="14" fill="#4b5563" class="cal-cell"/>
+            <rect x="22"  y="0" width="22" height="14" fill="#92400e" class="cal-cell"/>
+            <rect x="44"  y="0" width="22" height="14" fill="#1e3a8a" class="cal-cell"/>
+            <rect x="66"  y="0" width="22" height="14" fill="#166534" class="cal-cell"/>
+            <rect x="88"  y="0" width="22" height="14" fill="#15803d" class="cal-cell"/>
+            <text x="0"   y="28" class="ax">&lt;50</text>
+            <text x="22"  y="28" class="ax">60</text>
+            <text x="44"  y="28" class="ax">70</text>
+            <text x="66"  y="28" class="ax">80</text>
+            <text x="88"  y="28" class="ax">90+</text>
+          </g>
+          <!-- inline call-out -->
+          <g transform="translate(440,30)">
+            <text x="0" y="0" class="ax-title">today</text>
+            <text x="0" y="22" fill="#f4f4f5" font-size="26" font-weight="600" font-family="inherit">86.8</text>
+            <text x="0" y="42" class="ax">avg CHS</text>
+            <text x="0" y="72" class="ax-title">flagged today</text>
+            <text x="0" y="94" fill="#f4f4f5" font-size="26" font-weight="600" font-family="inherit">3</text>
+            <text x="0" y="114" class="ax">CHS &lt; 70</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="lg-2col">
+        <div class="widget">
+          <p class="w-title">CHS distribution · last 7 days</p>
+          <svg viewBox="0 0 360 180" width="100%" height="180">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#2a2a31"/>
+            <line x1="40" y1="150" x2="350" y2="150" stroke="#2a2a31"/>
+            <text x="36" y="24" class="ax" text-anchor="end">15</text>
+            <text x="36" y="90" class="ax" text-anchor="end">8</text>
+            <text x="36" y="150" class="ax" text-anchor="end">0</text>
+            <rect x="60"  y="135" width="50" height="15"  fill="#4b5563"/>
+            <rect x="120" y="124" width="50" height="26"  fill="#92400e"/>
+            <rect x="180" y="115" width="50" height="35"  fill="#92400e"/>
+            <rect x="240" y="98"  width="50" height="52"  fill="#1e3a8a"/>
+            <rect x="300" y="20"  width="50" height="130" fill="#15803d"/>
+            <text x="85"  y="165" class="ax" text-anchor="middle">0-20</text>
+            <text x="145" y="165" class="ax" text-anchor="middle">20-40</text>
+            <text x="205" y="165" class="ax" text-anchor="middle">40-60</text>
+            <text x="265" y="165" class="ax" text-anchor="middle">60-80</text>
+            <text x="325" y="165" class="ax" text-anchor="middle">80-100</text>
+            <text x="85"  y="132" fill="#fff" font-size="10" text-anchor="middle">1</text>
+            <text x="145" y="121" fill="#fff" font-size="10" text-anchor="middle">2</text>
+            <text x="205" y="112" fill="#fff" font-size="10" text-anchor="middle">3</text>
+            <text x="265" y="95"  fill="#fff" font-size="10" text-anchor="middle">5</text>
+            <text x="325" y="17"  fill="#f4f4f5" font-size="10" text-anchor="middle">14</text>
+          </svg>
+        </div>
+        <div class="widget">
+          <p class="w-title">sentiment · last 7 days <span class="right">favorable 64%</span></p>
+          <svg viewBox="0 0 360 180" width="100%" height="180">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#2a2a31"/>
+            <line x1="40" y1="150" x2="350" y2="150" stroke="#2a2a31"/>
+            <text x="36" y="24" class="ax" text-anchor="end">25</text>
+            <text x="36" y="150" class="ax" text-anchor="end">0</text>
+            <!-- pos / neu / neg stacked vertical bar (totals 25) -->
+            <g>
+              <rect x="80"  y="40" width="40" height="80" fill="#15803d"/>
+              <rect x="80"  y="120" width="40" height="20" fill="#1e3a8a"/>
+              <rect x="80"  y="140" width="40" height="10" fill="#4b5563"/>
+              <text x="100" y="78" fill="#fff" font-size="10" text-anchor="middle">16</text>
+              <text x="100" y="134" fill="#fff" font-size="10" text-anchor="middle">5</text>
+              <text x="100" y="148" fill="#fff" font-size="9"  text-anchor="middle">4</text>
+              <text x="100" y="165" class="ax" text-anchor="middle">all</text>
+            </g>
+            <g>
+              <rect x="160" y="56" width="40" height="48" fill="#15803d"/>
+              <rect x="160" y="104" width="40" height="22" fill="#1e3a8a"/>
+              <rect x="160" y="126" width="40" height="14" fill="#4b5563"/>
+              <text x="180" y="86" fill="#fff" font-size="10" text-anchor="middle">10</text>
+              <text x="180" y="120" fill="#fff" font-size="10" text-anchor="middle">5</text>
+              <text x="180" y="138" fill="#fff" font-size="9"  text-anchor="middle">3</text>
+              <text x="180" y="165" class="ax" text-anchor="middle">booked</text>
+            </g>
+            <g>
+              <rect x="240" y="80" width="40" height="20" fill="#15803d"/>
+              <rect x="240" y="100" width="40" height="20" fill="#1e3a8a"/>
+              <rect x="240" y="120" width="40" height="20" fill="#4b5563"/>
+              <text x="260" y="94"  fill="#fff" font-size="10" text-anchor="middle">5</text>
+              <text x="260" y="114" fill="#fff" font-size="10" text-anchor="middle">5</text>
+              <text x="260" y="134" fill="#fff" font-size="10" text-anchor="middle">5</text>
+              <text x="260" y="165" class="ax" text-anchor="middle">flagged</text>
+            </g>
+            <g transform="translate(310,40)">
+              <rect width="10" height="10" fill="#15803d"/>
+              <text x="14" y="9" class="ax">positive</text>
+              <rect y="18" width="10" height="10" fill="#1e3a8a"/>
+              <text x="14" y="27" class="ax">neutral</text>
+              <rect y="36" width="10" height="10" fill="#4b5563"/>
+              <text x="14" y="45" class="ax">negative</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Spotting bad-day clusters at a glance — calendar reveals weekly cadence (Fridays running hot, Sundays slow).</p></div>
+      <div><p class="lbl">Worst at</p><p>Per-call detail — there is no flagged-list on this tab, drilldown requires a click.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 03 — QUADRANT SCATTER (CHS × SENTIMENT) -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">03</span>
+      <h2>Quadrant scatter</h2>
+      <p class="widgets">Scatter plot (X = CHS, Y = sentiment numeric) full-width → quadrant-count cards row → flagged-list table</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">case health × sentiment · each dot = a call</p>
+        <svg viewBox="0 0 800 320" width="100%" height="320">
+          <!-- background quadrants -->
+          <rect x="60"  y="20"  width="360" height="135" fill="rgba(146,64,14,0.05)"/>
+          <rect x="420" y="20"  width="320" height="135" fill="rgba(30,58,138,0.06)"/>
+          <rect x="60"  y="155" width="360" height="135" fill="rgba(75,85,99,0.10)"/>
+          <rect x="420" y="155" width="320" height="135" fill="rgba(21,128,61,0.08)"/>
+          <!-- axes -->
+          <line x1="60" y1="290" x2="740" y2="290" stroke="#2a2a31"/>
+          <line x1="60" y1="20"  x2="60"  y2="290" stroke="#2a2a31"/>
+          <!-- threshold line at CHS 70 -->
+          <line x1="420" y1="20" x2="420" y2="290" stroke="#92400e" stroke-dasharray="3 4"/>
+          <text x="424" y="34" class="ax" fill="#92400e">CHS 70</text>
+          <!-- y zero line -->
+          <line x1="60" y1="155" x2="740" y2="155" stroke="#2a2a31" stroke-dasharray="2 4"/>
+          <!-- ticks -->
+          <text x="60"  y="305" class="ax" text-anchor="middle">0</text>
+          <text x="200" y="305" class="ax" text-anchor="middle">40</text>
+          <text x="340" y="305" class="ax" text-anchor="middle">60</text>
+          <text x="420" y="305" class="ax" text-anchor="middle">70</text>
+          <text x="500" y="305" class="ax" text-anchor="middle">80</text>
+          <text x="600" y="305" class="ax" text-anchor="middle">90</text>
+          <text x="740" y="305" class="ax" text-anchor="middle">100</text>
+          <text x="50" y="24"  class="ax" text-anchor="end">+1</text>
+          <text x="50" y="158" class="ax" text-anchor="end">0</text>
+          <text x="50" y="290" class="ax" text-anchor="end">−1</text>
+          <text x="400" y="316" class="ax-title" text-anchor="middle">case health score</text>
+          <text x="20"  y="155" class="ax-title" text-anchor="middle" transform="rotate(-90 20,155)">sentiment</text>
+
+          <!-- quadrant labels -->
+          <text x="240" y="60" class="ax" fill="#9a9aa3">flagged · positive (5)</text>
+          <text x="580" y="60" class="ax" fill="#9a9aa3">healthy · positive (11)</text>
+          <text x="240" y="200" class="ax" fill="#9a9aa3">flagged · negative (7)</text>
+          <text x="580" y="200" class="ax" fill="#9a9aa3">healthy · negative (2)</text>
+
+          <!-- dots: flagged-positive -->
+          <g fill="#1e3a8a" opacity="0.85">
+            <circle cx="320" cy="80" r="4"/>
+            <circle cx="280" cy="100" r="4"/>
+            <circle cx="370" cy="115" r="4"/>
+            <circle cx="200" cy="90" r="4"/>
+            <circle cx="240" cy="125" r="4"/>
+          </g>
+          <!-- dots: flagged-negative -->
+          <g fill="#4b5563" opacity="0.9">
+            <circle cx="180" cy="240" r="4"/>
+            <circle cx="220" cy="220" r="4"/>
+            <circle cx="280" cy="265" r="4"/>
+            <circle cx="320" cy="200" r="4"/>
+            <circle cx="370" cy="250" r="4"/>
+            <circle cx="150" cy="270" r="4"/>
+            <circle cx="380" cy="175" r="4"/>
+          </g>
+          <!-- dots: healthy-positive -->
+          <g fill="#15803d" opacity="0.9">
+            <circle cx="500" cy="50" r="4"/>
+            <circle cx="540" cy="70" r="4"/>
+            <circle cx="580" cy="60" r="4"/>
+            <circle cx="620" cy="40" r="4"/>
+            <circle cx="660" cy="55" r="4"/>
+            <circle cx="700" cy="40" r="4"/>
+            <circle cx="720" cy="80" r="4"/>
+            <circle cx="540" cy="95" r="4"/>
+            <circle cx="600" cy="100" r="4"/>
+            <circle cx="660" cy="120" r="4"/>
+            <circle cx="700" cy="110" r="4"/>
+          </g>
+          <!-- dots: healthy-negative -->
+          <g fill="#92400e" opacity="0.85">
+            <circle cx="500" cy="195" r="4"/>
+            <circle cx="660" cy="220" r="4"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="lg-row4" style="margin-bottom: 16px;">
+        <div class="widget kpi-card"><p class="w-title">healthy &amp; happy</p><div class="big-number" style="color:#86efac">11</div><span class="delta">CHS≥70 &amp; positive</span></div>
+        <div class="widget kpi-card"><p class="w-title">healthy but sour</p><div class="big-number" style="color:#fcd34d">2</div><span class="delta">passed but negative tone</span></div>
+        <div class="widget kpi-card"><p class="w-title">flagged but happy</p><div class="big-number" style="color:#fcd34d">5</div><span class="delta">low CHS, positive tone</span></div>
+        <div class="widget kpi-card"><p class="w-title">flagged &amp; sour</p><div class="big-number" style="color:#d4d4d8">7</div><span class="delta">priority review</span></div>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">flagged &amp; sour calls (priority review)</p>
+        <table class="q-table">
+          <thead><tr><th>Time</th><th>MC</th><th>CHS</th><th>Audit remark</th></tr></thead>
+          <tbody>
+            <tr><td class="muted">04-30 14:22</td><td>MC-781234</td><td>32</td><td>Carrier hung up after rate quote</td></tr>
+            <tr><td class="muted">04-29 17:44</td><td>MC-220114</td><td>54</td><td>FMCSA decline · transfer not offered</td></tr>
+            <tr><td class="muted">04-29 09:51</td><td>MC-118822</td><td>61</td><td>Did not verify carrier identity twice</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Diagnosing the relationship between sentiment and outcome — the priority quadrant is visually unambiguous.</p></div>
+      <div><p class="lbl">Worst at</p><p>Time-series — there is no trend on this tab, you can't tell if today is worse than last week.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 04 — HERO GAUGE + DRILLDOWN -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">04</span>
+      <h2>Hero gauge + drilldown</h2>
+      <p class="widgets">Large radial gauge (avg CHS) + sparkline + flagged count → flagged-calls table full-width</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="lg-1-2" style="margin-bottom: 16px;">
+        <div class="widget">
+          <p class="w-title">avg case-health · today</p>
+          <svg viewBox="0 0 260 220" width="100%" height="220">
+            <!-- gauge arc background -->
+            <path d="M 30 180 A 100 100 0 0 1 230 180" stroke="#1f1f24" stroke-width="18" fill="none" stroke-linecap="round"/>
+            <!-- gauge arc value (86.8 / 100 of half circle => angle ~ 180*0.868) -->
+            <path d="M 30 180 A 100 100 0 0 1 222 145" stroke="#15803d" stroke-width="18" fill="none" stroke-linecap="round"/>
+            <!-- threshold ticks -->
+            <line x1="100" y1="92" x2="106" y2="98" stroke="#92400e" stroke-width="3"/>
+            <line x1="146" y1="80" x2="148" y2="89" stroke="#15803d" stroke-width="3"/>
+            <text x="130" y="120" text-anchor="middle" class="gauge-num">86.8</text>
+            <text x="130" y="142" text-anchor="middle" class="gauge-sub">avg CHS</text>
+            <text x="60"  y="200" class="ax" text-anchor="middle">0</text>
+            <text x="100" y="80"  class="ax" text-anchor="middle">70</text>
+            <text x="160" y="68"  class="ax" text-anchor="middle">85</text>
+            <text x="200" y="200" class="ax" text-anchor="middle">100</text>
+          </svg>
+        </div>
+        <div class="widget">
+          <p class="w-title">7-day trend <span class="right">+1.8 vs prior period</span></p>
+          <svg viewBox="0 0 480 220" width="100%" height="220">
+            <line x1="50" y1="40"  x2="470" y2="40"  class="grid-line"/>
+            <line x1="50" y1="100" x2="470" y2="100" class="grid-line"/>
+            <line x1="50" y1="160" x2="470" y2="160" class="grid-line"/>
+            <text x="44" y="44"  class="ax" text-anchor="end">100</text>
+            <text x="44" y="104" class="ax" text-anchor="end">85</text>
+            <text x="44" y="164" class="ax" text-anchor="end">70</text>
+            <line x1="50" y1="100" x2="470" y2="100" stroke="#15803d" stroke-dasharray="3 4"/>
+            <line x1="50" y1="160" x2="470" y2="160" stroke="#92400e" stroke-dasharray="3 4"/>
+            <path d="M 70 130 L 130 110 L 200 120 L 270 80 L 340 100 L 410 70 L 460 85" stroke="#15803d" stroke-width="2" fill="none"/>
+            <g fill="#15803d">
+              <circle cx="70"  cy="130" r="3"/><circle cx="130" cy="110" r="3"/>
+              <circle cx="200" cy="120" r="3"/><circle cx="270" cy="80"  r="3"/>
+              <circle cx="340" cy="100" r="3"/><circle cx="410" cy="70"  r="3"/>
+              <circle cx="460" cy="85"  r="3"/>
+            </g>
+            <text x="70"  y="195" class="ax" text-anchor="middle">04-24</text>
+            <text x="200" y="195" class="ax" text-anchor="middle">04-26</text>
+            <text x="340" y="195" class="ax" text-anchor="middle">04-28</text>
+            <text x="460" y="195" class="ax" text-anchor="middle">04-30</text>
+            <text x="50"  y="210" class="ax">flagged today: 3 · 7d total: 12</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">flagged calls drilldown · CHS &lt; 70 <span class="right">12 total · sortable</span></p>
+        <table class="q-table">
+          <thead><tr><th>Time</th><th>MC</th><th>Outcome</th><th>Sentiment</th><th>CHS</th><th>Audit remark</th></tr></thead>
+          <tbody>
+            <tr><td class="muted">04-30 14:22</td><td>MC-781234</td><td>Abandoned</td><td><span class="pill bad">negative</span></td><td>32</td><td>Carrier hung up after rate quote</td></tr>
+            <tr><td class="muted">04-30 11:08</td><td>MC-559010</td><td>No match</td><td><span class="pill warn">neutral</span></td><td>48</td><td>Lane mismatch · agent gave up early</td></tr>
+            <tr><td class="muted">04-29 17:44</td><td>MC-220114</td><td>Abandoned</td><td><span class="pill bad">negative</span></td><td>54</td><td>FMCSA decline · transfer not offered</td></tr>
+            <tr><td class="muted">04-29 09:51</td><td>MC-118822</td><td>Not qualified</td><td><span class="pill warn">neutral</span></td><td>61</td><td>Did not verify carrier identity twice</td></tr>
+            <tr><td class="muted">04-28 16:02</td><td>MC-905661</td><td>Abandoned</td><td><span class="pill warn">neutral</span></td><td>68</td><td>Negotiation loop exceeded 3 rounds</td></tr>
+            <tr><td class="muted">04-28 09:14</td><td>MC-554711</td><td>Abandoned</td><td><span class="pill bad">negative</span></td><td>69</td><td>Agent quoted rate before MC verify</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Single-glance status — the gauge tells you everything in one number, then drops you straight into actionable rows.</p></div>
+      <div><p class="lbl">Worst at</p><p>Distribution shape — gauge collapses CHS spread, can't see whether the avg is bimodal or tight.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 05 — RIDGELINE OVER TIME -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">05</span>
+      <h2>Ridgeline / distribution-over-time</h2>
+      <p class="widgets">Ridgeline (one density curve per day, stacked vertically) → KPI tiles → flagged-list mini</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">CHS distribution per day · last 7 days <span class="right">drift right = improving</span></p>
+        <svg viewBox="0 0 800 340" width="100%" height="340">
+          <!-- x axis at bottom -->
+          <line x1="80" y1="320" x2="780" y2="320" stroke="#2a2a31"/>
+          <text x="80"  y="335" class="ax" text-anchor="middle">0</text>
+          <text x="220" y="335" class="ax" text-anchor="middle">40</text>
+          <text x="360" y="335" class="ax" text-anchor="middle">60</text>
+          <text x="430" y="335" class="ax" text-anchor="middle">70</text>
+          <text x="500" y="335" class="ax" text-anchor="middle">80</text>
+          <text x="600" y="335" class="ax" text-anchor="middle">90</text>
+          <text x="780" y="335" class="ax" text-anchor="middle">100</text>
+          <line x1="430" y1="20" x2="430" y2="320" stroke="#92400e" stroke-dasharray="3 4"/>
+
+          <!-- Each ridge: baseline + curve (later days higher up + tighter at high CHS) -->
+          <!-- Day 1 (bottom) - widest, more spread -->
+          <g transform="translate(0,280)">
+            <text x="40" y="14" class="ax">04-24</text>
+            <path d="M 80 0 C 200 0, 280 -25, 380 -28 C 460 -30, 540 -10, 700 -5 C 750 -2, 770 0, 780 0 Z" fill="rgba(75,85,99,0.35)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,235)">
+            <text x="40" y="14" class="ax">04-25</text>
+            <path d="M 80 0 C 220 0, 320 -22, 420 -32 C 520 -36, 620 -18, 700 -10 C 740 -4, 770 0, 780 0 Z" fill="rgba(30,58,138,0.30)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,190)">
+            <text x="40" y="14" class="ax">04-26</text>
+            <path d="M 80 0 C 240 0, 360 -20, 460 -32 C 560 -38, 640 -22, 720 -8 C 750 -4, 770 0, 780 0 Z" fill="rgba(30,58,138,0.36)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,145)">
+            <text x="40" y="14" class="ax">04-27</text>
+            <path d="M 80 0 C 280 0, 400 -18, 500 -34 C 580 -40, 660 -28, 720 -12 C 750 -6, 770 0, 780 0 Z" fill="rgba(22,101,52,0.40)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,100)">
+            <text x="40" y="14" class="ax">04-28</text>
+            <path d="M 80 0 C 300 0, 440 -16, 540 -34 C 620 -42, 690 -26, 740 -12 C 760 -6, 775 0, 780 0 Z" fill="rgba(22,101,52,0.45)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,55)">
+            <text x="40" y="14" class="ax">04-29</text>
+            <path d="M 80 0 C 340 0, 480 -14, 560 -36 C 640 -44, 700 -28, 750 -10 C 770 -4, 778 0, 780 0 Z" fill="rgba(21,128,61,0.45)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+          <g transform="translate(0,15)">
+            <text x="40" y="14" class="ax">04-30</text>
+            <path d="M 80 0 C 360 0, 500 -10, 580 -34 C 650 -44, 710 -28, 755 -12 C 770 -6, 778 0, 780 0 Z" fill="rgba(21,128,61,0.50)" stroke="#9a9aa3" stroke-width="1"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="lg-row3" style="margin-bottom: 16px;">
+        <div class="widget kpi-card"><p class="w-title">avg CHS</p><div class="big-number">86.8</div><span class="delta">7-day rolling</span></div>
+        <div class="widget kpi-card"><p class="w-title">P10 CHS</p><div class="big-number">52</div><span class="delta">10th-percentile call</span></div>
+        <div class="widget kpi-card"><p class="w-title">P90 CHS</p><div class="big-number">96</div><span class="delta">90th-percentile call</span></div>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">recent flagged · last 5</p>
+        <table class="q-table">
+          <thead><tr><th>Time</th><th>MC</th><th>CHS</th><th>Audit remark</th></tr></thead>
+          <tbody>
+            <tr><td class="muted">04-30 14:22</td><td>MC-781234</td><td>32</td><td>Carrier hung up after rate quote</td></tr>
+            <tr><td class="muted">04-30 11:08</td><td>MC-559010</td><td>48</td><td>Lane mismatch · agent gave up early</td></tr>
+            <tr><td class="muted">04-29 17:44</td><td>MC-220114</td><td>54</td><td>FMCSA decline · transfer not offered</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Telling a "the distribution is moving" story — drift visible over a week, perfect for execs in a quality review.</p></div>
+      <div><p class="lbl">Worst at</p><p>Operator scan — ridgeline takes a few seconds to read, not a glance metric.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 06 — OUTCOME × CHS MATRIX -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">06</span>
+      <h2>Outcome × CHS matrix</h2>
+      <p class="widgets">Cross-tab matrix (rows = call_outcome, cols = CHS bucket) → trend line → distribution bar</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">call outcome × case-health bucket · last 7 days <span class="right">cell shade = density</span></p>
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th></th><th>0–20</th><th>20–40</th><th>40–60</th><th>60–80</th><th>80–100</th><th>row total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-h">Booked</td>
+              <td style="background:rgba(21,128,61,0.05)">0</td>
+              <td style="background:rgba(21,128,61,0.05)">0</td>
+              <td style="background:rgba(21,128,61,0.10)">1</td>
+              <td style="background:rgba(21,128,61,0.30)">3</td>
+              <td style="background:rgba(21,128,61,0.65)">11</td>
+              <td><b>15</b></td>
+            </tr>
+            <tr>
+              <td class="row-h">No match</td>
+              <td style="background:rgba(30,58,138,0.05)">0</td>
+              <td style="background:rgba(30,58,138,0.10)">1</td>
+              <td style="background:rgba(30,58,138,0.20)">1</td>
+              <td style="background:rgba(30,58,138,0.10)">1</td>
+              <td style="background:rgba(30,58,138,0.20)">2</td>
+              <td><b>5</b></td>
+            </tr>
+            <tr>
+              <td class="row-h">Not qualified</td>
+              <td style="background:rgba(146,64,14,0.05)">0</td>
+              <td style="background:rgba(146,64,14,0.10)">1</td>
+              <td style="background:rgba(146,64,14,0.05)">0</td>
+              <td style="background:rgba(146,64,14,0.10)">1</td>
+              <td style="background:rgba(146,64,14,0.05)">0</td>
+              <td><b>2</b></td>
+            </tr>
+            <tr>
+              <td class="row-h">Abandoned</td>
+              <td style="background:rgba(75,85,99,0.40)">1</td>
+              <td style="background:rgba(75,85,99,0.05)">0</td>
+              <td style="background:rgba(75,85,99,0.20)">1</td>
+              <td style="background:rgba(75,85,99,0.10)">0</td>
+              <td style="background:rgba(75,85,99,0.20)">1</td>
+              <td><b>3</b></td>
+            </tr>
+            <tr style="background:#0a0a0c">
+              <td class="row-h"><b>col total</b></td>
+              <td><b>1</b></td><td><b>2</b></td><td><b>3</b></td><td><b>5</b></td><td><b>14</b></td><td><b>25</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lg-2col">
+        <div class="widget">
+          <p class="w-title">avg CHS · 7d</p>
+          <svg viewBox="0 0 360 180" width="100%" height="180">
+            <line x1="40" y1="30"  x2="350" y2="30"  class="grid-line"/>
+            <line x1="40" y1="80"  x2="350" y2="80"  class="grid-line"/>
+            <line x1="40" y1="130" x2="350" y2="130" class="grid-line"/>
+            <line x1="40" y1="80"  x2="350" y2="80"  stroke="#15803d" stroke-dasharray="3 4"/>
+            <line x1="40" y1="130" x2="350" y2="130" stroke="#92400e" stroke-dasharray="3 4"/>
+            <text x="36" y="34"  class="ax" text-anchor="end">100</text>
+            <text x="36" y="84"  class="ax" text-anchor="end">85</text>
+            <text x="36" y="134" class="ax" text-anchor="end">70</text>
+            <path d="M 60 100 L 110 90 L 160 95 L 210 70 L 260 85 L 300 60 L 340 75" stroke="#15803d" stroke-width="2" fill="none"/>
+            <g fill="#15803d">
+              <circle cx="60" cy="100" r="3"/><circle cx="110" cy="90" r="3"/>
+              <circle cx="160" cy="95" r="3"/><circle cx="210" cy="70" r="3"/>
+              <circle cx="260" cy="85" r="3"/><circle cx="300" cy="60" r="3"/>
+              <circle cx="340" cy="75" r="3"/>
+            </g>
+            <text x="60"  y="155" class="ax" text-anchor="middle">M</text>
+            <text x="110" y="155" class="ax" text-anchor="middle">T</text>
+            <text x="160" y="155" class="ax" text-anchor="middle">W</text>
+            <text x="210" y="155" class="ax" text-anchor="middle">T</text>
+            <text x="260" y="155" class="ax" text-anchor="middle">F</text>
+            <text x="300" y="155" class="ax" text-anchor="middle">S</text>
+            <text x="340" y="155" class="ax" text-anchor="middle">S</text>
+          </svg>
+        </div>
+        <div class="widget">
+          <p class="w-title">CHS distribution · totals</p>
+          <svg viewBox="0 0 360 180" width="100%" height="180">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#2a2a31"/>
+            <line x1="40" y1="150" x2="350" y2="150" stroke="#2a2a31"/>
+            <text x="36" y="24" class="ax" text-anchor="end">15</text>
+            <text x="36" y="150" class="ax" text-anchor="end">0</text>
+            <rect x="60"  y="135" width="50" height="15"  fill="#4b5563"/>
+            <rect x="120" y="124" width="50" height="26"  fill="#92400e"/>
+            <rect x="180" y="115" width="50" height="35"  fill="#92400e"/>
+            <rect x="240" y="98"  width="50" height="52"  fill="#1e3a8a"/>
+            <rect x="300" y="20"  width="50" height="130" fill="#15803d"/>
+            <text x="85"  y="165" class="ax" text-anchor="middle">0-20</text>
+            <text x="145" y="165" class="ax" text-anchor="middle">20-40</text>
+            <text x="205" y="165" class="ax" text-anchor="middle">40-60</text>
+            <text x="265" y="165" class="ax" text-anchor="middle">60-80</text>
+            <text x="325" y="165" class="ax" text-anchor="middle">80-100</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Diagnosing root causes — instantly see if abandonment correlates with CHS or is uniform across buckets.</p></div>
+      <div><p class="lbl">Worst at</p><p>Quick KPIs — no big-number tile, you have to read cells to extract the headline number.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 07 — STOPLIGHT TODAY-VS-TARGET -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">07</span>
+      <h2>Stoplight: today vs target</h2>
+      <p class="widgets">Vertical metric list with goal/today/light columns → trend line below → distribution bar</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="lg-2-1" style="margin-bottom: 16px;">
+        <div class="widget">
+          <p class="w-title">quality scorecard · today vs target</p>
+          <div class="stoplight" style="border-bottom: 1px solid var(--border2); color: var(--muted2); text-transform: uppercase; font-size: 10px; letter-spacing: 0.06em;">
+            <span>metric</span><span style="text-align:right">today</span><span style="text-align:right">target</span><span style="text-align:center">status</span>
+          </div>
+          <div class="stoplight">
+            <span class="name">avg case-health score</span>
+            <span class="val">86.8</span>
+            <span class="val">≥ 85</span>
+            <span><span class="light" style="background:#15803d"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">pass rate (CHS ≥ 70)</span>
+            <span class="val">76.0%</span>
+            <span class="val">≥ 80%</span>
+            <span><span class="light" style="background:#92400e"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">flagged count (CHS &lt; 70)</span>
+            <span class="val">12</span>
+            <span class="val">≤ 8</span>
+            <span><span class="light" style="background:#92400e"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">critical count (CHS &lt; 40)</span>
+            <span class="val">3</span>
+            <span class="val">0</span>
+            <span><span class="light" style="background:#4b5563"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">favorable sentiment %</span>
+            <span class="val">64%</span>
+            <span class="val">≥ 60%</span>
+            <span><span class="light" style="background:#15803d"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">negative sentiment %</span>
+            <span class="val">16%</span>
+            <span class="val">≤ 15%</span>
+            <span><span class="light" style="background:#92400e"></span></span>
+          </div>
+          <div class="stoplight">
+            <span class="name">CHS p90 (top tier)</span>
+            <span class="val">96</span>
+            <span class="val">≥ 95</span>
+            <span><span class="light" style="background:#15803d"></span></span>
+          </div>
+        </div>
+        <div class="widget">
+          <p class="w-title">trend · last 7d</p>
+          <svg viewBox="0 0 320 280" width="100%" height="280">
+            <line x1="40" y1="30"  x2="310" y2="30"  class="grid-line"/>
+            <line x1="40" y1="120" x2="310" y2="120" class="grid-line"/>
+            <line x1="40" y1="200" x2="310" y2="200" class="grid-line"/>
+            <line x1="40" y1="120" x2="310" y2="120" stroke="#15803d" stroke-dasharray="3 4"/>
+            <line x1="40" y1="200" x2="310" y2="200" stroke="#92400e" stroke-dasharray="3 4"/>
+            <text x="36" y="34"  class="ax" text-anchor="end">100</text>
+            <text x="36" y="124" class="ax" text-anchor="end">85</text>
+            <text x="36" y="204" class="ax" text-anchor="end">70</text>
+            <path d="M 60 150 L 100 130 L 140 140 L 180 100 L 220 120 L 260 80 L 300 100" stroke="#15803d" stroke-width="2" fill="none"/>
+            <g fill="#15803d">
+              <circle cx="60"  cy="150" r="3"/><circle cx="100" cy="130" r="3"/>
+              <circle cx="140" cy="140" r="3"/><circle cx="180" cy="100" r="3"/>
+              <circle cx="220" cy="120" r="3"/><circle cx="260" cy="80"  r="3"/>
+              <circle cx="300" cy="100" r="3"/>
+            </g>
+            <text x="60"  y="225" class="ax" text-anchor="middle">M</text>
+            <text x="180" y="225" class="ax" text-anchor="middle">T</text>
+            <text x="300" y="225" class="ax" text-anchor="middle">S</text>
+            <text x="60"  y="255" class="ax">today vs avg: <tspan fill="#86efac">+1.8</tspan></text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">CHS distribution · last 7 days</p>
+        <svg viewBox="0 0 800 160" width="100%" height="160">
+          <line x1="40" y1="20" x2="40" y2="130" stroke="#2a2a31"/>
+          <line x1="40" y1="130" x2="780" y2="130" stroke="#2a2a31"/>
+          <text x="36" y="24" class="ax" text-anchor="end">15</text>
+          <text x="36" y="130" class="ax" text-anchor="end">0</text>
+          <rect x="80"  y="120" width="120" height="10"  fill="#4b5563"/>
+          <rect x="220" y="111" width="120" height="19"  fill="#92400e"/>
+          <rect x="360" y="102" width="120" height="28"  fill="#92400e"/>
+          <rect x="500" y="89"  width="120" height="41"  fill="#1e3a8a"/>
+          <rect x="640" y="20"  width="120" height="110" fill="#15803d"/>
+          <text x="140" y="148" class="ax" text-anchor="middle">0-20  (1)</text>
+          <text x="280" y="148" class="ax" text-anchor="middle">20-40 (2)</text>
+          <text x="420" y="148" class="ax" text-anchor="middle">40-60 (3)</text>
+          <text x="560" y="148" class="ax" text-anchor="middle">60-80 (5)</text>
+          <text x="700" y="148" class="ax" text-anchor="middle">80-100 (14)</text>
+        </svg>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>SLA-style review — instantly see which targets are hitting and which are red, with no chart-reading required.</p></div>
+      <div><p class="lbl">Worst at</p><p>Per-call drilldown — the flagged list is missing entirely from this layout.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 08 — AUDIT-REMARK WORD CLOUD -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">08</span>
+      <h2>Audit themes</h2>
+      <p class="widgets">Audit-remark word cloud + frequency table side by side → CHS trend → small distribution + sentiment row</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="lg-2col" style="margin-bottom: 16px;">
+        <div class="widget">
+          <p class="w-title">audit themes · last 30 days</p>
+          <div class="wc">
+            <span class="term s1">rate-quote</span>
+            <span class="term s2">FMCSA decline</span>
+            <span class="term s2">no-match</span>
+            <span class="term s3">verify identity</span>
+            <span class="term s3">negotiation loop</span>
+            <span class="term s4">transfer skipped</span>
+            <span class="term s3">lane mismatch</span>
+            <span class="term s4">hung up</span>
+            <span class="term s4">policy override</span>
+            <span class="term s5">dispatcher</span>
+            <span class="term s4">callback missing</span>
+            <span class="term s5">duplicate call</span>
+            <span class="term s5">silent</span>
+            <span class="term s5">tone</span>
+            <span class="term s5">scripted</span>
+          </div>
+        </div>
+        <div class="widget">
+          <p class="w-title">frequency · top remarks</p>
+          <table class="q-table">
+            <thead><tr><th>Theme</th><th>Calls</th><th>Avg CHS</th></tr></thead>
+            <tbody>
+              <tr><td>Rate-quote before verify</td><td>8</td><td>54</td></tr>
+              <tr><td>FMCSA decline path</td><td>6</td><td>61</td></tr>
+              <tr><td>No-match handling</td><td>5</td><td>66</td></tr>
+              <tr><td>Negotiation loop &gt; 3</td><td>4</td><td>62</td></tr>
+              <tr><td>Transfer skipped</td><td>3</td><td>58</td></tr>
+              <tr><td>Lane mismatch giveup</td><td>2</td><td>49</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">avg CHS · 7d</p>
+        <svg viewBox="0 0 800 160" width="100%" height="160">
+          <line x1="50" y1="30"  x2="780" y2="30"  class="grid-line"/>
+          <line x1="50" y1="80"  x2="780" y2="80"  class="grid-line"/>
+          <line x1="50" y1="130" x2="780" y2="130" class="grid-line"/>
+          <line x1="50" y1="80"  x2="780" y2="80"  stroke="#15803d" stroke-dasharray="3 4"/>
+          <line x1="50" y1="130" x2="780" y2="130" stroke="#92400e" stroke-dasharray="3 4"/>
+          <text x="44" y="34"  class="ax" text-anchor="end">100</text>
+          <text x="44" y="84"  class="ax" text-anchor="end">85</text>
+          <text x="44" y="134" class="ax" text-anchor="end">70</text>
+          <path d="M 70 100 L 180 90 L 290 95 L 400 70 L 510 85 L 620 60 L 750 75" stroke="#15803d" stroke-width="2" fill="none"/>
+          <g fill="#15803d">
+            <circle cx="70"  cy="100" r="3"/><circle cx="180" cy="90" r="3"/>
+            <circle cx="290" cy="95" r="3"/><circle cx="400" cy="70" r="3"/>
+            <circle cx="510" cy="85" r="3"/><circle cx="620" cy="60" r="3"/>
+            <circle cx="750" cy="75" r="3"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="lg-2col">
+        <div class="widget">
+          <p class="w-title">CHS distribution</p>
+          <svg viewBox="0 0 360 140" width="100%" height="140">
+            <rect x="20"  y="105" width="55" height="15"  fill="#4b5563"/>
+            <rect x="80"  y="94"  width="55" height="26"  fill="#92400e"/>
+            <rect x="140" y="85"  width="55" height="35"  fill="#92400e"/>
+            <rect x="200" y="68"  width="55" height="52"  fill="#1e3a8a"/>
+            <rect x="260" y="0"   width="55" height="120" fill="#15803d"/>
+            <text x="48"  y="135" class="ax" text-anchor="middle">0-20</text>
+            <text x="108" y="135" class="ax" text-anchor="middle">20-40</text>
+            <text x="168" y="135" class="ax" text-anchor="middle">40-60</text>
+            <text x="228" y="135" class="ax" text-anchor="middle">60-80</text>
+            <text x="288" y="135" class="ax" text-anchor="middle">80-100</text>
+          </svg>
+        </div>
+        <div class="widget">
+          <p class="w-title">sentiment split <span class="right">favorable 64%</span></p>
+          <div style="display:flex;height:42px;border-radius:5px;overflow:hidden;border:1px solid var(--border)">
+            <div style="flex:16;background:#15803d;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600">positive · 16</div>
+            <div style="flex:5;background:#1e3a8a;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600">neutral · 5</div>
+            <div style="flex:4;background:#4b5563;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600">neg · 4</div>
+          </div>
+          <p class="delta" style="margin-top:10px">25 calls · 7 days</p>
+        </div>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Surfacing patterns in qualitative audit notes — instantly see what failure modes recur most.</p></div>
+      <div><p class="lbl">Worst at</p><p>Real-time numeric rigor — word clouds are interpretive, not precise; reviewers may distrust the visual weight.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 09 — CARRIER COHORT TABLE -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">09</span>
+      <h2>Carrier cohort table</h2>
+      <p class="widgets">Cohort table (carriers grouped by avg CHS bucket, columns = call counts/sentiment/booking %) → trend line below</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">carrier cohorts by avg CHS · last 30 days <span class="right">25 calls · 18 unique MCs</span></p>
+        <table class="q-table">
+          <thead>
+            <tr>
+              <th>Cohort</th>
+              <th>Carriers</th>
+              <th>Calls</th>
+              <th>Booked</th>
+              <th>Booked %</th>
+              <th>Avg CHS</th>
+              <th>Favorable %</th>
+              <th>Top remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pill good">90+</span> elite</td>
+              <td>9</td><td>14</td><td>11</td><td>78.6%</td><td>94</td><td>86%</td>
+              <td class="muted">clean verify, no friction</td>
+            </tr>
+            <tr>
+              <td><span class="pill good">80–89</span> healthy</td>
+              <td>4</td><td>5</td><td>3</td><td>60.0%</td><td>85</td><td>60%</td>
+              <td class="muted">minor lane mismatch</td>
+            </tr>
+            <tr>
+              <td><span class="pill warn">70–79</span> watch</td>
+              <td>2</td><td>3</td><td>1</td><td>33.3%</td><td>74</td><td>33%</td>
+              <td class="muted">rate-quote before verify</td>
+            </tr>
+            <tr>
+              <td><span class="pill warn">60–69</span> at-risk</td>
+              <td>2</td><td>2</td><td>0</td><td>0%</td><td>65</td><td>0%</td>
+              <td class="muted">negotiation loop &gt; 3</td>
+            </tr>
+            <tr>
+              <td><span class="pill bad">&lt;60</span> failing</td>
+              <td>1</td><td>1</td><td>0</td><td>0%</td><td>32</td><td>0%</td>
+              <td class="muted">hung up after rate quote</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lg-2col">
+        <div class="widget">
+          <p class="w-title">avg CHS · 7d</p>
+          <svg viewBox="0 0 360 180" width="100%" height="180">
+            <line x1="40" y1="30"  x2="350" y2="30"  class="grid-line"/>
+            <line x1="40" y1="80"  x2="350" y2="80"  class="grid-line"/>
+            <line x1="40" y1="130" x2="350" y2="130" class="grid-line"/>
+            <line x1="40" y1="80"  x2="350" y2="80"  stroke="#15803d" stroke-dasharray="3 4"/>
+            <line x1="40" y1="130" x2="350" y2="130" stroke="#92400e" stroke-dasharray="3 4"/>
+            <text x="36" y="34"  class="ax" text-anchor="end">100</text>
+            <text x="36" y="84"  class="ax" text-anchor="end">85</text>
+            <text x="36" y="134" class="ax" text-anchor="end">70</text>
+            <path d="M 60 100 L 110 90 L 160 95 L 210 70 L 260 85 L 300 60 L 340 75" stroke="#15803d" stroke-width="2" fill="none"/>
+            <g fill="#15803d">
+              <circle cx="60" cy="100" r="3"/><circle cx="110" cy="90" r="3"/>
+              <circle cx="160" cy="95" r="3"/><circle cx="210" cy="70" r="3"/>
+              <circle cx="260" cy="85" r="3"/><circle cx="300" cy="60" r="3"/>
+              <circle cx="340" cy="75" r="3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="widget">
+          <p class="w-title">cohort size</p>
+          <div class="hbar"><span class="lbl">90+ elite</span><span class="track"><span class="fill" style="width:50%;background:#15803d"></span></span><span class="val">9</span></div>
+          <div class="hbar"><span class="lbl">80–89 healthy</span><span class="track"><span class="fill" style="width:22%;background:#166534"></span></span><span class="val">4</span></div>
+          <div class="hbar"><span class="lbl">70–79 watch</span><span class="track"><span class="fill" style="width:11%;background:#1e3a8a"></span></span><span class="val">2</span></div>
+          <div class="hbar"><span class="lbl">60–69 at-risk</span><span class="track"><span class="fill" style="width:11%;background:#92400e"></span></span><span class="val">2</span></div>
+          <div class="hbar"><span class="lbl">&lt;60 failing</span><span class="track"><span class="fill" style="width:5%;background:#4b5563"></span></span><span class="val">1</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Account-management framing — quality is sliced by carrier persona, supports targeted carrier-relations follow-up.</p></div>
+      <div><p class="lbl">Worst at</p><p>Single-call review — flagged list collapsed into cohorts, you lose the row-level audit remark.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- LAYOUT 10 — LEADERBOARD STACK -->
+  <!-- ============================================================== -->
+  <section class="layout-card">
+    <div class="head">
+      <span class="num">10</span>
+      <h2>Leaderboard stack</h2>
+      <p class="widgets">Three leaderboards stacked: lowest-CHS calls · oldest unresolved flags · highest-volume failure themes — each a horizontal-bar list</p>
+    </div>
+    <div class="tab-canvas">
+      <div class="lg-row3" style="margin-bottom: 16px;">
+        <div class="widget kpi-card"><p class="w-title">avg CHS</p><div class="big-number">86.8</div><span class="delta">goal 85</span></div>
+        <div class="widget kpi-card"><p class="w-title">flagged</p><div class="big-number">12</div><span class="delta">CHS &lt; 70</span></div>
+        <div class="widget kpi-card"><p class="w-title">unresolved &gt; 24h</p><div class="big-number">7</div><span class="delta">need review</span></div>
+      </div>
+
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">lowest CHS · last 7 days</p>
+        <div class="hbar"><span class="lbl">MC-781234 · 04-30</span><span class="track"><span class="fill" style="width:32%;background:#4b5563"></span></span><span class="val">32</span></div>
+        <div class="hbar"><span class="lbl">MC-559010 · 04-30</span><span class="track"><span class="fill" style="width:48%;background:#92400e"></span></span><span class="val">48</span></div>
+        <div class="hbar"><span class="lbl">MC-220114 · 04-29</span><span class="track"><span class="fill" style="width:54%;background:#92400e"></span></span><span class="val">54</span></div>
+        <div class="hbar"><span class="lbl">MC-118822 · 04-29</span><span class="track"><span class="fill" style="width:61%;background:#1e3a8a"></span></span><span class="val">61</span></div>
+        <div class="hbar"><span class="lbl">MC-905661 · 04-28</span><span class="track"><span class="fill" style="width:68%;background:#1e3a8a"></span></span><span class="val">68</span></div>
+        <div class="hbar"><span class="lbl">MC-554711 · 04-28</span><span class="track"><span class="fill" style="width:69%;background:#1e3a8a"></span></span><span class="val">69</span></div>
+      </div>
+
+      <div class="widget" style="margin-bottom: 16px;">
+        <p class="w-title">oldest unresolved flags · waiting for audit-team triage</p>
+        <div class="hbar"><span class="lbl">MC-554711 · 04-28</span><span class="track"><span class="fill" style="width:60%;background:#92400e"></span></span><span class="val">59h</span></div>
+        <div class="hbar"><span class="lbl">MC-905661 · 04-28</span><span class="track"><span class="fill" style="width:54%;background:#92400e"></span></span><span class="val">52h</span></div>
+        <div class="hbar"><span class="lbl">MC-118822 · 04-29</span><span class="track"><span class="fill" style="width:36%;background:#1e3a8a"></span></span><span class="val">35h</span></div>
+        <div class="hbar"><span class="lbl">MC-220114 · 04-29</span><span class="track"><span class="fill" style="width:30%;background:#1e3a8a"></span></span><span class="val">29h</span></div>
+        <div class="hbar"><span class="lbl">MC-559010 · 04-30</span><span class="track"><span class="fill" style="width:9%;background:#15803d"></span></span><span class="val">9h</span></div>
+      </div>
+
+      <div class="widget">
+        <p class="w-title">most-frequent failure themes · 30d</p>
+        <div class="hbar"><span class="lbl">Rate-quote pre-verify</span><span class="track"><span class="fill" style="width:80%;background:#92400e"></span></span><span class="val">8</span></div>
+        <div class="hbar"><span class="lbl">FMCSA decline path</span><span class="track"><span class="fill" style="width:60%;background:#92400e"></span></span><span class="val">6</span></div>
+        <div class="hbar"><span class="lbl">No-match handling</span><span class="track"><span class="fill" style="width:50%;background:#1e3a8a"></span></span><span class="val">5</span></div>
+        <div class="hbar"><span class="lbl">Negotiation loop &gt; 3</span><span class="track"><span class="fill" style="width:40%;background:#1e3a8a"></span></span><span class="val">4</span></div>
+        <div class="hbar"><span class="lbl">Transfer skipped</span><span class="track"><span class="fill" style="width:30%;background:#4b5563"></span></span><span class="val">3</span></div>
+      </div>
+    </div>
+    <div class="pros-cons">
+      <div><p class="lbl">Best for</p><p>Operator triage workflow — three stacked "what to act on next" lists turn the tab into a literal todo queue.</p></div>
+      <div><p class="lbl">Worst at</p><p>Trend awareness — no time-series, no sentiment view, no distribution; entirely "now" oriented.</p></div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

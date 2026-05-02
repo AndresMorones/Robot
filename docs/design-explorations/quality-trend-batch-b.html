@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Quality Trend — Batch B (Unconventional Scatters)</title>
+<style>
+  :root {
+    --bg: #0A0E15;
+    --panel: #11161F;
+    --border: #1F2733;
+    --ink: #E6EBF2;
+    --slate-1: #94A3B8;
+    --slate-2: #64748B;
+    --forest: #15803d;
+    --amber: #b45309;
+    --brick: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--ink); margin: 0; padding: 0; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Inter", sans-serif; padding: 32px; }
+  h1 { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--slate-1); margin: 0 0 24px; }
+  .concept {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 20px 16px;
+    margin-bottom: 24px;
+    width: 760px;
+  }
+  .concept h2 {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink); margin: 0 0 4px;
+  }
+  .concept .desc { font-size: 12px; color: var(--slate-1); margin: 0 0 14px; }
+  .chart-frame { position: relative; width: 700px; height: 260px; }
+  .axis-label { font-size: 10px; fill: var(--slate-2); font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; }
+  .axis-line { stroke: var(--border); stroke-width: 1; }
+  .grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0.55; }
+  .threshold-pass { stroke: var(--slate-2); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.55; }
+  .threshold-excellent { stroke: var(--slate-2); stroke-width: 1; stroke-dasharray: 2 6; opacity: 0.35; }
+  .threshold-label { font-size: 9px; fill: var(--slate-2); font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.06em; }
+  .legend {
+    position: absolute; bottom: 6px; right: 8px;
+    font-size: 10px; color: var(--slate-1); font-family: ui-monospace, Menlo, monospace;
+    background: rgba(10,14,21,0.65);
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+  .legend .sw { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align: middle; }
+  .legend .row { display:flex; align-items:center; gap:10px; }
+  .legend .row + .row { margin-top:3px; }
+  .dot { stroke: rgba(10,14,21,0.85); stroke-width: 0.75; }
+  .dot:hover { stroke: var(--ink); stroke-width: 1.5; }
+  .dot title { pointer-events: none; }
+  .meanline { fill: none; stroke: var(--slate-1); stroke-width: 1.25; opacity: 0.85; }
+  .deviation { stroke-width: 1; opacity: 0.7; }
+  .stream-good   { fill: var(--forest); }
+  .stream-warn   { fill: var(--amber); }
+  .stream-flag   { fill: var(--brick); }
+  .header-row { display:flex; justify-content: space-between; align-items: baseline; }
+  .meta { font-size: 10px; color: var(--slate-2); font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<h1>Quality Score Trend · Batch B · Unconventional Scatter</h1>
+
+<!-- =========================================================
+     B1 — VARIABLE-SIZE BUBBLE SCATTER
+     ========================================================= -->
+<section class="concept">
+  <div class="header-row">
+    <h2>B1 · Variable-Size Bubble Scatter</h2>
+    <span class="meta">SIZE = CALL DURATION</span>
+  </div>
+  <p class="desc">Bubble radius encodes per-call duration (30–600s); color encodes CHS tier. Multi-dimensional, Bloomberg-terminal style.</p>
+  <div class="chart-frame" id="b1-frame">
+    <svg width="700" height="260" id="b1"></svg>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background:var(--forest)"></span>good ≥85</div>
+      <div class="row"><span class="sw" style="background:var(--amber)"></span>warn 70–85</div>
+      <div class="row"><span class="sw" style="background:var(--brick)"></span>flagged &lt;70</div>
+      <div class="row" style="margin-top:6px;">⬤ size = call duration (s)</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     B2 — SCATTER WITH DEVIATION CONNECTORS
+     ========================================================= -->
+<section class="concept">
+  <div class="header-row">
+    <h2>B2 · Deviation Connectors vs 7-Day Rolling Mean</h2>
+    <span class="meta">VOLATILITY VIEW</span>
+  </div>
+  <p class="desc">Each point connects to a smooth 7-day rolling-mean curve via a thin vertical line. Forest above / brick below / amber near baseline.</p>
+  <div class="chart-frame" id="b2-frame">
+    <svg width="700" height="260" id="b2"></svg>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background:var(--forest)"></span>above mean</div>
+      <div class="row"><span class="sw" style="background:var(--amber)"></span>near mean (±3)</div>
+      <div class="row"><span class="sw" style="background:var(--brick)"></span>below mean</div>
+      <div class="row" style="margin-top:6px;"><span class="sw" style="background:var(--slate-1); border-radius:1px; height:2px; width:14px"></span>7-day rolling mean</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     B3 — STREAMGRAPH-OVERLAY SCATTER
+     ========================================================= -->
+<section class="concept">
+  <div class="header-row">
+    <h2>B3 · Streamgraph-Overlay Scatter</h2>
+    <span class="meta">VOLUME × SCORE</span>
+  </div>
+  <p class="desc">Stacked area beneath shows daily call counts per tier (good/warn/flagged). Dots overlay at low opacity composite — volume + per-call quality in one frame.</p>
+  <div class="chart-frame" id="b3-frame">
+    <svg width="700" height="260" id="b3"></svg>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background:var(--forest)"></span>good calls/day</div>
+      <div class="row"><span class="sw" style="background:var(--amber)"></span>warn calls/day</div>
+      <div class="row"><span class="sw" style="background:var(--brick)"></span>flagged calls/day</div>
+      <div class="row" style="margin-top:6px;">dots = per-call CHS</div>
+    </div>
+  </div>
+</section>
+
+<script>
+// -----------------------------------------------------------
+// Deterministic seeded PRNG (mulberry32) — same dataset each render
+// -----------------------------------------------------------
+function mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(20260501);
+
+// -----------------------------------------------------------
+// Build 60 points across 30 days
+//   70% good (80-100)
+//   20% warn (70-85)
+//   10% flagged (<70)
+//   + 5 outliers around 30-40
+// duration: 30s..600s
+// -----------------------------------------------------------
+const N = 60;
+const DAYS = 30;
+const points = [];
+const tierMix = [];
+for (let i = 0; i < N; i++) {
+  const r = rand();
+  if (i < 5) tierMix.push("outlier");
+  else if (r < 0.70) tierMix.push("good");
+  else if (r < 0.90) tierMix.push("warn");
+  else tierMix.push("flagged");
+}
+
+for (let i = 0; i < N; i++) {
+  const day = Math.floor(rand() * DAYS); // 0..29
+  const hourFrac = rand();                // intra-day noise
+  let chs;
+  const t = tierMix[i];
+  if (t === "good")    chs = 80 + rand() * 20;          // 80..100
+  else if (t === "warn")    chs = 70 + rand() * 15;     // 70..85
+  else if (t === "flagged") chs = 55 + rand() * 14;     // 55..69
+  else                  chs = 30 + rand() * 10;         // 30..40 outliers
+
+  const duration = 30 + Math.pow(rand(), 1.4) * 570;    // skew small but allow longs
+  points.push({
+    idx: i,
+    day,
+    timeMs: day + hourFrac,
+    chs: +chs.toFixed(1),
+    duration: Math.round(duration),
+  });
+}
+points.sort((a, b) => a.timeMs - b.timeMs);
+
+// Geometry common to all 3 charts
+const W = 700, H = 260;
+const M = { top: 18, right: 22, bottom: 28, left: 38 };
+const innerW = W - M.left - M.right;
+const innerH = H - M.top - M.bottom;
+const xScale = t => M.left + (t / DAYS) * innerW;
+const yScale = c => M.top + (1 - c / 100) * innerH;
+
+// Helper: tier from chs
+function tierOf(c) {
+  if (c >= 85) return "good";
+  if (c >= 70) return "warn";
+  return "flagged";
+}
+const tierColor = { good: "#15803d", warn: "#b45309", flagged: "#b91c1c" };
+
+// Date label (Apr X)
+const baseMonth = "Apr";
+function dayLabel(d) { return baseMonth + " " + (d + 1); }
+
+// -----------------------------------------------------------
+// Common axes / grid / threshold drawing
+// -----------------------------------------------------------
+function drawFrame(svg, opts = {}) {
+  const ns = "http://www.w3.org/2000/svg";
+
+  // Y grid + labels (0,25,50,75,100)
+  [0, 25, 50, 70, 85, 100].forEach(v => {
+    const y = yScale(v);
+    if (v === 70 || v === 85) return; // thresholds drawn separately
+    const ln = document.createElementNS(ns, "line");
+    ln.setAttribute("class", "grid");
+    ln.setAttribute("x1", M.left);
+    ln.setAttribute("x2", W - M.right);
+    ln.setAttribute("y1", y);
+    ln.setAttribute("y2", y);
+    svg.appendChild(ln);
+
+    const lbl = document.createElementNS(ns, "text");
+    lbl.setAttribute("class", "axis-label");
+    lbl.setAttribute("x", M.left - 6);
+    lbl.setAttribute("y", y + 3);
+    lbl.setAttribute("text-anchor", "end");
+    lbl.textContent = v;
+    svg.appendChild(lbl);
+  });
+
+  // Threshold lines: 70 (pass) + 85 (excellent)
+  const t70 = document.createElementNS(ns, "line");
+  t70.setAttribute("class", "threshold-pass");
+  t70.setAttribute("x1", M.left); t70.setAttribute("x2", W - M.right);
+  t70.setAttribute("y1", yScale(70)); t70.setAttribute("y2", yScale(70));
+  svg.appendChild(t70);
+  const lbl70 = document.createElementNS(ns, "text");
+  lbl70.setAttribute("class", "threshold-label");
+  lbl70.setAttribute("x", W - M.right - 4);
+  lbl70.setAttribute("y", yScale(70) - 3);
+  lbl70.setAttribute("text-anchor", "end");
+  lbl70.textContent = "PASS · 70";
+  svg.appendChild(lbl70);
+
+  const t85 = document.createElementNS(ns, "line");
+  t85.setAttribute("class", "threshold-excellent");
+  t85.setAttribute("x1", M.left); t85.setAttribute("x2", W - M.right);
+  t85.setAttribute("y1", yScale(85)); t85.setAttribute("y2", yScale(85));
+  svg.appendChild(t85);
+  const lbl85 = document.createElementNS(ns, "text");
+  lbl85.setAttribute("class", "threshold-label");
+  lbl85.setAttribute("x", W - M.right - 4);
+  lbl85.setAttribute("y", yScale(85) - 3);
+  lbl85.setAttribute("text-anchor", "end");
+  lbl85.textContent = "EXCELLENT · 85";
+  svg.appendChild(lbl85);
+
+  // X axis line
+  const ax = document.createElementNS(ns, "line");
+  ax.setAttribute("class", "axis-line");
+  ax.setAttribute("x1", M.left); ax.setAttribute("x2", W - M.right);
+  ax.setAttribute("y1", H - M.bottom); ax.setAttribute("y2", H - M.bottom);
+  svg.appendChild(ax);
+
+  // X tick labels every 5 days
+  for (let d = 0; d <= DAYS; d += 5) {
+    const x = xScale(d);
+    const tk = document.createElementNS(ns, "line");
+    tk.setAttribute("x1", x); tk.setAttribute("x2", x);
+    tk.setAttribute("y1", H - M.bottom); tk.setAttribute("y2", H - M.bottom + 4);
+    tk.setAttribute("stroke", "#1F2733"); tk.setAttribute("stroke-width", 1);
+    svg.appendChild(tk);
+    const lbl = document.createElementNS(ns, "text");
+    lbl.setAttribute("class", "axis-label");
+    lbl.setAttribute("x", x);
+    lbl.setAttribute("y", H - M.bottom + 14);
+    lbl.setAttribute("text-anchor", "middle");
+    lbl.textContent = d === DAYS ? "Apr 30" : "Apr " + Math.max(1, d + 1);
+    svg.appendChild(lbl);
+  }
+}
+
+// -----------------------------------------------------------
+// B1 — bubble scatter, radius = duration
+// -----------------------------------------------------------
+(function renderB1() {
+  const svg = document.getElementById("b1");
+  const ns = "http://www.w3.org/2000/svg";
+  drawFrame(svg);
+
+  // radius scale: 30s -> 3px, 600s -> 14px
+  const rScale = d => 3 + (d - 30) / (600 - 30) * 11;
+
+  points.forEach(p => {
+    const c = document.createElementNS(ns, "circle");
+    c.setAttribute("class", "dot");
+    c.setAttribute("cx", xScale(p.timeMs));
+    c.setAttribute("cy", yScale(p.chs));
+    c.setAttribute("r", rScale(p.duration));
+    c.setAttribute("fill", tierColor[tierOf(p.chs)]);
+    c.setAttribute("fill-opacity", "0.62");
+    const ttl = document.createElementNS(ns, "title");
+    ttl.textContent = `${dayLabel(p.day)} · ${p.duration}s · CHS ${Math.round(p.chs)}`;
+    c.appendChild(ttl);
+    svg.appendChild(c);
+  });
+})();
+
+// -----------------------------------------------------------
+// B2 — deviation connectors to rolling 7-day mean
+// -----------------------------------------------------------
+(function renderB2() {
+  const svg = document.getElementById("b2");
+  const ns = "http://www.w3.org/2000/svg";
+  drawFrame(svg);
+
+  // Compute rolling 7-day mean across DAYS, sampled per day
+  // For each day d (0..29), avg CHS of points with timeMs in [d-6, d]
+  const meanSeries = [];
+  for (let d = 0; d < DAYS; d++) {
+    const win = points.filter(p => p.timeMs >= d - 6 && p.timeMs <= d);
+    if (win.length === 0) {
+      meanSeries.push({ d, mean: meanSeries.length ? meanSeries[meanSeries.length - 1].mean : 80 });
+    } else {
+      const m = win.reduce((s, x) => s + x.chs, 0) / win.length;
+      meanSeries.push({ d, mean: m });
+    }
+  }
+
+  // Smooth Catmull-Rom-ish path
+  function smoothPath(series) {
+    const pts = series.map(s => [xScale(s.d + 0.5), yScale(s.mean)]);
+    let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(pts.length - 1, i + 2)];
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    }
+    return d;
+  }
+
+  // mean curve (under dots)
+  const path = document.createElementNS(ns, "path");
+  path.setAttribute("class", "meanline");
+  path.setAttribute("d", smoothPath(meanSeries));
+  svg.appendChild(path);
+
+  // For each point: vertical connector + dot
+  function meanAt(t) {
+    const d0 = Math.floor(t);
+    const d1 = Math.min(DAYS - 1, d0 + 1);
+    const a = meanSeries[d0]?.mean ?? 80;
+    const b = meanSeries[d1]?.mean ?? a;
+    const f = t - d0;
+    return a + (b - a) * f;
+  }
+
+  points.forEach(p => {
+    const m = meanAt(p.timeMs);
+    const dx = xScale(p.timeMs);
+    const dyPt = yScale(p.chs);
+    const dyMn = yScale(m);
+    const delta = p.chs - m;
+
+    let color;
+    if (Math.abs(delta) <= 3) color = tierColor.warn;       // amber near
+    else if (delta > 3)       color = tierColor.good;       // forest above
+    else                      color = tierColor.flagged;    // brick below
+
+    const ln = document.createElementNS(ns, "line");
+    ln.setAttribute("class", "deviation");
+    ln.setAttribute("x1", dx); ln.setAttribute("x2", dx);
+    ln.setAttribute("y1", dyPt); ln.setAttribute("y2", dyMn);
+    ln.setAttribute("stroke", color);
+    svg.appendChild(ln);
+
+    const c = document.createElementNS(ns, "circle");
+    c.setAttribute("class", "dot");
+    c.setAttribute("cx", dx);
+    c.setAttribute("cy", dyPt);
+    c.setAttribute("r", 3.2);
+    c.setAttribute("fill", color);
+    c.setAttribute("fill-opacity", "0.92");
+    const ttl = document.createElementNS(ns, "title");
+    ttl.textContent = `${dayLabel(p.day)} · CHS ${Math.round(p.chs)} · Δ ${delta >= 0 ? "+" : ""}${delta.toFixed(1)} vs 7d mean`;
+    c.appendChild(ttl);
+    svg.appendChild(c);
+  });
+})();
+
+// -----------------------------------------------------------
+// B3 — streamgraph overlay
+// -----------------------------------------------------------
+(function renderB3() {
+  const svg = document.getElementById("b3");
+  const ns = "http://www.w3.org/2000/svg";
+
+  // Per-day counts by tier
+  const days = Array.from({ length: DAYS }, (_, d) => ({ d, good: 0, warn: 0, flag: 0 }));
+  points.forEach(p => {
+    const t = tierOf(p.chs);
+    if (t === "good") days[p.day].good++;
+    else if (t === "warn") days[p.day].warn++;
+    else days[p.day].flag++;
+  });
+
+  const maxStack = Math.max(...days.map(x => x.good + x.warn + x.flag), 1);
+
+  // Stream uses BOTTOM 55% of the chart area as visual ceiling -- keeps top free for dots
+  // Map count 0..maxStack -> 0..streamH
+  const streamH = innerH * 0.55;
+  const streamBottom = H - M.bottom;
+  const streamTop = streamBottom - streamH;
+  // Stack from bottom up: flag, warn, good
+  const ySt = (count) => (count / maxStack) * streamH;
+
+  // Build smooth area path for a series (cumulative top + cumulative bottom)
+  function streamPath(topVals, botVals) {
+    const xs = days.map(x => xScale(x.d + 0.5));
+    // Top curve forwards
+    let d = `M ${xs[0].toFixed(1)} ${(streamBottom - topVals[0]).toFixed(1)}`;
+    for (let i = 1; i < xs.length; i++) {
+      const x0 = xs[i - 1], x1 = xs[i];
+      const y0 = streamBottom - topVals[i - 1];
+      const y1 = streamBottom - topVals[i];
+      const xm = (x0 + x1) / 2;
+      d += ` C ${xm.toFixed(1)} ${y0.toFixed(1)}, ${xm.toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+    }
+    // Bottom curve backwards
+    for (let i = xs.length - 1; i >= 0; i--) {
+      const xC = xs[i];
+      const yC = streamBottom - botVals[i];
+      if (i === xs.length - 1) {
+        d += ` L ${xC.toFixed(1)} ${yC.toFixed(1)}`;
+      } else {
+        const xN = xs[i + 1];
+        const yN = streamBottom - botVals[i + 1];
+        const xm = (xN + xC) / 2;
+        d += ` C ${xm.toFixed(1)} ${yN.toFixed(1)}, ${xm.toFixed(1)} ${yC.toFixed(1)}, ${xC.toFixed(1)} ${yC.toFixed(1)}`;
+      }
+    }
+    d += " Z";
+    return d;
+  }
+
+  const flagTop = days.map(x => ySt(x.flag));
+  const warnTop = days.map((x, i) => ySt(x.flag + x.warn));
+  const goodTop = days.map((x, i) => ySt(x.flag + x.warn + x.good));
+  const zero    = days.map(() => 0);
+
+  // Streams (drawn first, low opacity)
+  const aFlag = document.createElementNS(ns, "path");
+  aFlag.setAttribute("class", "stream-flag");
+  aFlag.setAttribute("d", streamPath(flagTop, zero));
+  aFlag.setAttribute("fill-opacity", "0.32");
+  svg.appendChild(aFlag);
+
+  const aWarn = document.createElementNS(ns, "path");
+  aWarn.setAttribute("class", "stream-warn");
+  aWarn.setAttribute("d", streamPath(warnTop, flagTop));
+  aWarn.setAttribute("fill-opacity", "0.30");
+  svg.appendChild(aWarn);
+
+  const aGood = document.createElementNS(ns, "path");
+  aGood.setAttribute("class", "stream-good");
+  aGood.setAttribute("d", streamPath(goodTop, warnTop));
+  aGood.setAttribute("fill-opacity", "0.28");
+  svg.appendChild(aGood);
+
+  // Right-side calls/day axis ticks (1, max)
+  const rax = document.createElementNS(ns, "line");
+  rax.setAttribute("class", "axis-line");
+  rax.setAttribute("x1", W - M.right); rax.setAttribute("x2", W - M.right);
+  rax.setAttribute("y1", streamTop); rax.setAttribute("y2", streamBottom);
+  svg.appendChild(rax);
+  [0, Math.ceil(maxStack/2), maxStack].forEach(v => {
+    const y = streamBottom - (v / maxStack) * streamH;
+    const tk = document.createElementNS(ns, "line");
+    tk.setAttribute("x1", W - M.right); tk.setAttribute("x2", W - M.right + 4);
+    tk.setAttribute("y1", y); tk.setAttribute("y2", y);
+    tk.setAttribute("stroke", "#1F2733"); tk.setAttribute("stroke-width", 1);
+    svg.appendChild(tk);
+    const lbl = document.createElementNS(ns, "text");
+    lbl.setAttribute("class", "axis-label");
+    lbl.setAttribute("x", W - M.right + 6);
+    lbl.setAttribute("y", y + 3);
+    lbl.setAttribute("text-anchor", "start");
+    lbl.textContent = v + (v === maxStack ? " /day" : "");
+    svg.appendChild(lbl);
+  });
+
+  // Frame on top (so threshold/grid lines stay visible)
+  drawFrame(svg);
+
+  // Dots overlay
+  points.forEach(p => {
+    const c = document.createElementNS(ns, "circle");
+    c.setAttribute("class", "dot");
+    c.setAttribute("cx", xScale(p.timeMs));
+    c.setAttribute("cy", yScale(p.chs));
+    c.setAttribute("r", 3);
+    c.setAttribute("fill", tierColor[tierOf(p.chs)]);
+    c.setAttribute("fill-opacity", "0.95");
+    const ttl = document.createElementNS(ns, "title");
+    ttl.textContent = `${dayLabel(p.day)} · CHS ${Math.round(p.chs)}`;
+    c.appendChild(ttl);
+    svg.appendChild(c);
+  });
+})();
+</script>
+</body>
+</html>

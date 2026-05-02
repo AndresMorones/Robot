@@ -1,0 +1,1812 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Acme Logistics — themes v2 preview (12 design languages)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ───────────────────────────────────────────── meta-page styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: "Inter", system-ui, sans-serif; background: #18181B; color: #E4E4E7; line-height: 1.5; }
+body { padding-bottom: 96px; }
+
+.page-head {
+  position: sticky; top: 0; z-index: 50;
+  background: #0F0F11; border-bottom: 1px solid #27272A;
+  padding: 16px 32px; display: flex; align-items: center; gap: 24px;
+  flex-wrap: wrap;
+}
+.page-head h1 { font-size: 16px; font-weight: 600; color: #FAFAFA; }
+.page-head h1 small { font-weight: 400; color: #A1A1AA; margin-left: 8px; }
+.page-head nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; font-size: 12px; }
+.page-head nav a {
+  color: #A1A1AA; text-decoration: none; padding: 4px 10px;
+  border-radius: 4px; background: #1F1F22; border: 1px solid #27272A;
+}
+.page-head nav a:hover { color: #FAFAFA; background: #27272A; }
+
+.intro {
+  max-width: 920px; margin: 32px auto; padding: 0 32px;
+  font-size: 14px; line-height: 1.7; color: #A1A1AA;
+}
+.intro h2 { font-size: 20px; color: #FAFAFA; margin-bottom: 12px; font-weight: 600; }
+.intro p + p { margin-top: 12px; }
+.intro code { font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: #E4E4E7; background: #1F1F22; padding: 1px 6px; border-radius: 3px; }
+
+.lens-divider {
+  max-width: 1280px; margin: 64px auto 32px; padding: 0 32px;
+  display: flex; align-items: center; gap: 16px;
+}
+.lens-divider .label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: #A1A1AA; text-transform: uppercase; white-space: nowrap; }
+.lens-divider .rule { flex: 1; height: 1px; background: #27272A; }
+
+.theme {
+  max-width: 1280px; margin: 0 auto 56px; padding: 0 32px;
+}
+.theme-meta {
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 16px; padding: 12px 16px; background: #1F1F22;
+  border: 1px solid #27272A; border-radius: 6px;
+}
+.theme-meta .num { font-family: "JetBrains Mono", monospace; font-size: 11px; color: #71717A; }
+.theme-meta .name { font-size: 18px; font-weight: 600; color: #FAFAFA; }
+.theme-meta .inspo { font-size: 13px; color: #A1A1AA; font-style: italic; }
+.theme-meta .tags { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.theme-meta .tags span {
+  font-size: 11px; padding: 2px 8px; border-radius: 3px;
+  background: #27272A; color: #D4D4D8; border: 1px solid #3F3F46;
+  font-family: "JetBrains Mono", monospace;
+}
+.theme-stage {
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid #27272A;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 1 — TUFTE CONSOLE (BI lens, light, serif+mono+sans)
+   ═════════════════════════════════════════════════════════════════ */
+.t-tufte {
+  --bg: #FBFAF7; --fg: #1F1B16; --fg-muted: #6F6A60;
+  --border: #DDD7CB; --accent: #C2410C; --success: #15803D; --danger: #B91C1C;
+  background: var(--bg); color: var(--fg);
+  font-family: "Source Serif 4", Georgia, serif;
+  padding: 24px 32px;
+}
+.t-tufte .kpi-strip {
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg);
+  margin-bottom: 32px;
+}
+.t-tufte .kpi {
+  padding: 12px 16px; border-right: 1px solid var(--border);
+}
+.t-tufte .kpi:last-child { border-right: 0; }
+.t-tufte .kpi .label {
+  font-family: "Inter", sans-serif; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-muted);
+  margin-bottom: 6px;
+}
+.t-tufte .kpi .hero {
+  font-family: "IBM Plex Mono", monospace; font-size: 28px; font-weight: 500;
+  color: var(--fg); letter-spacing: -0.01em;
+}
+.t-tufte .kpi .delta {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; margin-top: 4px;
+}
+.t-tufte .kpi .delta.up { color: var(--success); }
+.t-tufte .kpi .delta.down { color: var(--danger); }
+.t-tufte .kpi .spark { display: block; margin-top: 8px; height: 22px; width: 100%; }
+.t-tufte .kpi .spark path { fill: none; stroke: var(--fg); stroke-width: 1; }
+.t-tufte .kpi .spark .accent { stroke: var(--accent); stroke-width: 1.25; }
+
+.t-tufte .chart-wrap { display: grid; grid-template-columns: 180px 1fr; gap: 24px; align-items: start; padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+.t-tufte .chart-title {
+  font-family: "Source Serif 4", serif; font-style: italic; font-size: 13px;
+  color: var(--fg); padding-top: 24px; text-align: right;
+}
+.t-tufte .chart-title em { color: var(--fg-muted); display: block; font-size: 11px; }
+.t-tufte .chart-svg { width: 100%; height: 140px; display: block; }
+.t-tufte .chart-svg .axis { stroke: var(--fg); stroke-width: 1; }
+.t-tufte .chart-svg .gridline { stroke: var(--border); stroke-width: 1; }
+.t-tufte .chart-svg .series { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.t-tufte .chart-svg .series.accent { stroke: var(--accent); }
+.t-tufte .chart-svg .ylabel, .t-tufte .chart-svg .xlabel { font-family: "IBM Plex Mono", monospace; font-size: 10px; fill: var(--fg-muted); }
+
+.t-tufte .table { width: 100%; }
+.t-tufte .trow {
+  display: grid; grid-template-columns: 24px 90px 1fr 110px 100px 70px 90px;
+  align-items: center; height: 28px; padding: 0 4px;
+  font-size: 13px; gap: 8px;
+}
+.t-tufte .trow.head {
+  font-family: "Inter", sans-serif; font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-muted);
+  border-bottom: 1px solid var(--fg); height: 22px;
+}
+.t-tufte .trow:hover:not(.head) { background: #F4F1EA; }
+.t-tufte .trow .tick { color: var(--fg-muted); font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+.t-tufte .trow .mc { font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+.t-tufte .trow .num { font-family: "IBM Plex Mono", monospace; font-size: 12px; text-align: right; }
+.t-tufte .trow .name { font-style: italic; }
+
+.t-tufte .ticker {
+  border-top: 1px solid var(--fg); border-bottom: 1px solid var(--border);
+  padding: 8px 0; margin-top: 24px;
+  font-family: "IBM Plex Mono", monospace; font-size: 12px;
+  color: var(--fg-muted); white-space: nowrap; overflow: hidden;
+}
+.t-tufte .ticker span.lane { color: var(--fg); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 2 — HEX NOTEBOOK (BI lens, light, vertical notebook flow)
+   ═════════════════════════════════════════════════════════════════ */
+.t-hex {
+  --bg: #FFFFFF; --surface-alt: #F7F7FB;
+  --border: #E4E4EC; --border-strong: #C4C4CF;
+  --fg: #18181B; --fg-muted: #71717A;
+  --primary: #4F46E5; --accent: #EC4899; --success: #16A34A; --danger: #DC2626;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 32px 64px; max-width: 100%;
+}
+.t-hex .notebook { max-width: 980px; margin: 0 auto; display: grid; gap: 12px; }
+.t-hex .cell {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
+  box-shadow: 0 1px 2px rgba(24,24,27,0.04);
+  overflow: hidden;
+}
+.t-hex .cell-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 16px; border-bottom: 1px solid var(--border); background: var(--surface-alt);
+  font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--fg-muted);
+}
+.t-hex .cell-header .run {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--accent); color: white; border: 0; border-radius: 4px;
+  padding: 2px 8px; font-size: 11px; font-family: "Inter", sans-serif;
+}
+.t-hex .cell-body { padding: 16px 20px; }
+.t-hex .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.t-hex .kpi { display: grid; gap: 6px; }
+.t-hex .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--fg-muted); font-weight: 500; }
+.t-hex .kpi .hero { font-size: 30px; font-weight: 700; color: var(--fg); letter-spacing: -0.02em; }
+.t-hex .kpi .delta {
+  display: inline-flex; align-self: start; padding: 2px 8px; border-radius: 12px;
+  font-size: 11px; font-weight: 500;
+}
+.t-hex .kpi .delta.up { background: #DCFCE7; color: var(--success); }
+.t-hex .kpi .delta.down { background: #FEE2E2; color: var(--danger); }
+.t-hex .kpi .spark { width: 100%; height: 36px; }
+.t-hex .kpi .spark path { fill: var(--primary); fill-opacity: 0.12; stroke: var(--primary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.t-hex .kpi .spark circle { fill: var(--primary); }
+
+.t-hex .chart-cell .cell-body { background: var(--surface-alt); }
+.t-hex .chart-svg { width: 100%; height: 120px; }
+.t-hex .chart-svg .area { fill: var(--primary); fill-opacity: 0.15; }
+.t-hex .chart-svg .line { fill: none; stroke: var(--primary); stroke-width: 2; }
+.t-hex .chart-svg .axis { stroke: var(--border-strong); stroke-width: 1; }
+.t-hex .chart-svg text { font-family: "JetBrains Mono", monospace; font-size: 10px; fill: var(--fg-muted); }
+
+.t-hex .sql {
+  margin-top: 12px; padding: 10px 12px;
+  background: #18181B; color: #D4D4D8;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace; font-size: 11.5px; line-height: 1.6;
+}
+.t-hex .sql .kw { color: #C084FC; }
+.t-hex .sql .str { color: #FCA5A5; }
+
+.t-hex .table-cell { padding: 0; }
+.t-hex .table-cell .cell-body { padding: 0; }
+.t-hex .trow {
+  display: grid; grid-template-columns: 4px 90px 1fr 110px 90px 80px 90px;
+  align-items: center; height: 36px; gap: 10px;
+  border-bottom: 1px solid var(--border); padding-right: 16px;
+  font-size: 13px;
+}
+.t-hex .trow:nth-child(odd):not(.head) { background: var(--surface-alt); }
+.t-hex .trow.head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--fg-muted); font-weight: 600; height: 32px;
+  background: var(--bg);
+}
+.t-hex .trow .gutter { width: 4px; height: 36px; }
+.t-hex .trow.booked .gutter { background: var(--success); }
+.t-hex .trow.negot .gutter  { background: #F59E0B; }
+.t-hex .trow.flag .gutter   { background: var(--danger); }
+.t-hex .trow.head .gutter   { background: transparent; }
+.t-hex .trow .mc { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
+.t-hex .trow .num { font-family: "JetBrains Mono", monospace; font-size: 12.5px; text-align: right; }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 3 — POWER BI BOARDROOM (BI lens, cool-grey enterprise)
+   ═════════════════════════════════════════════════════════════════ */
+.t-powerbi {
+  --bg: #F3F4F8; --surface: #FFFFFF; --border: #E1E4EC; --fg: #1B1F2A; --fg-muted: #5F6573;
+  --primary: #1B3F73; --accent: #0E8C7A; --success: #107C10; --danger: #C42B1C; --warning: #B7791F;
+  background: var(--bg); color: var(--fg);
+  font-family: "Segoe UI", "Inter", sans-serif;
+}
+.t-powerbi .ribbon {
+  height: 56px; background: var(--surface);
+  display: flex; align-items: center; gap: 24px; padding: 0 24px;
+  box-shadow: 0 1px 2px rgba(27,31,42,0.06), 0 1px 3px rgba(27,31,42,0.04);
+  border-bottom: 1px solid var(--border);
+}
+.t-powerbi .ribbon .brand { font-weight: 600; color: var(--primary); font-size: 16px; }
+.t-powerbi .ribbon .tabs { display: flex; gap: 4px; }
+.t-powerbi .ribbon .tabs .tab {
+  padding: 8px 14px; font-size: 13px; color: var(--fg-muted);
+  border-radius: 4px; cursor: default;
+}
+.t-powerbi .ribbon .tabs .tab.active { background: #EDF2F7; color: var(--primary); font-weight: 600; }
+.t-powerbi .ribbon .right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.t-powerbi .ribbon .pill { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 4px 12px; font-size: 12px; color: var(--fg); }
+.t-powerbi .ribbon .btn { background: var(--primary); color: white; border-radius: 4px; padding: 6px 14px; font-size: 13px; font-weight: 600; }
+
+.t-powerbi .body { padding: 24px; }
+.t-powerbi .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.t-powerbi .kpi {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  padding: 24px; box-shadow: 0 1px 2px rgba(27,31,42,0.06), 0 1px 3px rgba(27,31,42,0.04);
+  position: relative;
+}
+.t-powerbi .kpi:hover { box-shadow: 0 4px 8px rgba(27,31,42,0.08); }
+.t-powerbi .kpi .icon {
+  width: 32px; height: 32px; background: var(--primary);
+  border-radius: 4px; color: white;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600;
+  margin-bottom: 12px;
+}
+.t-powerbi .kpi .menu { position: absolute; top: 16px; right: 16px; color: var(--fg-muted); font-size: 16px; letter-spacing: -1px; }
+.t-powerbi .kpi .label { font-size: 13px; color: var(--fg-muted); margin-bottom: 4px; }
+.t-powerbi .kpi .hero { font-size: 36px; font-weight: 600; color: var(--fg); }
+.t-powerbi .kpi .delta { font-size: 14px; margin-top: 4px; }
+.t-powerbi .kpi .delta.up { color: var(--success); }
+.t-powerbi .kpi .delta.down { color: var(--danger); }
+.t-powerbi .kpi .spark { width: 100%; height: 48px; margin-top: 16px; }
+.t-powerbi .kpi .spark path.area { fill: url(#pbi-grad); }
+.t-powerbi .kpi .spark path.line { fill: none; stroke: var(--primary); stroke-width: 2; }
+
+.t-powerbi .table-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(27,31,42,0.06);
+  overflow: hidden;
+}
+.t-powerbi .table-card .header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.t-powerbi .table-card .header h3 { font-size: 16px; font-weight: 600; color: var(--fg); }
+.t-powerbi .table-card .header .pill { margin-left: auto; padding: 4px 10px; background: #F3F4F6; border-radius: 12px; font-size: 11px; color: var(--fg-muted); }
+.t-powerbi .trow {
+  display: grid; grid-template-columns: 4px 100px 1fr 120px 100px 80px 100px;
+  align-items: center; height: 44px; gap: 12px;
+  border-bottom: 1px solid var(--border); padding: 0 24px 0 0;
+  font-size: 13px;
+}
+.t-powerbi .trow.head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--fg-muted); font-weight: 700;
+  border-bottom: 2px solid #B8BCC8; background: #FAFBFD;
+  height: 40px;
+}
+.t-powerbi .trow .left { width: 4px; height: 44px; background: transparent; }
+.t-powerbi .trow.selected { background: rgba(27,63,115,0.04); }
+.t-powerbi .trow.selected .left { background: var(--primary); }
+.t-powerbi .trow .mc, .t-powerbi .trow .num { font-family: "Cascadia Mono", "JetBrains Mono", monospace; font-size: 13px; }
+.t-powerbi .trow .num { text-align: right; }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 4 — SIGMA SPREADSHEET (BI lens, Excel grid first)
+   ═════════════════════════════════════════════════════════════════ */
+.t-sigma {
+  --bg: #FFFFFF; --surface-alt: #F2F4F7; --border: #D0D5DD; --border-strong: #344054;
+  --fg: #101828; --fg-muted: #667085;
+  --primary: #217346; --success: #12B76A; --danger: #D92D20; --warning: #F79009; --accent: #1F77B4;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter Tight", "Inter", "Aptos", sans-serif;
+  font-feature-settings: "tnum" 1;
+}
+.t-sigma .toolbar {
+  height: 36px; padding: 0 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border-strong); background: var(--surface-alt);
+}
+.t-sigma .toolbar .btn { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 2px; }
+.t-sigma .toolbar .btn.primary { background: var(--primary); color: white; border-color: var(--primary); }
+.t-sigma .toolbar .tabs { margin-left: auto; display: flex; gap: 0; font-size: 11px; }
+.t-sigma .toolbar .tabs .tab { padding: 4px 12px; border-right: 1px solid var(--border); background: var(--bg); }
+.t-sigma .toolbar .tabs .tab.active { background: var(--surface-alt); border-top: 2px solid var(--primary); font-weight: 600; }
+
+.t-sigma .kpi-band {
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  border-bottom: 1px solid var(--border-strong);
+}
+.t-sigma .kpi {
+  padding: 8px 12px;
+  border-right: 1px solid var(--border);
+  background: var(--surface-alt);
+  position: relative;
+}
+.t-sigma .kpi:last-child { border-right: 0; }
+.t-sigma .kpi .label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--fg-muted); margin-bottom: 4px;
+}
+.t-sigma .kpi .hero {
+  font-size: 28px; font-weight: 700; color: var(--fg);
+  text-align: center; line-height: 1.1;
+}
+.t-sigma .kpi .delta { font-size: 11px; text-align: center; margin-top: 2px; }
+.t-sigma .kpi .delta.up { color: var(--success); }
+.t-sigma .kpi .delta.down { color: var(--danger); }
+.t-sigma .kpi .databar {
+  position: absolute; bottom: 0; left: 0; height: 4px;
+  background: var(--success);
+}
+.t-sigma .kpi .databar.warn { background: var(--warning); }
+
+.t-sigma .recent {
+  display: grid; grid-template-columns: 80px 1fr;
+  border-bottom: 1px solid var(--border-strong);
+  background: #FFFBE6;
+  font-size: 11px;
+}
+.t-sigma .recent .label { padding: 4px 12px; background: var(--surface-alt); border-right: 1px solid var(--border); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); }
+.t-sigma .recent .row { padding: 4px 12px; font-family: "Inter Tight", sans-serif; color: var(--fg); }
+.t-sigma .recent .row .more { color: var(--accent); margin-left: 12px; }
+
+.t-sigma .grid-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.t-sigma .grid-table th, .t-sigma .grid-table td {
+  border: 1px solid var(--border); padding: 4px 8px; height: 22px;
+}
+.t-sigma .grid-table th {
+  background: var(--surface-alt); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--fg-muted); font-weight: 600; text-align: left;
+}
+.t-sigma .grid-table .num { text-align: right; }
+.t-sigma .grid-table tr:hover td { background: var(--surface-alt); }
+.t-sigma .grid-table .databar-cell { position: relative; padding-left: 8px; padding-right: 8px; }
+.t-sigma .grid-table .databar-cell .bar {
+  position: absolute; left: 4px; top: 50%; transform: translateY(-50%); height: 14px;
+  background: rgba(33,115,70,0.18); z-index: 0;
+}
+.t-sigma .grid-table .databar-cell .bar.neg { background: rgba(217,45,32,0.18); }
+.t-sigma .grid-table .databar-cell .val { position: relative; z-index: 1; font-family: "Inter Tight", monospace; }
+.t-sigma .chs-cell { font-weight: 600; text-align: center; }
+.t-sigma .chs-cell.hi { background: #DCFCE7; color: #166534; }
+.t-sigma .chs-cell.mid { background: #FEF3C7; color: #92400E; }
+.t-sigma .chs-cell.lo { background: #FEE2E2; color: #991B1B; }
+.t-sigma .icon-set { display: inline-block; width: 14px; }
+
+.t-sigma .small-multiples {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  padding: 16px; border-top: 1px solid var(--border-strong); background: var(--surface-alt);
+}
+.t-sigma .sm-chart { background: var(--bg); border: 1px solid var(--border); padding: 8px 10px; }
+.t-sigma .sm-chart .cap { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); margin-bottom: 4px; }
+.t-sigma .sm-chart svg { width: 100%; height: 80px; }
+.t-sigma .sm-chart svg path { fill: none; stroke: var(--primary); stroke-width: 1.25; }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 5 — TREASURY NOTE (Mercury × Carta, light cream serif)
+   ═════════════════════════════════════════════════════════════════ */
+.t-treasury {
+  --bg: #FAF8F4; --surface: #FFFFFF; --border: #EDE8DF; --border-strong: #D7D0C3;
+  --fg: #1A1A1A; --fg-muted: #6B6B6B;
+  --primary: #1F3A2E; --accent: #B8945C; --success: #2E6B4A; --danger: #9C3A2E;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 64px;
+}
+.t-treasury .hero {
+  margin-bottom: 96px; max-width: 720px;
+}
+.t-treasury .hero .label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg-muted); font-weight: 600; margin-bottom: 16px;
+}
+.t-treasury .hero .value {
+  font-family: "Source Serif 4", serif; font-size: 88px; font-weight: 400;
+  letter-spacing: -0.02em; line-height: 1; font-feature-settings: "tnum" 1;
+  margin-bottom: 16px;
+}
+.t-treasury .hero .context {
+  font-family: "Source Serif 4", serif; font-size: 14px; font-style: italic;
+  color: var(--fg-muted); line-height: 1.55;
+}
+
+.t-treasury .kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 64px;
+  padding-bottom: 24px; border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+}
+.t-treasury .kpi { }
+.t-treasury .kpi .label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg-muted); font-weight: 600; margin-bottom: 12px;
+}
+.t-treasury .kpi .hero {
+  font-family: "Source Serif 4", serif; font-size: 56px; font-weight: 400;
+  letter-spacing: -0.02em; line-height: 1; font-feature-settings: "tnum" 1;
+  margin-bottom: 8px;
+}
+.t-treasury .kpi .delta {
+  font-size: 13px; color: var(--fg-muted);
+}
+.t-treasury .kpi .delta .arrow.up { color: var(--success); }
+.t-treasury .kpi .delta .arrow.down { color: var(--danger); }
+
+.t-treasury .table { }
+.t-treasury .table h3 {
+  font-family: "Source Serif 4", serif; font-size: 22px; font-weight: 600;
+  margin-bottom: 24px;
+}
+.t-treasury .trow {
+  display: grid; grid-template-columns: 100px 1fr 130px 100px 110px;
+  align-items: center; height: 48px; gap: 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.t-treasury .trow.head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg-muted); font-weight: 600; height: 36px;
+  border-bottom: 1px solid var(--border-strong);
+}
+.t-treasury .trow:hover:not(.head) { background: var(--bg); }
+.t-treasury .trow .mc { font-family: "JetBrains Mono", monospace; font-size: 13px; }
+.t-treasury .trow .num { font-family: "JetBrains Mono", monospace; font-size: 13px; text-align: right; }
+.t-treasury .trow .status { font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+.t-treasury .trow .status .dot { width: 6px; height: 6px; border-radius: 50%; }
+.t-treasury .status.booked .dot { background: var(--success); }
+.t-treasury .status.negot .dot  { background: var(--accent); }
+.t-treasury .status.flag .dot   { background: var(--danger); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 6 — BLOOMBERG PIT (Bloomberg × Plaid, near-black, mono only)
+   ═════════════════════════════════════════════════════════════════ */
+.t-pit {
+  --bg: #0A0A0A; --surface: #0F0F0F; --surface-alt: #161616;
+  --border: #2A2A2A; --border-strong: #3D3D3D;
+  --fg: #E6E6E6; --fg-muted: #7A7A7A;
+  --amber: #FFB800; --green: #00D26A; --red: #FF3838; --cyan: #5BC0EB;
+  background: var(--bg); color: var(--fg);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; line-height: 1.3;
+}
+.t-pit .ticker-bar {
+  height: 28px; border-bottom: 1px solid var(--border-strong);
+  display: flex; align-items: center; gap: 24px;
+  padding: 0 12px; overflow: hidden; white-space: nowrap;
+  font-size: 11px;
+}
+.t-pit .ticker-bar .tk-item { flex-shrink: 0; }
+.t-pit .ticker-bar .tk-item .lane { color: var(--amber); }
+.t-pit .ticker-bar .tk-item .up { color: var(--green); }
+.t-pit .ticker-bar .tk-item .down { color: var(--red); }
+
+.t-pit .grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+.t-pit .kpi {
+  padding: 12px; border-right: 1px solid var(--border);
+}
+.t-pit .kpi:last-child { border-right: 0; }
+.t-pit .kpi .ticker {
+  color: var(--amber); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 4px;
+}
+.t-pit .kpi .hero {
+  font-size: 24px; font-weight: 600; color: var(--fg);
+  text-align: right; letter-spacing: 0;
+}
+.t-pit .kpi .row {
+  font-size: 10px; color: var(--fg-muted);
+  display: flex; gap: 8px; margin-top: 4px;
+}
+.t-pit .kpi .row .up { color: var(--green); }
+.t-pit .kpi .row .down { color: var(--red); }
+.t-pit .kpi .ts { font-size: 9px; color: var(--fg-muted); margin-top: 6px; }
+
+.t-pit .quadrants {
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  border-top: 1px solid var(--border);
+}
+.t-pit .quad {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+.t-pit .quad:nth-child(2n) { border-right: 0; }
+.t-pit .quad:nth-last-child(-n+2) { border-bottom: 0; }
+.t-pit .quad .qtitle {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 12px; color: var(--amber);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.t-pit .quad .qbody { padding: 8px 12px; }
+
+.t-pit table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.t-pit table th { color: var(--amber); text-align: left; font-weight: 400; padding: 4px 8px; border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 10px; }
+.t-pit table td { padding: 4px 8px; height: 24px; }
+.t-pit table .num { text-align: right; }
+.t-pit table .num.up { color: var(--green); }
+.t-pit table .num.down { color: var(--red); }
+.t-pit table tr:nth-child(even) td { background: var(--surface); }
+.t-pit table .status-letter {
+  display: inline-block; width: 16px; height: 16px;
+  text-align: center; line-height: 16px;
+  font-weight: 600; color: #000;
+}
+.t-pit table .status-letter.B { background: var(--green); }
+.t-pit table .status-letter.N { background: var(--amber); }
+.t-pit table .status-letter.F { background: var(--red); color: white; }
+
+.t-pit svg.spark path { fill: none; stroke: var(--amber); stroke-width: 1; }
+.t-pit svg.spark .green { stroke: var(--green); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 7 — ROBINHOOD FLOOR (Robinhood × Wise, dark lifted-charcoal)
+   ═════════════════════════════════════════════════════════════════ */
+.t-floor {
+  --bg: #1A1A1F; --surface: #22232A; --surface-alt: #2C2D36;
+  --border: #34353F; --border-strong: #4A4C58;
+  --fg: #F5F5F7; --fg-muted: #A0A1AC;
+  --primary: #00D982; --accent: #7B61FF; --warning: #FFB948; --danger: #FF4D5E;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 24px;
+}
+.t-floor .hero-card {
+  background: var(--surface); border-radius: 16px; padding: 24px;
+  display: grid; grid-template-columns: 1fr 1.5fr; gap: 16px; align-items: center;
+  margin-bottom: 16px; position: relative; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(255,255,255,0.02);
+}
+.t-floor .hero-card .left .label { font-size: 13px; color: var(--fg-muted); margin-bottom: 8px; }
+.t-floor .hero-card .left .value { font-size: 64px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.05; }
+.t-floor .hero-card .left .value .muted { color: var(--fg-muted); }
+.t-floor .hero-card .left .delta {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px;
+  border-radius: 999px; font-size: 14px; font-weight: 600; margin-top: 12px;
+  background: rgba(0,217,130,0.15); color: var(--primary); border: 1px solid rgba(0,217,130,0.3);
+}
+.t-floor .hero-card .right { height: 120px; }
+.t-floor .hero-card .right svg { width: 100%; height: 100%; }
+.t-floor .hero-card .right svg .area { fill: var(--primary); fill-opacity: 0.18; }
+.t-floor .hero-card .right svg .line { fill: none; stroke: var(--primary); stroke-width: 2.5; }
+
+.t-floor .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
+.t-floor .kpi {
+  background: var(--surface); border-radius: 16px; padding: 20px 20px 0;
+  position: relative; overflow: hidden;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(255,255,255,0.02);
+}
+.t-floor .kpi .top { display: flex; align-items: center; justify-content: space-between; }
+.t-floor .kpi .label { font-size: 13px; color: var(--fg-muted); font-weight: 500; }
+.t-floor .kpi .delta {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+  border-radius: 999px; font-size: 12px; font-weight: 600;
+}
+.t-floor .kpi .delta.up { background: rgba(0,217,130,0.15); color: var(--primary); border: 1px solid rgba(0,217,130,0.3); }
+.t-floor .kpi .delta.down { background: rgba(255,77,94,0.15); color: var(--danger); border: 1px solid rgba(255,77,94,0.3); }
+.t-floor .kpi .hero {
+  font-size: 40px; font-weight: 500; letter-spacing: -0.03em;
+  margin-top: 12px; line-height: 1.1;
+}
+.t-floor .kpi .hero .muted { color: var(--fg-muted); }
+.t-floor .kpi .spark {
+  margin: 16px -20px 0; height: 32px; display: block;
+}
+.t-floor .kpi .spark svg { width: 100%; height: 32px; display: block; }
+.t-floor .kpi .spark .area { fill: var(--primary); fill-opacity: 0.2; }
+.t-floor .kpi .spark .line { fill: none; stroke: var(--primary); stroke-width: 2; }
+.t-floor .kpi.alt .spark .area { fill: var(--accent); fill-opacity: 0.2; }
+.t-floor .kpi.alt .spark .line { stroke: var(--accent); }
+
+.t-floor .table { background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; }
+.t-floor .trow {
+  display: grid; grid-template-columns: 56px 1fr 100px 100px 80px 110px;
+  align-items: center; height: 56px; gap: 12px;
+  border-bottom: 1px solid var(--border); padding: 0 16px;
+  font-size: 14px;
+}
+.t-floor .trow.head { height: 40px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); font-weight: 600; }
+.t-floor .trow .avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--primary)); color: white;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; font-family: "JetBrains Mono", monospace;
+}
+.t-floor .trow .name { font-weight: 500; }
+.t-floor .trow .lane { font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: var(--fg-muted); }
+.t-floor .trow .num { font-family: "JetBrains Mono", monospace; text-align: right; }
+.t-floor .trow .pill {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+  border-radius: 999px; font-size: 12px; font-weight: 500;
+}
+.t-floor .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+.t-floor .pill.booked { background: rgba(0,217,130,0.15); color: var(--primary); border: 1px solid rgba(0,217,130,0.3); }
+.t-floor .pill.booked .dot { background: var(--primary); }
+.t-floor .pill.negot { background: rgba(255,185,72,0.15); color: var(--warning); border: 1px solid rgba(255,185,72,0.3); }
+.t-floor .pill.negot .dot { background: var(--warning); }
+.t-floor .pill.flag  { background: rgba(255,77,94,0.15); color: var(--danger); border: 1px solid rgba(255,77,94,0.3); }
+.t-floor .pill.flag .dot { background: var(--danger); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 8 — BREX OPERATOR (Brex × Ramp × Stripe, light cream)
+   ═════════════════════════════════════════════════════════════════ */
+.t-brex {
+  --bg: #FAF6F0; --surface: #FFFFFF; --border: #E8E2D6; --border-strong: #D4CCB8;
+  --fg: #1F1F1F; --fg-muted: #6E6E6E;
+  --primary: #FF5C26; --accent: #1F1F1F; --success: #0E7B3F; --danger: #C4322A; --warning: #B66A05;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 32px;
+  font-feature-settings: "tnum" 1;
+}
+.t-brex .hero-banner {
+  background: var(--surface); border-radius: 12px; padding: 32px;
+  display: grid; grid-template-columns: 1fr 200px; gap: 24px; align-items: center;
+  margin-bottom: 32px; position: relative; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(31,31,31,0.04), 0 4px 12px rgba(31,31,31,0.04);
+}
+.t-brex .hero-banner::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top right, rgba(255,92,38,0.08), transparent 60%);
+  pointer-events: none;
+}
+.t-brex .hero-banner .left { position: relative; z-index: 1; }
+.t-brex .hero-banner .label { font-size: 13px; color: var(--fg-muted); margin-bottom: 8px; font-weight: 500; }
+.t-brex .hero-banner .value { font-size: 48px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; margin-bottom: 8px; }
+.t-brex .hero-banner .ctx { font-size: 14px; color: var(--fg-muted); }
+.t-brex .hero-banner .cta {
+  margin-top: 16px; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--primary); color: white; border-radius: 999px;
+  padding: 10px 20px; font-size: 13px; font-weight: 600;
+}
+.t-brex .hero-banner .right svg { width: 100%; height: 120px; }
+.t-brex .hero-banner .right svg .area { fill: var(--primary); fill-opacity: 0.15; }
+.t-brex .hero-banner .right svg .line { fill: none; stroke: var(--primary); stroke-width: 2; }
+
+.t-brex .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+.t-brex .kpi {
+  background: var(--surface); border-radius: 12px; padding: 16px;
+  box-shadow: 0 1px 2px rgba(31,31,31,0.04), 0 4px 12px rgba(31,31,31,0.04);
+  transition: box-shadow .2s, transform .2s;
+}
+.t-brex .kpi:hover {
+  box-shadow: 0 2px 4px rgba(31,31,31,0.06), 0 12px 24px rgba(31,31,31,0.08);
+  transform: translateY(-1px);
+}
+.t-brex .kpi .icon-square {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(255,92,38,0.1); color: var(--primary);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 12px;
+}
+.t-brex .kpi .label { font-size: 13px; color: var(--fg-muted); font-weight: 500; margin-bottom: 4px; }
+.t-brex .kpi .hero { font-size: 32px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
+.t-brex .kpi .ctx { font-size: 13px; color: var(--success); margin-top: 6px; }
+.t-brex .kpi .ctx.down { color: var(--danger); }
+.t-brex .kpi .arrow-link { position: absolute; }
+
+.t-brex .table-card { background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(31,31,31,0.04), 0 4px 12px rgba(31,31,31,0.04); }
+.t-brex .table-card .head-bar { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+.t-brex .table-card .head-bar h3 { font-size: 17px; font-weight: 600; }
+.t-brex .table-card .head-bar .right { margin-left: auto; display: flex; gap: 6px; }
+.t-brex .table-card .head-bar .pill {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 12px;
+}
+.t-brex .trow {
+  display: grid; grid-template-columns: 48px 1.5fr 1fr 100px 100px 80px 100px 32px;
+  align-items: center; height: 64px; gap: 12px;
+  border-bottom: 1px solid var(--border); padding: 0 24px;
+  font-size: 14px;
+}
+.t-brex .trow.head { height: 44px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-muted); font-weight: 600; }
+.t-brex .trow .avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,92,38,0.12); color: var(--primary);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+}
+.t-brex .trow .stack { display: grid; gap: 2px; }
+.t-brex .trow .stack .name { font-weight: 500; font-size: 15px; }
+.t-brex .trow .stack .sub { font-size: 13px; color: var(--fg-muted); }
+.t-brex .trow .num { text-align: right; font-feature-settings: "tnum" 1; }
+.t-brex .trow .pill {
+  display: inline-flex; align-items: center; padding: 4px 10px;
+  border-radius: 999px; font-size: 13px; font-weight: 500;
+}
+.t-brex .pill.booked { background: rgba(14,123,63,0.12); color: var(--success); }
+.t-brex .pill.negot  { background: rgba(182,106,5,0.12); color: var(--warning); }
+.t-brex .pill.flag   { background: rgba(196,50,42,0.12); color: var(--danger); }
+.t-brex .trow .dots { color: var(--fg-muted); font-size: 18px; letter-spacing: -1px; cursor: default; }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 9 — DISPATCH CONSOLE (Linear × Zed, dark blue-gray, status-first)
+   ═════════════════════════════════════════════════════════════════ */
+.t-dispatch {
+  --bg: #0B0D10; --surface: #101317; --surface-alt: #161A20;
+  --border: #1F242C; --border-strong: #2A313B;
+  --fg: #E6EAF0; --fg-muted: #8893A3;
+  --primary: #5B8DEF; --accent: #A78BFA;
+  --success: #34D399; --warning: #F5B454; --danger: #F87171;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  font-feature-settings: "tnum" 1, "ss03" 1;
+  padding: 24px;
+}
+.t-dispatch .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.t-dispatch .kpi {
+  display: grid; grid-template-columns: 4px 1fr 80px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden; height: 88px;
+}
+.t-dispatch .kpi .bar { width: 4px; height: 100%; }
+.t-dispatch .kpi.ok .bar { background: var(--success); }
+.t-dispatch .kpi.warn .bar { background: var(--warning); }
+.t-dispatch .kpi.alert .bar { background: var(--danger); }
+.t-dispatch .kpi.info .bar { background: var(--primary); }
+.t-dispatch .kpi .stack { padding: 14px 16px; }
+.t-dispatch .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); margin-bottom: 6px; }
+.t-dispatch .kpi .row { display: flex; align-items: baseline; gap: 8px; }
+.t-dispatch .kpi .hero { font-size: 28px; font-weight: 520; letter-spacing: -0.015em; }
+.t-dispatch .kpi .delta { font-size: 13px; }
+.t-dispatch .kpi .delta.up { color: var(--success); }
+.t-dispatch .kpi .delta.down { color: var(--danger); }
+.t-dispatch .kpi .spark-side {
+  align-self: center; padding-right: 16px;
+}
+.t-dispatch .kpi .spark-side svg { width: 100%; height: 40px; }
+.t-dispatch .kpi .spark-side path { fill: none; stroke: var(--primary); stroke-width: 1.5; }
+
+.t-dispatch .feed {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+  margin-bottom: 24px; overflow: hidden;
+}
+.t-dispatch .feed-head {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.06em;
+}
+.t-dispatch .feed-row {
+  display: grid; grid-template-columns: 70px 90px 100px 1fr;
+  align-items: center; height: 24px; gap: 12px;
+  font-size: 12px; padding: 0 16px;
+}
+.t-dispatch .feed-row .ts { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--fg-muted); }
+.t-dispatch .feed-row .mc { font-family: "JetBrains Mono", monospace; font-size: 12px; }
+.t-dispatch .feed-row .pill {
+  display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.t-dispatch .pill.booked { background: rgba(52,211,153,0.15); color: var(--success); }
+.t-dispatch .pill.negot { background: rgba(245,180,84,0.15); color: var(--warning); }
+.t-dispatch .pill.flag { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+.t-dispatch .table {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+}
+.t-dispatch .trow {
+  display: grid; grid-template-columns: 24px 90px 1fr 110px 100px 130px 90px;
+  align-items: center; height: 36px; gap: 12px;
+  border-bottom: 1px solid var(--border); padding: 0 16px;
+  font-size: 13px;
+}
+.t-dispatch .trow.head { height: 32px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); font-weight: 500; }
+.t-dispatch .trow .dot { width: 8px; height: 8px; border-radius: 50%; }
+.t-dispatch .trow.booked .dot { background: var(--success); }
+.t-dispatch .trow.negot .dot { background: var(--warning); }
+.t-dispatch .trow.flag .dot { background: var(--danger); }
+.t-dispatch .trow .mc, .t-dispatch .trow .num, .t-dispatch .trow .lane { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
+.t-dispatch .trow .num { text-align: right; }
+.t-dispatch .trow .chs-bar {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: "JetBrains Mono", monospace; font-size: 12px;
+}
+.t-dispatch .trow .chs-bar .blocks { letter-spacing: -0.5px; color: var(--success); }
+.t-dispatch .trow.flag .chs-bar .blocks { color: var(--danger); }
+.t-dispatch .trow.negot .chs-bar .blocks { color: var(--warning); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 10 — BILL OF LADING (Notion × Stripe Atlas, light warm prose)
+   ═════════════════════════════════════════════════════════════════ */
+.t-lading {
+  --bg: #FAF9F6; --surface: #FFFFFF;
+  --border: #E8E4DC; --border-strong: #D6D0C4;
+  --fg: #1F1B16; --fg-muted: #6B6356;
+  --primary: #2C5F4A; --accent: #B45309; --success: #2C5F4A; --danger: #9F1239;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 64px 96px;
+}
+.t-lading h2.section {
+  font-family: "Source Serif 4", serif; font-size: 22px; font-weight: 600;
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.t-lading .section-intro {
+  font-size: 15px; color: var(--fg-muted); line-height: 1.6;
+  max-width: 620px; margin-bottom: 32px;
+}
+.t-lading .kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
+  margin-bottom: 64px;
+}
+.t-lading .kpi { }
+.t-lading .kpi .label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg-muted); font-weight: 600; margin-bottom: 12px;
+}
+.t-lading .kpi .hero {
+  font-family: "Source Serif 4", serif; font-size: 44px; font-weight: 600;
+  letter-spacing: -0.015em; line-height: 1; margin-bottom: 8px;
+  font-feature-settings: "tnum" 1;
+}
+.t-lading .kpi .prose {
+  font-size: 14px; color: var(--fg-muted); line-height: 1.6;
+}
+.t-lading .kpi .prose strong { color: var(--success); font-weight: 600; }
+.t-lading .kpi .prose strong.down { color: var(--danger); }
+
+.t-lading .feed {
+  margin-top: 48px; max-width: 720px;
+}
+.t-lading .feed h3 {
+  font-family: "Source Serif 4", serif; font-size: 17px; font-weight: 600;
+  margin-bottom: 16px;
+}
+.t-lading .feed-entry {
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.t-lading .feed-entry .meta {
+  font-size: 13px; color: var(--fg-muted); margin-bottom: 4px;
+  font-family: "JetBrains Mono", monospace;
+}
+.t-lading .feed-entry .body { font-size: 14px; line-height: 1.55; }
+
+.t-lading .table-section { margin-top: 64px; }
+.t-lading .trow {
+  display: grid; grid-template-columns: 36px 1fr 130px 110px 120px 120px;
+  align-items: center; height: 44px; gap: 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.t-lading .trow.head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg-muted); font-weight: 600; height: 36px;
+  border-bottom: 1px solid var(--border-strong);
+}
+.t-lading .trow .av {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--bg); border: 1.5px solid var(--border-strong);
+  font-size: 11px; font-weight: 600; color: var(--fg-muted);
+  font-family: "JetBrains Mono", monospace;
+}
+.t-lading .trow .name { font-weight: 500; }
+.t-lading .trow .lane { font-family: "JetBrains Mono", monospace; font-size: 13px; }
+.t-lading .trow .num { font-family: "JetBrains Mono", monospace; font-size: 13px; text-align: right; }
+.t-lading .trow .chs {
+  font-size: 14px; position: relative; padding-bottom: 4px;
+}
+.t-lading .trow .chs .num { display: inline; font-weight: 600; }
+.t-lading .trow .chs::after {
+  content: ""; position: absolute; bottom: 0; left: 0; height: 2px;
+  background: var(--success);
+}
+.t-lading .trow .chs.hi::after  { width: 84%; background: var(--success); }
+.t-lading .trow .chs.mid::after { width: 71%; background: var(--accent); }
+.t-lading .trow .chs.lo::after  { width: 58%; background: var(--danger); }
+.t-lading .trow .chip {
+  display: inline-block; padding: 2px 10px; border-radius: 4px;
+  font-size: 13px; background: var(--bg); border: 1px solid var(--border);
+}
+.t-lading .chip.booked { color: var(--success); border-color: var(--success); }
+.t-lading .chip.negot  { color: var(--accent); border-color: var(--accent); }
+.t-lading .chip.flag   { color: var(--danger); border-color: var(--danger); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 11 — FREIGHT TERMINAL (Vercel × Apple Dev, near-pure-black)
+   ═════════════════════════════════════════════════════════════════ */
+.t-terminal {
+  --bg: #060607; --surface: #0E0E10; --surface-alt: #16161A;
+  --border: #232328; --border-strong: #3A3A42;
+  --fg: #FAFAFA; --fg-muted: #9A9AA3;
+  --primary: #FFFFFF; --accent: #00DC82; --warning: #F5A524; --danger: #FF5C5C;
+  background: var(--bg); color: var(--fg);
+  font-family: "Geist", "Inter", sans-serif;
+  padding: 24px;
+}
+.t-terminal .kpi-strip { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.t-terminal .kpi {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.t-terminal .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--fg-muted); font-weight: 500; margin-bottom: 12px; }
+.t-terminal .kpi .hero {
+  font-family: "Geist Mono", "JetBrains Mono", monospace;
+  font-size: 36px; font-weight: 600; letter-spacing: -0.011em; line-height: 1;
+}
+.t-terminal .kpi.headline .hero { font-size: 56px; }
+.t-terminal .kpi .row {
+  display: flex; align-items: center; gap: 8px; margin-top: 12px;
+}
+.t-terminal .kpi .delta-chip {
+  font-family: "Geist Mono", monospace; font-size: 11px;
+  padding: 2px 8px; border-radius: 6px; font-weight: 500;
+}
+.t-terminal .kpi .delta-chip.up { background: rgba(0,220,130,0.12); color: var(--accent); border: 1px solid rgba(0,220,130,0.3); }
+.t-terminal .kpi .delta-chip.down { background: rgba(255,92,92,0.12); color: var(--danger); border: 1px solid rgba(255,92,92,0.3); }
+.t-terminal .kpi .bar-spark {
+  display: inline-flex; align-items: end; gap: 1px; height: 16px;
+}
+.t-terminal .kpi .bar-spark span {
+  display: inline-block; width: 2px; background: var(--fg-muted);
+}
+
+.t-terminal .logs {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; font-family: "Geist Mono", "JetBrains Mono", monospace; font-size: 12px;
+  margin-bottom: 24px; line-height: 1.7;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.t-terminal .logs .log .ts { color: var(--fg-muted); }
+.t-terminal .logs .log .mc { color: var(--fg); }
+.t-terminal .logs .log.b .stat { color: var(--accent); }
+.t-terminal .logs .log.n .stat { color: var(--warning); }
+.t-terminal .logs .log.f .stat { color: var(--danger); }
+
+.t-terminal .table {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+.t-terminal .trow {
+  display: grid; grid-template-columns: 110px 1fr 130px 110px 80px 100px;
+  align-items: center; height: 32px; gap: 12px;
+  border-bottom: 1px solid var(--border); padding: 0 16px;
+  font-size: 13px;
+}
+.t-terminal .trow.head { height: 32px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--fg-muted); font-weight: 500; }
+.t-terminal .trow .mc, .t-terminal .trow .num, .t-terminal .trow .lane { font-family: "Geist Mono", "JetBrains Mono", monospace; font-size: 12.5px; }
+.t-terminal .trow .num { text-align: right; }
+.t-terminal .trow .chiclet {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-family: "Geist Mono", monospace; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+}
+.t-terminal .chiclet.b { background: rgba(0,220,130,0.12); color: var(--accent); border: 1px solid rgba(0,220,130,0.3); }
+.t-terminal .chiclet.n { background: rgba(245,165,36,0.12); color: var(--warning); border: 1px solid rgba(245,165,36,0.3); }
+.t-terminal .chiclet.f { background: rgba(255,92,92,0.12); color: var(--danger); border: 1px solid rgba(255,92,92,0.3); }
+
+/* ═════════════════════════════════════════════════════════════════
+   THEME 12 — LOADBOARD LIVE (Raycast × Arc, warm charcoal coral)
+   ═════════════════════════════════════════════════════════════════ */
+.t-loadboard {
+  --bg: #1A1A1F; --surface: #25252C; --surface-alt: #32323B;
+  --border: #3A3A45; --border-strong: #54545F;
+  --fg: #F4F4F5; --fg-muted: #A0A0AB;
+  --primary: #FF6363; --accent: #4ECDC4; --warning: #FBBF24; --success: #4ADE80; --danger: #F43F5E;
+  background: var(--bg); color: var(--fg);
+  font-family: "Inter", sans-serif;
+  padding: 24px;
+}
+.t-loadboard .cmdk-bar {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 0 60px rgba(255,99,99,0.15), 0 1px 0 rgba(255,255,255,0.06) inset;
+}
+.t-loadboard .cmdk-bar .icon { color: var(--primary); }
+.t-loadboard .cmdk-bar input {
+  background: transparent; border: 0; outline: 0;
+  color: var(--fg); font-size: 14px; flex: 1;
+  font-family: "Inter", sans-serif;
+}
+.t-loadboard .cmdk-bar .hint {
+  font-size: 11px; color: var(--fg-muted);
+  font-family: "JetBrains Mono", monospace;
+  background: var(--surface-alt); border: 1px solid var(--border);
+  padding: 2px 6px; border-radius: 4px;
+}
+
+.t-loadboard .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.t-loadboard .kpi {
+  background: var(--surface); border-radius: 12px; padding: 14px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 0 0 1px var(--border);
+  position: relative; overflow: hidden;
+  transition: transform .25s, box-shadow .25s;
+}
+.t-loadboard .kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 0 0 1px var(--border-strong), 0 4px 16px rgba(0,0,0,0.4);
+}
+.t-loadboard .kpi .top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.t-loadboard .kpi .icon-square {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 13px;
+}
+.t-loadboard .kpi.calls .icon-square { background: rgba(255,99,99,0.15); }
+.t-loadboard .kpi.bookings .icon-square { background: rgba(78,205,196,0.15); }
+.t-loadboard .kpi.rate .icon-square { background: rgba(74,222,128,0.15); }
+.t-loadboard .kpi.chs .icon-square { background: rgba(251,191,36,0.15); }
+.t-loadboard .kpi .label { font-size: 11px; color: var(--fg-muted); font-weight: 500; }
+.t-loadboard .kpi .hero { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; line-height: 1; }
+.t-loadboard .kpi .delta-pill {
+  display: inline-flex; padding: 3px 10px; border-radius: 999px; margin-top: 8px;
+  font-size: 12px; font-weight: 600;
+}
+.t-loadboard .kpi .delta-pill.up { background: rgba(74,222,128,0.14); color: var(--success); }
+.t-loadboard .kpi .delta-pill.down { background: rgba(244,63,94,0.14); color: var(--danger); }
+.t-loadboard .kpi .roller {
+  position: absolute; bottom: 8px; right: 8px; width: 36px; height: 12px;
+}
+.t-loadboard .kpi .roller path { fill: none; stroke: var(--primary); stroke-width: 1.5; }
+.t-loadboard .kpi.bookings .roller path { stroke: var(--accent); }
+.t-loadboard .kpi.rate .roller path { stroke: var(--success); }
+.t-loadboard .kpi.chs .roller path { stroke: var(--warning); }
+
+.t-loadboard .card-stack {
+  display: grid; gap: 4px; margin-bottom: 16px;
+}
+.t-loadboard .card-stack .card {
+  background: var(--surface); border-radius: 12px; padding: 12px 14px;
+  display: grid; grid-template-columns: 28px 80px 100px 1fr 100px 90px;
+  align-items: center; gap: 10px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 0 1px var(--border);
+  font-size: 13px;
+}
+.t-loadboard .card-stack .card.new {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 0 1px var(--accent), 0 0 32px rgba(78,205,196,0.18);
+}
+.t-loadboard .card-stack .card .icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--surface-alt); display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.t-loadboard .card-stack .card .ts { font-size: 11px; color: var(--fg-muted); font-family: "JetBrains Mono", monospace; }
+.t-loadboard .card-stack .card .mc { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
+.t-loadboard .card-stack .card .lane { color: var(--fg-muted); font-family: "JetBrains Mono", monospace; }
+.t-loadboard .card-stack .card .num { font-family: "JetBrains Mono", monospace; text-align: right; }
+
+.t-loadboard .table {
+  background: var(--surface); border-radius: 12px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 0 0 1px var(--border);
+  padding: 4px;
+}
+.t-loadboard .trow {
+  display: grid; grid-template-columns: 32px 90px 1fr 110px 100px 80px 90px;
+  align-items: center; height: 40px; gap: 12px;
+  padding: 0 12px; border-radius: 6px;
+  font-size: 13px;
+}
+.t-loadboard .trow.head { height: 36px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-muted); font-weight: 600; }
+.t-loadboard .trow:hover:not(.head) { background: var(--surface-alt); }
+.t-loadboard .trow .av {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; font-family: "JetBrains Mono", monospace;
+  background: var(--surface-alt); color: var(--accent);
+}
+.t-loadboard .trow .mc, .t-loadboard .trow .num, .t-loadboard .trow .lane { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
+.t-loadboard .trow .num { text-align: right; }
+.t-loadboard .trow .pill {
+  display: inline-flex; align-items: center; padding: 2px 10px;
+  border-radius: 999px; font-size: 11px; font-weight: 500;
+}
+.t-loadboard .pill.booked { background: rgba(74,222,128,0.14); color: var(--success); }
+.t-loadboard .pill.negot { background: rgba(251,191,36,0.14); color: var(--warning); }
+.t-loadboard .pill.flag { background: rgba(244,63,94,0.14); color: var(--danger); }
+.t-loadboard .ring {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: "JetBrains Mono", monospace; font-size: 12px;
+}
+.t-loadboard .ring svg { display: block; }
+
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <h1>Acme Logistics — themes v2 preview <small>12 design languages, structurally distinct</small></h1>
+  <nav>
+    <a href="#tufte">1 Tufte</a>
+    <a href="#hex">2 Hex</a>
+    <a href="#powerbi">3 Power BI</a>
+    <a href="#sigma">4 Sigma</a>
+    <a href="#treasury">5 Treasury</a>
+    <a href="#pit">6 Pit</a>
+    <a href="#floor">7 Floor</a>
+    <a href="#brex">8 Brex</a>
+    <a href="#dispatch">9 Dispatch</a>
+    <a href="#lading">10 Lading</a>
+    <a href="#terminal">11 Terminal</a>
+    <a href="#loadboard">12 Loadboard</a>
+  </nav>
+</header>
+
+<section class="intro">
+  <h2>Reading guide</h2>
+  <p>Twelve themes across three lenses. Each theme below is a self-contained sample of that design language showing its <strong>own</strong> KPI tile geometry, table row shape, and signature element (ticker / ribbon / activity feed / Cmd-K bar / hero block — whichever the language calls for). Same data across all twelve so you can compare structure cleanly.</p>
+  <p>Six KPIs everywhere: <code>Calls Today 87</code>, <code>Bookings Today 12</code>, <code>Booked Rate 64.2%</code>, <code>Margin Captured $142,038</code>, <code>Avg CHS 78</code>, <code>Latency P70 1.4s</code>. Same four sample rows: <code>ELT-Logistics MC-453221 ATL→DAL $2,840 CHS 84 Booked</code>, <code>Cardinal Lines MC-872019 CHI→MIA $3,250 CHS 71 Negotiating</code>, <code>Sunbelt Frt MC-201840 LAX→DEN $2,140 CHS 92 Booked</code>, <code>Heartland Fr MC-119233 HOU→PHX $1,920 CHS 58 Flagged</code>.</p>
+  <p>Compared to the rejected v1 round (<code>themes-9-dark.md</code>) where every theme used the same KPI card / table row / ticker geometry: this round, the <strong>shapes</strong> change between themes, not just the colors.</p>
+</section>
+
+<!-- ═══════════════════════════ BI LENS ═══════════════════════════ -->
+<div class="lens-divider"><div class="label">BI / analytics lens</div><div class="rule"></div></div>
+
+<!-- ──────────── 1. TUFTE CONSOLE ──────────── -->
+<section id="tufte" class="theme">
+  <div class="theme-meta">
+    <span class="num">01</span>
+    <span class="name">Tufte Console</span>
+    <span class="inspo">Tableau stripped × Edward Tufte</span>
+    <span class="tags"><span>light</span><span>serif+mono</span><span>hairline</span><span>0 shadow</span><span>compact 28px row</span></span>
+  </div>
+  <div class="theme-stage t-tufte">
+    <div class="kpi-strip">
+      <div class="kpi"><div class="label">Calls today</div><div class="hero">87</div><div class="delta up">↑ 12%</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M0,16 L10,14 L20,12 L30,15 L40,11 L50,9 L60,7 L70,8 L80,5 L90,4 L100,2"/></svg>
+      </div>
+      <div class="kpi"><div class="label">Bookings</div><div class="hero">12</div><div class="delta up">↑ 3</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M0,18 L20,15 L40,12 L60,9 L80,7 L100,4"/></svg>
+      </div>
+      <div class="kpi"><div class="label">Booked rate</div><div class="hero">64.2%</div><div class="delta up">↑ 0.4 pp</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path class="accent" d="M0,12 L15,11 L30,13 L45,9 L60,10 L75,7 L90,8 L100,6"/></svg>
+      </div>
+      <div class="kpi"><div class="label">Margin captured</div><div class="hero">$142,038</div><div class="delta up">↑ 12.4%</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M0,17 L20,14 L40,11 L60,12 L80,7 L100,3"/></svg>
+      </div>
+      <div class="kpi"><div class="label">Avg CHS</div><div class="hero">78</div><div class="delta down">↓ 2</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M0,8 L20,9 L40,11 L60,13 L80,12 L100,14"/></svg>
+      </div>
+      <div class="kpi"><div class="label">Latency P70</div><div class="hero">1.4s</div><div class="delta up">↓ 0.1s</div>
+        <svg class="spark" viewBox="0 0 100 22" preserveAspectRatio="none"><path d="M0,10 L20,11 L40,9 L60,10 L80,8 L100,7"/></svg>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title"><em>fig 1.</em>Booked rate vs target<br><em>Apr 1 – Apr 30 · n=87</em></div>
+      <svg class="chart-svg" viewBox="0 0 600 140" preserveAspectRatio="none">
+        <line class="gridline" x1="0" y1="20" x2="600" y2="20"/>
+        <line class="gridline" x1="0" y1="60" x2="600" y2="60"/>
+        <line class="gridline" x1="0" y1="100" x2="600" y2="100"/>
+        <line class="axis" x1="0" y1="135" x2="600" y2="135"/>
+        <text class="ylabel" x="0" y="22">70%</text>
+        <text class="ylabel" x="0" y="62">60%</text>
+        <text class="ylabel" x="0" y="102">50%</text>
+        <path class="series" d="M30,90 L80,80 L130,75 L180,70 L230,65 L280,68 L330,55 L380,58 L430,50 L480,42 L530,38 L570,32"/>
+        <path class="series accent" d="M30,60 L570,60" stroke-dasharray="4,4"/>
+      </svg>
+    </div>
+
+    <div class="table">
+      <div class="trow head"><span></span><span>MC</span><span>Carrier · Lane</span><span>Rate</span><span>CHS</span><span>Outcome</span><span></span></div>
+      <div class="trow"><span class="tick">·</span><span class="mc">MC-453221</span><span class="name">ELT-Logistics — ATL → DAL</span><span class="num">$2,840</span><span class="num">84</span><span style="color:var(--success)">booked</span><span class="num">14:08</span></div>
+      <div class="trow"><span></span><span class="mc">MC-872019</span><span class="name">Cardinal Lines — CHI → MIA</span><span class="num">$3,250</span><span class="num">71</span><span style="color:var(--accent)">negotiating</span><span class="num">14:11</span></div>
+      <div class="trow"><span></span><span class="mc">MC-201840</span><span class="name">Sunbelt Frt — LAX → DEN</span><span class="num">$2,140</span><span class="num">92</span><span style="color:var(--success)">booked</span><span class="num">14:14</span></div>
+      <div class="trow"><span></span><span class="mc">MC-119233</span><span class="name">Heartland Fr — HOU → PHX</span><span class="num">$1,920</span><span class="num">58</span><span style="color:var(--danger)">flagged</span><span class="num">14:16</span></div>
+      <div class="trow"><span class="tick">·</span><span class="mc">MC-553112</span><span class="name">Pinerock Trans — SEA → PDX</span><span class="num">$1,250</span><span class="num">79</span><span style="color:var(--success)">booked</span><span class="num">14:19</span></div>
+    </div>
+
+    <div class="ticker">
+      ATL → DAL <span class="lane">$2,840</span> · CHI → MIA <span class="lane">$3,250</span> · LAX → DEN <span class="lane">$2,140</span> · HOU → PHX <span class="lane">$1,920</span> · SEA → PDX <span class="lane">$1,250</span> · NYC → ATL <span class="lane">$2,610</span>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 2. HEX NOTEBOOK ──────────── -->
+<section id="hex" class="theme">
+  <div class="theme-meta">
+    <span class="num">02</span>
+    <span class="name">Hex Notebook</span>
+    <span class="inspo">Hex.tech notebook flow + provenance</span>
+    <span class="tags"><span>light</span><span>vertical cells</span><span>provenance ▶</span><span>zebra rows</span><span>inline drilldown</span></span>
+  </div>
+  <div class="theme-stage t-hex">
+    <div class="notebook">
+      <div class="cell">
+        <div class="cell-header">cell #01 · source: calls_log · refreshed 2m ago · ⓘ <button class="run">▶ run</button></div>
+        <div class="cell-body">
+          <div class="kpi-grid">
+            <div class="kpi"><div class="label">Calls today</div><div class="hero">87</div><div class="delta up">↑ 12%</div>
+              <svg class="spark" viewBox="0 0 100 36"><path d="M0,28 L15,24 L30,20 L45,22 L60,16 L75,12 L90,9 L100,6 L100,36 L0,36 Z"/><circle cx="100" cy="6" r="3"/></svg>
+            </div>
+            <div class="kpi"><div class="label">Bookings</div><div class="hero">12</div><div class="delta up">↑ 3</div>
+              <svg class="spark" viewBox="0 0 100 36"><path d="M0,30 L20,25 L40,20 L60,15 L80,10 L100,7 L100,36 L0,36 Z"/><circle cx="100" cy="7" r="3"/></svg>
+            </div>
+            <div class="kpi"><div class="label">Booked rate</div><div class="hero">64.2%</div><div class="delta up">↑ 0.4 pp</div>
+              <svg class="spark" viewBox="0 0 100 36"><path d="M0,18 L20,17 L40,20 L60,14 L80,11 L100,8 L100,36 L0,36 Z"/><circle cx="100" cy="8" r="3"/></svg>
+            </div>
+            <div class="kpi"><div class="label">Margin captured</div><div class="hero">$142K</div><div class="delta up">↑ 12.4%</div>
+              <svg class="spark" viewBox="0 0 100 36"><path d="M0,28 L20,22 L40,18 L60,16 L80,10 L100,5 L100,36 L0,36 Z"/><circle cx="100" cy="5" r="3"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cell chart-cell">
+        <div class="cell-header">cell #02 · source: bookings · refreshed 2m ago · ⓘ <button class="run">▶ run</button></div>
+        <div class="cell-body">
+          <svg class="chart-svg" viewBox="0 0 600 120" preserveAspectRatio="none">
+            <path class="area" d="M0,80 L60,72 L120,68 L180,60 L240,52 L300,48 L360,40 L420,38 L480,30 L540,22 L600,18 L600,120 L0,120 Z"/>
+            <path class="line" d="M0,80 L60,72 L120,68 L180,60 L240,52 L300,48 L360,40 L420,38 L480,30 L540,22 L600,18"/>
+            <text x="0" y="115">Apr 1</text>
+            <text x="280" y="115">Apr 15</text>
+            <text x="560" y="115">Apr 30</text>
+          </svg>
+          <div class="sql">
+            <span class="kw">SELECT</span> date_trunc(<span class="str">'day'</span>, created_at), count(*) <span class="kw">FROM</span> bookings <span class="kw">WHERE</span> created_at &gt; now() - <span class="str">'30d'</span><span class="kw">::</span>interval <span class="kw">GROUP BY</span> 1;
+          </div>
+        </div>
+      </div>
+
+      <div class="cell table-cell">
+        <div class="cell-header">cell #03 · source: calls_log JOIN bookings · refreshed 2m ago · ⓘ <button class="run">▶ run</button></div>
+        <div class="cell-body">
+          <div class="trow head"><span class="gutter"></span><span>MC</span><span>Carrier</span><span>Lane</span><span class="num">Rate</span><span>CHS</span><span>Outcome</span></div>
+          <div class="trow booked"><span class="gutter"></span><span class="mc">MC-453221</span><span>ELT-Logistics</span><span class="mc">ATL → DAL</span><span class="num">$2,840</span><span class="num">84</span><span style="color:var(--success)">booked</span></div>
+          <div class="trow negot"><span class="gutter"></span><span class="mc">MC-872019</span><span>Cardinal Lines</span><span class="mc">CHI → MIA</span><span class="num">$3,250</span><span class="num">71</span><span style="color:#F59E0B">negotiating</span></div>
+          <div class="trow booked"><span class="gutter"></span><span class="mc">MC-201840</span><span>Sunbelt Frt</span><span class="mc">LAX → DEN</span><span class="num">$2,140</span><span class="num">92</span><span style="color:var(--success)">booked</span></div>
+          <div class="trow flag"><span class="gutter"></span><span class="mc">MC-119233</span><span>Heartland Fr</span><span class="mc">HOU → PHX</span><span class="num">$1,920</span><span class="num">58</span><span style="color:var(--danger)">flagged</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 3. POWER BI BOARDROOM ──────────── -->
+<section id="powerbi" class="theme">
+  <div class="theme-meta">
+    <span class="num">03</span>
+    <span class="name">Power BI Boardroom</span>
+    <span class="inspo">Power BI / Office 365 / Looker Studio</span>
+    <span class="tags"><span>light cool-grey</span><span>56px ribbon</span><span>icon + 3-dot menu</span><span>multi-layer shadow</span><span>44px row</span></span>
+  </div>
+  <div class="theme-stage t-powerbi">
+    <svg width="0" height="0"><defs><linearGradient id="pbi-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B3F73" stop-opacity="0.4"/><stop offset="100%" stop-color="#1B3F73" stop-opacity="0"/></linearGradient></defs></svg>
+    <div class="ribbon">
+      <span class="brand">Acme Logistics</span>
+      <div class="tabs">
+        <span class="tab active">Overview</span>
+        <span class="tab">Calls</span>
+        <span class="tab">Carriers</span>
+        <span class="tab">New bookings</span>
+      </div>
+      <div class="right">
+        <span class="pill">Last 7 days ▾</span>
+        <span class="pill">⟳ Refresh</span>
+        <span class="btn">Export</span>
+      </div>
+    </div>
+    <div class="body">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="icon">📞</div><span class="menu">⋯</span><div class="label">Calls today</div><div class="hero">87</div><div class="delta up">↑ 12.4% vs last week</div>
+          <svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none">
+            <path class="area" d="M0,40 L20,35 L40,32 L60,28 L80,30 L100,22 L120,20 L140,16 L160,12 L180,10 L200,6 L200,48 L0,48 Z"/>
+            <path class="line" d="M0,40 L20,35 L40,32 L60,28 L80,30 L100,22 L120,20 L140,16 L160,12 L180,10 L200,6"/>
+          </svg>
+        </div>
+        <div class="kpi"><div class="icon">🚚</div><span class="menu">⋯</span><div class="label">Bookings today</div><div class="hero">12</div><div class="delta up">↑ 3 vs last week</div>
+          <svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none">
+            <path class="area" d="M0,42 L40,38 L80,34 L120,28 L160,18 L200,8 L200,48 L0,48 Z"/>
+            <path class="line" d="M0,42 L40,38 L80,34 L120,28 L160,18 L200,8"/>
+          </svg>
+        </div>
+        <div class="kpi"><div class="icon">$</div><span class="menu">⋯</span><div class="label">Margin captured</div><div class="hero">$142K</div><div class="delta up">↑ 12.4% vs last week</div>
+          <svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none">
+            <path class="area" d="M0,40 L40,32 L80,28 L120,24 L160,12 L200,6 L200,48 L0,48 Z"/>
+            <path class="line" d="M0,40 L40,32 L80,28 L120,24 L160,12 L200,6"/>
+          </svg>
+        </div>
+        <div class="kpi"><div class="icon">★</div><span class="menu">⋯</span><div class="label">Avg CHS</div><div class="hero">78</div><div class="delta down">↓ 2 vs last week</div>
+          <svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none">
+            <path class="area" d="M0,12 L40,14 L80,18 L120,22 L160,24 L200,28 L200,48 L0,48 Z"/>
+            <path class="line" d="M0,12 L40,14 L80,18 L120,22 L160,24 L200,28"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="header"><h3>Recent calls</h3><span class="pill">87 calls</span></div>
+        <div class="trow head"><span class="left"></span><span>MC</span><span>Carrier</span><span>Lane</span><span class="num">Rate</span><span>CHS</span><span>Outcome</span></div>
+        <div class="trow"><span class="left"></span><span class="mc">MC-453221</span><span>ELT-Logistics</span><span>Atlanta → Dallas</span><span class="num">$2,840</span><span class="num">84</span><span style="color:var(--success)">● Booked</span></div>
+        <div class="trow selected"><span class="left"></span><span class="mc">MC-872019</span><span>Cardinal Lines</span><span>Chicago → Miami</span><span class="num">$3,250</span><span class="num">71</span><span style="color:var(--warning)">● Negotiating</span></div>
+        <div class="trow"><span class="left"></span><span class="mc">MC-201840</span><span>Sunbelt Frt</span><span>LAX → Denver</span><span class="num">$2,140</span><span class="num">92</span><span style="color:var(--success)">● Booked</span></div>
+        <div class="trow"><span class="left"></span><span class="mc">MC-119233</span><span>Heartland Fr</span><span>Houston → Phoenix</span><span class="num">$1,920</span><span class="num">58</span><span style="color:var(--danger)">● Flagged</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 4. SIGMA SPREADSHEET ──────────── -->
+<section id="sigma" class="theme">
+  <div class="theme-meta">
+    <span class="num">04</span>
+    <span class="name">Sigma Spreadsheet</span>
+    <span class="inspo">Sigma Computing × Excel × Metabase</span>
+    <span class="tags"><span>light</span><span>22px row</span><span>cell gridlines</span><span>in-cell data bars</span><span>frozen merged-cell KPI band</span></span>
+  </div>
+  <div class="theme-stage t-sigma">
+    <div class="toolbar">
+      <span class="btn primary">+ New</span>
+      <span class="btn">Sort</span>
+      <span class="btn">Filter</span>
+      <span class="btn">Freeze</span>
+      <span class="btn">Export</span>
+      <div class="tabs"><span class="tab active">Overview</span><span class="tab">Calls</span><span class="tab">Carriers</span><span class="tab">Bookings</span></div>
+    </div>
+    <div class="kpi-band">
+      <div class="kpi"><div class="label">Calls</div><div class="hero">87</div><div class="delta up">▲ 12%</div><div class="databar" style="width: 87%"></div></div>
+      <div class="kpi"><div class="label">Bookings</div><div class="hero">12</div><div class="delta up">▲ 3</div><div class="databar" style="width: 60%"></div></div>
+      <div class="kpi"><div class="label">Booked rate</div><div class="hero">64.2%</div><div class="delta up">▲ 0.4pp</div><div class="databar" style="width: 64%"></div></div>
+      <div class="kpi"><div class="label">Margin</div><div class="hero">$142K</div><div class="delta up">▲ 12.4%</div><div class="databar" style="width: 78%"></div></div>
+      <div class="kpi"><div class="label">Avg CHS</div><div class="hero">78</div><div class="delta down">▼ 2</div><div class="databar warn" style="width: 78%"></div></div>
+      <div class="kpi"><div class="label">P70</div><div class="hero">1.4s</div><div class="delta up">▼ 0.1s</div><div class="databar" style="width: 50%"></div></div>
+    </div>
+    <div class="recent">
+      <div class="label">Recent</div>
+      <div class="row">12 bookings · 4 negotiating · 2 flagged · last 5 calls all from registered MCs<span class="more">›› view all</span></div>
+    </div>
+    <table class="grid-table">
+      <thead><tr><th>MC</th><th>Carrier</th><th>Lane</th><th class="num">Rate</th><th class="num">Listed</th><th class="num">Δ</th><th>CHS</th><th>Outcome</th><th>Time</th></tr></thead>
+      <tbody>
+        <tr><td>MC-453221</td><td>ELT-Logistics</td><td>ATL → DAL</td><td class="num">2840</td><td class="num">2900</td>
+          <td class="databar-cell"><span class="bar" style="width:30%"></span><span class="val">+60</span></td>
+          <td class="chs-cell hi">84</td><td><span class="icon-set" style="color:#15803D">✓</span> Booked</td><td>14:08</td></tr>
+        <tr><td>MC-872019</td><td>Cardinal Lines</td><td>CHI → MIA</td><td class="num">3250</td><td class="num">3400</td>
+          <td class="databar-cell"><span class="bar" style="width:48%"></span><span class="val">+150</span></td>
+          <td class="chs-cell mid">71</td><td><span class="icon-set" style="color:#A16207">⋯</span> Negotiating</td><td>14:11</td></tr>
+        <tr><td>MC-201840</td><td>Sunbelt Frt</td><td>LAX → DEN</td><td class="num">2140</td><td class="num">2100</td>
+          <td class="databar-cell"><span class="bar neg" style="width:18%"></span><span class="val">-40</span></td>
+          <td class="chs-cell hi">92</td><td><span class="icon-set" style="color:#15803D">✓</span> Booked</td><td>14:14</td></tr>
+        <tr><td>MC-119233</td><td>Heartland Fr</td><td>HOU → PHX</td><td class="num">1920</td><td class="num">2000</td>
+          <td class="databar-cell"><span class="bar" style="width:32%"></span><span class="val">+80</span></td>
+          <td class="chs-cell lo">58</td><td><span class="icon-set" style="color:#B91C1C">✗</span> Flagged</td><td>14:16</td></tr>
+        <tr><td>MC-553112</td><td>Pinerock Trans</td><td>SEA → PDX</td><td class="num">1250</td><td class="num">1280</td>
+          <td class="databar-cell"><span class="bar" style="width:14%"></span><span class="val">+30</span></td>
+          <td class="chs-cell hi">79</td><td><span class="icon-set" style="color:#15803D">✓</span> Booked</td><td>14:19</td></tr>
+      </tbody>
+    </table>
+    <div class="small-multiples">
+      <div class="sm-chart"><div class="cap">Booked rate / day</div><svg viewBox="0 0 200 80" preserveAspectRatio="none"><path d="M0,60 L20,55 L40,50 L60,52 L80,42 L100,38 L120,30 L140,28 L160,22 L180,18 L200,12"/></svg></div>
+      <div class="sm-chart"><div class="cap">Margin / day</div><svg viewBox="0 0 200 80" preserveAspectRatio="none"><path d="M0,68 L40,55 L80,48 L120,40 L160,28 L200,18"/></svg></div>
+      <div class="sm-chart"><div class="cap">Avg CHS / day</div><svg viewBox="0 0 200 80" preserveAspectRatio="none"><path d="M0,18 L40,22 L80,28 L120,34 L160,38 L200,44"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FINTECH LENS ═══════════════════════════ -->
+<div class="lens-divider"><div class="label">Fintech / banking lens</div><div class="rule"></div></div>
+
+<!-- ──────────── 5. TREASURY NOTE ──────────── -->
+<section id="treasury" class="theme">
+  <div class="theme-meta">
+    <span class="num">05</span>
+    <span class="name">Treasury Note</span>
+    <span class="inspo">Mercury × Carta — private-bank statement</span>
+    <span class="tags"><span>light cream</span><span>88px serif hero</span><span>single-column</span><span>0 shadow</span><span>2px radius</span></span>
+  </div>
+  <div class="theme-stage t-treasury">
+    <div class="hero">
+      <div class="label">Margin captured · MTD</div>
+      <div class="value">$142,038</div>
+      <div class="context">Up from $128,401 last month, on 47 bookings. Atlanta lanes drove most of the lift.</div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Calls today</div><div class="hero">87</div><div class="delta"><span class="arrow up">▲</span> 12% vs prior week</div></div>
+      <div class="kpi"><div class="label">Bookings today</div><div class="hero">12</div><div class="delta"><span class="arrow up">▲</span> 3 vs prior week</div></div>
+      <div class="kpi"><div class="label">Booked rate</div><div class="hero">64.2%</div><div class="delta"><span class="arrow up">▲</span> 0.4 pp vs prior week</div></div>
+    </div>
+
+    <div class="table">
+      <h3>Recent calls</h3>
+      <div class="trow head"><span>MC</span><span>Carrier · Lane</span><span class="num">Rate</span><span class="num">CHS</span><span>Outcome</span></div>
+      <div class="trow"><span class="mc">MC-453221</span><span>ELT-Logistics — Atlanta → Dallas</span><span class="num">$2,840</span><span class="num">84</span><span class="status booked"><span class="dot"></span>booked</span></div>
+      <div class="trow"><span class="mc">MC-872019</span><span>Cardinal Lines — Chicago → Miami</span><span class="num">$3,250</span><span class="num">71</span><span class="status negot"><span class="dot"></span>negotiating</span></div>
+      <div class="trow"><span class="mc">MC-201840</span><span>Sunbelt Frt — LAX → Denver</span><span class="num">$2,140</span><span class="num">92</span><span class="status booked"><span class="dot"></span>booked</span></div>
+      <div class="trow"><span class="mc">MC-119233</span><span>Heartland Fr — Houston → Phoenix</span><span class="num">$1,920</span><span class="num">58</span><span class="status flag"><span class="dot"></span>flagged</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 6. BLOOMBERG PIT ──────────── -->
+<section id="pit" class="theme">
+  <div class="theme-meta">
+    <span class="num">06</span>
+    <span class="name">Bloomberg Pit</span>
+    <span class="inspo">Bloomberg Terminal × Plaid Dashboard</span>
+    <span class="tags"><span>near-black</span><span>mono only</span><span>4-quadrant</span><span>no hero</span><span>square corners</span><span>continuous ticker</span></span>
+  </div>
+  <div class="theme-stage t-pit">
+    <div class="ticker-bar">
+      <span class="tk-item"><span class="lane">ATL→DAL</span> 2840 <span class="up">+60</span></span>
+      <span class="tk-item"><span class="lane">CHI→MIA</span> 3250 <span class="up">+150</span></span>
+      <span class="tk-item"><span class="lane">LAX→DEN</span> 2140 <span class="down">-40</span></span>
+      <span class="tk-item"><span class="lane">HOU→PHX</span> 1920 <span class="up">+80</span></span>
+      <span class="tk-item"><span class="lane">SEA→PDX</span> 1250 <span class="up">+30</span></span>
+      <span class="tk-item"><span class="lane">NYC→ATL</span> 2610 <span class="up">+45</span></span>
+      <span class="tk-item"><span class="lane">DAL→ELP</span> 1480 <span class="down">-20</span></span>
+    </div>
+
+    <div class="grid">
+      <div class="kpi"><div class="ticker">CALL · TODAY</div><div class="hero">87</div><div class="row"><span>PREV 78</span> <span class="up">+12%</span> <span>WK 82</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+      <div class="kpi"><div class="ticker">BOOK · TODAY</div><div class="hero">12</div><div class="row"><span>PREV 9</span> <span class="up">+33%</span> <span>WK 10</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+      <div class="kpi"><div class="ticker">BKDR · 7D</div><div class="hero">64.2%</div><div class="row"><span>PREV 63.8</span> <span class="up">+0.4</span> <span>WK 62.1</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+      <div class="kpi"><div class="ticker">MGNC · MTD</div><div class="hero">$142K</div><div class="row"><span>PREV $128K</span> <span class="up">+12.4%</span> <span>YR $1.6M</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+      <div class="kpi"><div class="ticker">CHS · AVG</div><div class="hero">78</div><div class="row"><span>PREV 80</span> <span class="down">-2.5%</span> <span>WK 79</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+      <div class="kpi"><div class="ticker">P70 · LAT</div><div class="hero">1.4s</div><div class="row"><span>PREV 1.5</span> <span class="up">-0.1</span> <span>WK 1.6</span></div><div class="ts">UPDATED 14:23:04 EDT</div></div>
+    </div>
+
+    <div class="quadrants">
+      <div class="quad">
+        <div class="qtitle">CALL TAPE</div>
+        <div class="qbody">
+          <table>
+            <thead><tr><th>TIME</th><th>MC</th><th>S</th><th>LANE</th><th class="num">RATE</th><th class="num">Δ</th></tr></thead>
+            <tbody>
+              <tr><td>14:08</td><td>MC-453221</td><td><span class="status-letter B">B</span></td><td>ATL→DAL</td><td class="num up">2840</td><td class="num up">+60</td></tr>
+              <tr><td>14:11</td><td>MC-872019</td><td><span class="status-letter N">N</span></td><td>CHI→MIA</td><td class="num up">3250</td><td class="num up">+150</td></tr>
+              <tr><td>14:14</td><td>MC-201840</td><td><span class="status-letter B">B</span></td><td>LAX→DEN</td><td class="num down">2140</td><td class="num down">-40</td></tr>
+              <tr><td>14:16</td><td>MC-119233</td><td><span class="status-letter F">F</span></td><td>HOU→PHX</td><td class="num up">1920</td><td class="num up">+80</td></tr>
+              <tr><td>14:19</td><td>MC-553112</td><td><span class="status-letter B">B</span></td><td>SEA→PDX</td><td class="num up">1250</td><td class="num up">+30</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="quad">
+        <div class="qtitle">BOOK RATE 7D</div>
+        <div class="qbody">
+          <svg class="spark" viewBox="0 0 360 100" preserveAspectRatio="none">
+            <path d="M0,80 L40,75 L80,72 L120,68 L160,60 L200,55 L240,50 L280,42 L320,35 L360,30"/>
+            <path class="green" d="M0,40 L360,40" stroke-dasharray="3,3"/>
+          </svg>
+          <div style="font-size:10px;color:var(--fg-muted);margin-top:4px">target 70% · current 64.2% · gap -5.8pp</div>
+        </div>
+      </div>
+      <div class="quad">
+        <div class="qtitle">MARGIN BY LANE</div>
+        <div class="qbody">
+          <table>
+            <thead><tr><th>LANE</th><th class="num">MGN</th><th class="num">N</th><th class="num">AVG</th></tr></thead>
+            <tbody>
+              <tr><td>ATL→DAL</td><td class="num up">+$8,420</td><td class="num">14</td><td class="num">$601</td></tr>
+              <tr><td>CHI→MIA</td><td class="num up">+$12,680</td><td class="num">9</td><td class="num">$1,409</td></tr>
+              <tr><td>LAX→DEN</td><td class="num down">-$1,200</td><td class="num">7</td><td class="num">-$171</td></tr>
+              <tr><td>HOU→PHX</td><td class="num up">+$4,100</td><td class="num">5</td><td class="num">$820</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="quad">
+        <div class="qtitle">CALL VOL · 24H</div>
+        <div class="qbody">
+          <svg class="spark" viewBox="0 0 360 100" preserveAspectRatio="none">
+            <path d="M0,90 L20,85 L40,80 L60,82 L80,72 L100,65 L120,60 L140,55 L160,50 L180,42 L200,40 L220,35 L240,28 L260,25 L280,30 L300,35 L320,42 L340,50 L360,55"/>
+          </svg>
+          <div style="font-size:10px;color:var(--fg-muted);margin-top:4px">peak 13:00 · 14 calls/h · idle 04:00-06:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 7. ROBINHOOD FLOOR ──────────── -->
+<section id="floor" class="theme">
+  <div class="theme-meta">
+    <span class="num">07</span>
+    <span class="name">Robinhood Floor</span>
+    <span class="inspo">Robinhood Pro × Wise — consumer-trading polish</span>
+    <span class="tags"><span>dark lifted-charcoal</span><span>64px hero on chart</span><span>16px radius</span><span>translucent pills</span><span>56px row + avatar</span></span>
+  </div>
+  <div class="theme-stage t-floor">
+    <div class="hero-card">
+      <div class="left">
+        <div class="label">Margin captured · today</div>
+        <div class="value">$142,<span class="muted">038</span></div>
+        <div class="delta">▲ 12.4% vs yesterday</div>
+      </div>
+      <div class="right">
+        <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+          <path class="area" d="M0,90 L40,80 L80,72 L120,65 L160,52 L200,48 L240,40 L280,32 L320,22 L360,16 L400,8 L400,120 L0,120 Z"/>
+          <path class="line" d="M0,90 L40,80 L80,72 L120,65 L160,52 L200,48 L240,40 L280,32 L320,22 L360,16 L400,8"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="top"><div class="label">Calls today</div><div class="delta up">▲ 12%</div></div>
+        <div class="hero">87</div>
+        <div class="spark"><svg viewBox="0 0 400 32" preserveAspectRatio="none">
+          <path class="area" d="M0,24 L60,20 L120,18 L180,14 L240,12 L300,8 L360,6 L400,4 L400,32 L0,32 Z"/>
+          <path class="line" d="M0,24 L60,20 L120,18 L180,14 L240,12 L300,8 L360,6 L400,4"/>
+        </svg></div>
+      </div>
+      <div class="kpi alt">
+        <div class="top"><div class="label">Bookings today</div><div class="delta up">▲ 3</div></div>
+        <div class="hero">12</div>
+        <div class="spark"><svg viewBox="0 0 400 32" preserveAspectRatio="none">
+          <path class="area" d="M0,28 L80,24 L160,20 L240,14 L320,10 L400,6 L400,32 L0,32 Z"/>
+          <path class="line" d="M0,28 L80,24 L160,20 L240,14 L320,10 L400,6"/>
+        </svg></div>
+      </div>
+      <div class="kpi">
+        <div class="top"><div class="label">Booked rate</div><div class="delta up">▲ 0.4pp</div></div>
+        <div class="hero">64.2<span class="muted">%</span></div>
+        <div class="spark"><svg viewBox="0 0 400 32" preserveAspectRatio="none">
+          <path class="area" d="M0,18 L80,16 L160,18 L240,14 L320,10 L400,8 L400,32 L0,32 Z"/>
+          <path class="line" d="M0,18 L80,16 L160,18 L240,14 L320,10 L400,8"/>
+        </svg></div>
+      </div>
+      <div class="kpi alt">
+        <div class="top"><div class="label">Avg CHS</div><div class="delta down">▼ 2</div></div>
+        <div class="hero">78</div>
+        <div class="spark"><svg viewBox="0 0 400 32" preserveAspectRatio="none">
+          <path class="area" d="M0,8 L80,10 L160,14 L240,18 L320,22 L400,26 L400,32 L0,32 Z"/>
+          <path class="line" d="M0,8 L80,10 L160,14 L240,18 L320,22 L400,26"/>
+        </svg></div>
+      </div>
+    </div>
+
+    <div class="table">
+      <div class="trow head"><span></span><span>Carrier · Lane</span><span class="num">Rate</span><span class="num">CHS</span><span>Outcome</span><span class="num">Time</span></div>
+      <div class="trow"><span class="avatar">EL</span><div><div class="name">ELT-Logistics</div><div class="lane">MC-453221 · ATL → DAL</div></div><span class="num">$2,840</span><span class="num">84</span><span class="pill booked"><span class="dot"></span>Booked</span><span class="num" style="color:var(--fg-muted)">14:08</span></div>
+      <div class="trow"><span class="avatar">CL</span><div><div class="name">Cardinal Lines</div><div class="lane">MC-872019 · CHI → MIA</div></div><span class="num">$3,250</span><span class="num">71</span><span class="pill negot"><span class="dot"></span>Negotiating</span><span class="num" style="color:var(--fg-muted)">14:11</span></div>
+      <div class="trow"><span class="avatar">SF</span><div><div class="name">Sunbelt Frt</div><div class="lane">MC-201840 · LAX → DEN</div></div><span class="num">$2,140</span><span class="num">92</span><span class="pill booked"><span class="dot"></span>Booked</span><span class="num" style="color:var(--fg-muted)">14:14</span></div>
+      <div class="trow"><span class="avatar">HF</span><div><div class="name">Heartland Fr</div><div class="lane">MC-119233 · HOU → PHX</div></div><span class="num">$1,920</span><span class="num">58</span><span class="pill flag"><span class="dot"></span>Flagged</span><span class="num" style="color:var(--fg-muted)">14:16</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 8. BREX OPERATOR ──────────── -->
+<section id="brex" class="theme">
+  <div class="theme-meta">
+    <span class="num">08</span>
+    <span class="name">Brex Operator</span>
+    <span class="inspo">Brex × Ramp × Stripe Dashboard</span>
+    <span class="tags"><span>light cream-on-white</span><span>multi-layer shadow</span><span>brand-orange CTA</span><span>64px row + avatar</span><span>filled-tint pills</span></span>
+  </div>
+  <div class="theme-stage t-brex">
+    <div class="hero-banner">
+      <div class="left">
+        <div class="label">Margin captured · this week</div>
+        <div class="value">$142,038</div>
+        <div class="ctx">↑ $14k vs last week, driven by 12 bookings on Atlanta lanes</div>
+        <span class="cta">View report →</span>
+      </div>
+      <div class="right">
+        <svg viewBox="0 0 200 120" preserveAspectRatio="none">
+          <path class="area" d="M0,90 L20,80 L40,72 L60,65 L80,52 L100,48 L120,40 L140,32 L160,22 L180,16 L200,8 L200,120 L0,120 Z"/>
+          <path class="line" d="M0,90 L20,80 L40,72 L60,65 L80,52 L100,48 L120,40 L140,32 L160,22 L180,16 L200,8"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="icon-square">📞</div><div class="label">Calls today</div><div class="hero">87</div><div class="ctx">↑ 12% vs last week</div></div>
+      <div class="kpi"><div class="icon-square">🚚</div><div class="label">Bookings today</div><div class="hero">12</div><div class="ctx">↑ 3 vs last week</div></div>
+      <div class="kpi"><div class="icon-square">★</div><div class="label">Avg CHS</div><div class="hero">78</div><div class="ctx down">↓ 2 vs last week</div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="head-bar"><h3>Recent activity</h3><div class="right"><span class="pill">All</span><span class="pill">Booked</span><span class="pill">Flagged</span></div></div>
+      <div class="trow head"><span></span><span>Carrier</span><span>Lane</span><span class="num">Rate</span><span class="num">CHS</span><span></span><span></span><span></span></div>
+      <div class="trow"><span class="avatar">EL</span><div class="stack"><div class="name">ELT-Logistics</div><div class="sub">MC-453221</div></div><div class="stack"><div>Atlanta → Dallas</div><div class="sub" style="color:var(--fg-muted)">2,840 · 14:08</div></div><span class="num">$2,840</span><span class="num">84</span><span></span><span class="pill booked">Booked</span><span class="dots">⋯</span></div>
+      <div class="trow"><span class="avatar">CL</span><div class="stack"><div class="name">Cardinal Lines</div><div class="sub">MC-872019</div></div><div class="stack"><div>Chicago → Miami</div><div class="sub" style="color:var(--fg-muted)">3,250 · 14:11</div></div><span class="num">$3,250</span><span class="num">71</span><span></span><span class="pill negot">Negotiating</span><span class="dots">⋯</span></div>
+      <div class="trow"><span class="avatar">SF</span><div class="stack"><div class="name">Sunbelt Frt</div><div class="sub">MC-201840</div></div><div class="stack"><div>LAX → Denver</div><div class="sub" style="color:var(--fg-muted)">2,140 · 14:14</div></div><span class="num">$2,140</span><span class="num">92</span><span></span><span class="pill booked">Booked</span><span class="dots">⋯</span></div>
+      <div class="trow"><span class="avatar">HF</span><div class="stack"><div class="name">Heartland Fr</div><div class="sub">MC-119233</div></div><div class="stack"><div>Houston → Phoenix</div><div class="sub" style="color:var(--fg-muted)">1,920 · 14:16</div></div><span class="num">$1,920</span><span class="num">58</span><span></span><span class="pill flag">Flagged</span><span class="dots">⋯</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ MODERN SAAS LENS ═══════════════════════════ -->
+<div class="lens-divider"><div class="label">Modern SaaS / productivity lens</div><div class="rule"></div></div>
+
+<!-- ──────────── 9. DISPATCH CONSOLE ──────────── -->
+<section id="dispatch" class="theme">
+  <div class="theme-meta">
+    <span class="num">09</span>
+    <span class="name">Dispatch Console</span>
+    <span class="inspo">Linear × Zed — opinionated tooling</span>
+    <span class="tags"><span>dark blue-gray</span><span>status-first</span><span>borders only</span><span>6px radius everywhere</span><span>tight 16/8</span></span>
+  </div>
+  <div class="theme-stage t-dispatch">
+    <div class="kpi-strip">
+      <div class="kpi info"><div class="bar"></div><div class="stack"><div class="label">Calls today</div><div class="row"><span class="hero">87</span><span class="delta up">+12%</span></div></div><div class="spark-side"><svg viewBox="0 0 80 40" preserveAspectRatio="none"><path d="M0,32 L20,25 L40,18 L60,12 L80,6"/></svg></div></div>
+      <div class="kpi ok"><div class="bar"></div><div class="stack"><div class="label">Bookings</div><div class="row"><span class="hero">12</span><span class="delta up">+3</span></div></div><div class="spark-side"><svg viewBox="0 0 80 40" preserveAspectRatio="none"><path d="M0,34 L20,28 L40,22 L60,15 L80,8"/></svg></div></div>
+      <div class="kpi info"><div class="bar"></div><div class="stack"><div class="label">Booked rate</div><div class="row"><span class="hero">64.2%</span><span class="delta up">+0.4pp</span></div></div><div class="spark-side"><svg viewBox="0 0 80 40" preserveAspectRatio="none"><path d="M0,20 L20,18 L40,22 L60,12 L80,6"/></svg></div></div>
+      <div class="kpi warn"><div class="bar"></div><div class="stack"><div class="label">Avg CHS</div><div class="row"><span class="hero">78</span><span class="delta down">−2</span></div></div><div class="spark-side"><svg viewBox="0 0 80 40" preserveAspectRatio="none"><path d="M0,12 L20,16 L40,22 L60,28 L80,32"/></svg></div></div>
+    </div>
+
+    <div class="feed">
+      <div class="feed-head">Live calls · last 5</div>
+      <div class="feed-row"><span class="ts">14:19:08</span><span class="mc">MC-553112</span><span class="pill booked">booked</span><span>Pinerock Trans · SEA → PDX · $1,250 · CHS 79</span></div>
+      <div class="feed-row"><span class="ts">14:16:42</span><span class="mc">MC-119233</span><span class="pill flag">flagged</span><span>Heartland Fr · HOU → PHX · $1,920 · CHS 58</span></div>
+      <div class="feed-row"><span class="ts">14:14:22</span><span class="mc">MC-201840</span><span class="pill booked">booked</span><span>Sunbelt Frt · LAX → DEN · $2,140 · CHS 92</span></div>
+      <div class="feed-row"><span class="ts">14:11:55</span><span class="mc">MC-872019</span><span class="pill negot">negot</span><span>Cardinal Lines · CHI → MIA · $3,250 · CHS 71</span></div>
+      <div class="feed-row"><span class="ts">14:08:31</span><span class="mc">MC-453221</span><span class="pill booked">booked</span><span>ELT-Logistics · ATL → DAL · $2,840 · CHS 84</span></div>
+    </div>
+
+    <div class="table">
+      <div class="trow head"><span></span><span>MC</span><span>Carrier</span><span class="lane">Lane</span><span class="num">Rate</span><span>CHS</span><span class="num">Outcome</span></div>
+      <div class="trow booked"><span class="dot"></span><span class="mc">MC-453221</span><span>ELT-Logistics</span><span class="lane">ATL → DAL</span><span class="num">$2,840</span><span class="chs-bar"><span class="blocks">██████░░</span> 84</span><span class="num" style="color:var(--success)">booked</span></div>
+      <div class="trow negot"><span class="dot"></span><span class="mc">MC-872019</span><span>Cardinal Lines</span><span class="lane">CHI → MIA</span><span class="num">$3,250</span><span class="chs-bar"><span class="blocks">██████░░</span> 71</span><span class="num" style="color:var(--warning)">negotiating</span></div>
+      <div class="trow booked"><span class="dot"></span><span class="mc">MC-201840</span><span>Sunbelt Frt</span><span class="lane">LAX → DEN</span><span class="num">$2,140</span><span class="chs-bar"><span class="blocks">█████████</span> 92</span><span class="num" style="color:var(--success)">booked</span></div>
+      <div class="trow flag"><span class="dot"></span><span class="mc">MC-119233</span><span>Heartland Fr</span><span class="lane">HOU → PHX</span><span class="num">$1,920</span><span class="chs-bar"><span class="blocks">█████░░░</span> 58</span><span class="num" style="color:var(--danger)">flagged</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 10. BILL OF LADING ──────────── -->
+<section id="lading" class="theme">
+  <div class="theme-meta">
+    <span class="num">10</span>
+    <span class="name">Bill of Lading</span>
+    <span class="inspo">Notion × Stripe Atlas — content-first ledger</span>
+    <span class="tags"><span>light warm paper</span><span>spacious 96px gutter</span><span>prose-led KPIs</span><span>borderless rows</span><span>typographic CHS bar</span></span>
+  </div>
+  <div class="theme-stage t-lading">
+    <h2 class="section">Today's brokerage</h2>
+    <p class="section-intro">A short summary of the desk's state, written for an owner-broker. Numbers are inline because the question is always <em>why did this move?</em>, not just <em>what is the value?</em></p>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Calls today</div>
+        <div class="hero">87</div>
+        <div class="prose">Up from 78 yesterday — <strong>↑ 12%</strong>. Most of the lift came in the Atlanta and Chicago lanes around midday.</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Bookings today</div>
+        <div class="hero">12</div>
+        <div class="prose">Three more than the rolling daily average. <strong>9 of 12</strong> bookings landed within 0.5 pp of the floor.</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Margin captured</div>
+        <div class="hero">$142,038</div>
+        <div class="prose"><strong>↑ 12.4%</strong> versus last week. Cardinal Lines on CHI → MIA contributed nearly a third.</div>
+      </div>
+    </div>
+
+    <div class="feed">
+      <h3>Live activity</h3>
+      <div class="feed-entry">
+        <div class="meta">14:19 · MC-553112</div>
+        <div class="body">Pinerock Trans booked Seattle → Portland at $1,250. Verified, single-load, CHS 79.</div>
+      </div>
+      <div class="feed-entry">
+        <div class="meta">14:16 · MC-119233</div>
+        <div class="body">Heartland Frt flagged on Houston → Phoenix — voice agent escalated due to a CHS of 58 (under target). Manual review queued.</div>
+      </div>
+      <div class="feed-entry">
+        <div class="meta">14:14 · MC-201840</div>
+        <div class="body">Sunbelt Frt booked LAX → Denver at $2,140 — $40 below listed. Carrier had a CHS of 92 across 14 prior calls; the agent offered the floor and they accepted.</div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <h2 class="section">Recent calls</h2>
+      <div class="trow head"><span></span><span>Carrier · Lane</span><span class="num">Rate</span><span>CHS</span><span class="num">Outcome</span><span class="num">Time</span></div>
+      <div class="trow"><span class="av">EL</span><div><div class="name">ELT-Logistics</div><div class="lane" style="color:var(--fg-muted)">MC-453221 · ATL → DAL</div></div><span class="num">$2,840</span><span class="chs hi"><span class="num">84</span></span><span class="num"><span class="chip booked">Booked</span></span><span class="num">14:08</span></div>
+      <div class="trow"><span class="av">CL</span><div><div class="name">Cardinal Lines</div><div class="lane" style="color:var(--fg-muted)">MC-872019 · CHI → MIA</div></div><span class="num">$3,250</span><span class="chs mid"><span class="num">71</span></span><span class="num"><span class="chip negot">Negotiating</span></span><span class="num">14:11</span></div>
+      <div class="trow"><span class="av">SF</span><div><div class="name">Sunbelt Frt</div><div class="lane" style="color:var(--fg-muted)">MC-201840 · LAX → DEN</div></div><span class="num">$2,140</span><span class="chs hi"><span class="num">92</span></span><span class="num"><span class="chip booked">Booked</span></span><span class="num">14:14</span></div>
+      <div class="trow"><span class="av">HF</span><div><div class="name">Heartland Fr</div><div class="lane" style="color:var(--fg-muted)">MC-119233 · HOU → PHX</div></div><span class="num">$1,920</span><span class="chs lo"><span class="num">58</span></span><span class="num"><span class="chip flag">Flagged</span></span><span class="num">14:16</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 11. FREIGHT TERMINAL ──────────── -->
+<section id="terminal" class="theme">
+  <div class="theme-meta">
+    <span class="num">11</span>
+    <span class="name">Freight Terminal</span>
+    <span class="inspo">Vercel × Apple Developer — Pro instrument</span>
+    <span class="tags"><span>near-pure-black</span><span>mono-tabular EVERYWHERE</span><span>white-as-primary</span><span>kubectl logs ticker</span><span>6px radius chiclets</span></span>
+  </div>
+  <div class="theme-stage t-terminal">
+    <div class="kpi-strip">
+      <div class="kpi headline">
+        <div class="label">Booked rate · 7d</div>
+        <div class="hero">64.2%</div>
+        <div class="row">
+          <span class="delta-chip up">+0.42pp</span>
+          <span class="bar-spark"><span style="height:8px"></span><span style="height:10px"></span><span style="height:7px"></span><span style="height:12px"></span><span style="height:11px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:13px"></span><span style="height:15px"></span><span style="height:12px"></span><span style="height:16px"></span><span style="height:14px"></span></span>
+        </div>
+      </div>
+      <div class="kpi"><div class="label">Calls today</div><div class="hero">87</div><div class="row"><span class="delta-chip up">+12%</span></div></div>
+      <div class="kpi"><div class="label">Bookings</div><div class="hero">12</div><div class="row"><span class="delta-chip up">+3</span></div></div>
+      <div class="kpi"><div class="label">Avg CHS</div><div class="hero">78</div><div class="row"><span class="delta-chip down">−2</span></div></div>
+    </div>
+
+    <div class="logs">
+      <div class="log b"><span class="ts">[14:19:08]</span> <span class="mc">MC-553112</span> <span class="stat">BOOKED</span> Pinerock Trans · SEA→PDX · $1,250 · CHS=79</div>
+      <div class="log f"><span class="ts">[14:16:42]</span> <span class="mc">MC-119233</span> <span class="stat">FLAGGED</span> Heartland Fr · HOU→PHX · $1,920 · CHS=58 · escalated</div>
+      <div class="log b"><span class="ts">[14:14:22]</span> <span class="mc">MC-201840</span> <span class="stat">BOOKED</span> Sunbelt Frt · LAX→DEN · $2,140 · CHS=92</div>
+      <div class="log n"><span class="ts">[14:11:55]</span> <span class="mc">MC-872019</span> <span class="stat">NEGOTIATING</span> Cardinal Lines · CHI→MIA · round 2 · counter=$3,400</div>
+      <div class="log b"><span class="ts">[14:08:31]</span> <span class="mc">MC-453221</span> <span class="stat">BOOKED</span> ELT-Logistics · ATL→DAL · $2,840 · CHS=84</div>
+    </div>
+
+    <div class="table">
+      <div class="trow head"><span>MC</span><span>Carrier</span><span class="lane">Lane</span><span class="num">Rate</span><span>CHS</span><span>Status</span></div>
+      <div class="trow"><span class="mc">MC-453221</span><span>ELT-Logistics</span><span class="lane">ATL→DAL</span><span class="num">$2,840</span><span class="num">84</span><span><span class="chiclet b">Booked</span></span></div>
+      <div class="trow"><span class="mc">MC-872019</span><span>Cardinal Lines</span><span class="lane">CHI→MIA</span><span class="num">$3,250</span><span class="num">71</span><span><span class="chiclet n">Negot</span></span></div>
+      <div class="trow"><span class="mc">MC-201840</span><span>Sunbelt Frt</span><span class="lane">LAX→DEN</span><span class="num">$2,140</span><span class="num">92</span><span><span class="chiclet b">Booked</span></span></div>
+      <div class="trow"><span class="mc">MC-119233</span><span>Heartland Fr</span><span class="lane">HOU→PHX</span><span class="num">$1,920</span><span class="num">58</span><span><span class="chiclet f">Flagged</span></span></div>
+      <div class="trow"><span class="mc">MC-553112</span><span>Pinerock Trans</span><span class="lane">SEA→PDX</span><span class="num">$1,250</span><span class="num">79</span><span><span class="chiclet b">Booked</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── 12. LOADBOARD LIVE ──────────── -->
+<section id="loadboard" class="theme">
+  <div class="theme-meta">
+    <span class="num">12</span>
+    <span class="name">Loadboard Live</span>
+    <span class="inspo">Raycast × Arc — command-first delight</span>
+    <span class="tags"><span>warm charcoal</span><span>coral primary</span><span>Cmd-K replaces sidebar</span><span>spring motion</span><span>circular CHS rings</span></span>
+  </div>
+  <div class="theme-stage t-loadboard">
+    <div class="cmdk-bar">
+      <span class="icon">⌘</span>
+      <input value="Search loads, carriers, MCs, lanes…" disabled />
+      <span class="hint">⌘K</span>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi calls">
+        <div class="top"><div class="icon-square">📞</div><div class="label">Calls today</div></div>
+        <div class="hero">87</div>
+        <div class="delta-pill up">▲ 12%</div>
+        <svg class="roller" viewBox="0 0 36 12" preserveAspectRatio="none"><path d="M0,9 L6,7 L12,8 L18,5 L24,4 L30,3 L36,1"/></svg>
+      </div>
+      <div class="kpi bookings">
+        <div class="top"><div class="icon-square">🚚</div><div class="label">Bookings</div></div>
+        <div class="hero">12</div>
+        <div class="delta-pill up">▲ 3</div>
+        <svg class="roller" viewBox="0 0 36 12" preserveAspectRatio="none"><path d="M0,10 L6,8 L12,7 L18,5 L24,4 L30,2 L36,1"/></svg>
+      </div>
+      <div class="kpi rate">
+        <div class="top"><div class="icon-square">✅</div><div class="label">Booked rate</div></div>
+        <div class="hero">64.2%</div>
+        <div class="delta-pill up">▲ 0.4pp</div>
+        <svg class="roller" viewBox="0 0 36 12" preserveAspectRatio="none"><path d="M0,6 L6,5 L12,7 L18,4 L24,3 L30,2 L36,1"/></svg>
+      </div>
+      <div class="kpi chs">
+        <div class="top"><div class="icon-square">★</div><div class="label">Avg CHS</div></div>
+        <div class="hero">78</div>
+        <div class="delta-pill down">▼ 2</div>
+        <svg class="roller" viewBox="0 0 36 12" preserveAspectRatio="none"><path d="M0,3 L6,4 L12,6 L18,7 L24,8 L30,9 L36,10"/></svg>
+      </div>
+    </div>
+
+    <div class="card-stack">
+      <div class="card new"><span class="icon">🚚</span><span class="ts">14:19:08</span><span class="mc">MC-553112</span><span><span class="lane">SEA → PDX</span> · Pinerock Trans · CHS 79</span><span class="num">$1,250</span><span style="text-align:right"><span class="pill" style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:11px;background:rgba(74,222,128,0.14);color:var(--success)">just booked</span></span></div>
+      <div class="card"><span class="icon">⚠</span><span class="ts">14:16:42</span><span class="mc">MC-119233</span><span><span class="lane">HOU → PHX</span> · Heartland · CHS 58</span><span class="num">$1,920</span><span style="text-align:right"><span class="pill" style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:11px;background:rgba(244,63,94,0.14);color:var(--danger)">flagged</span></span></div>
+      <div class="card"><span class="icon">🚚</span><span class="ts">14:14:22</span><span class="mc">MC-201840</span><span><span class="lane">LAX → DEN</span> · Sunbelt Frt · CHS 92</span><span class="num">$2,140</span><span style="text-align:right"><span class="pill" style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:11px;background:rgba(74,222,128,0.14);color:var(--success)">booked</span></span></div>
+      <div class="card"><span class="icon">⏱</span><span class="ts">14:11:55</span><span class="mc">MC-872019</span><span><span class="lane">CHI → MIA</span> · Cardinal · CHS 71</span><span class="num">$3,250</span><span style="text-align:right"><span class="pill" style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:11px;background:rgba(251,191,36,0.14);color:var(--warning)">negot</span></span></div>
+    </div>
+
+    <div class="table">
+      <div class="trow head"><span></span><span>MC</span><span>Carrier</span><span class="lane">Lane</span><span class="num">Rate</span><span>CHS</span><span>Outcome</span></div>
+      <div class="trow"><span class="av">EL</span><span class="mc">MC-453221</span><span>ELT-Logistics</span><span class="lane">ATL → DAL</span><span class="num">$2,840</span><span class="ring">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#3A3A45" stroke-width="2" fill="none"/><circle cx="8" cy="8" r="6" stroke="#4ADE80" stroke-width="2" fill="none" stroke-dasharray="32 100" transform="rotate(-90 8 8)"/></svg>84</span><span><span class="pill booked">Booked</span></span></div>
+      <div class="trow"><span class="av">CL</span><span class="mc">MC-872019</span><span>Cardinal Lines</span><span class="lane">CHI → MIA</span><span class="num">$3,250</span><span class="ring">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#3A3A45" stroke-width="2" fill="none"/><circle cx="8" cy="8" r="6" stroke="#FBBF24" stroke-width="2" fill="none" stroke-dasharray="27 100" transform="rotate(-90 8 8)"/></svg>71</span><span><span class="pill negot">Negotiating</span></span></div>
+      <div class="trow"><span class="av">SF</span><span class="mc">MC-201840</span><span>Sunbelt Frt</span><span class="lane">LAX → DEN</span><span class="num">$2,140</span><span class="ring">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#3A3A45" stroke-width="2" fill="none"/><circle cx="8" cy="8" r="6" stroke="#4ADE80" stroke-width="2" fill="none" stroke-dasharray="35 100" transform="rotate(-90 8 8)"/></svg>92</span><span><span class="pill booked">Booked</span></span></div>
+      <div class="trow"><span class="av">HF</span><span class="mc">MC-119233</span><span>Heartland Fr</span><span class="lane">HOU → PHX</span><span class="num">$1,920</span><span class="ring">
+        <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#3A3A45" stroke-width="2" fill="none"/><circle cx="8" cy="8" r="6" stroke="#F43F5E" stroke-width="2" fill="none" stroke-dasharray="22 100" transform="rotate(-90 8 8)"/></svg>58</span><span><span class="pill flag">Flagged</span></span></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

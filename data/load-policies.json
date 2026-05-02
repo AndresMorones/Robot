@@ -1,0 +1,170 @@
+{
+  "LOAD-001": {
+    "floor_rate": 2083,
+    "target_rate": 2328,
+    "step_1_counter": 2295,
+    "step_2_counter": 2250,
+    "step_3_counter": 2200
+  },
+  "LOAD-002": {
+    "floor_rate": 1148,
+    "target_rate": 1283,
+    "step_1_counter": 1265,
+    "step_2_counter": 1240,
+    "step_3_counter": 1210
+  },
+  "LOAD-003": {
+    "floor_rate": 1573,
+    "target_rate": 1758,
+    "step_1_counter": 1735,
+    "step_2_counter": 1700,
+    "step_3_counter": 1660
+  },
+  "LOAD-004": {
+    "floor_rate": 3315,
+    "target_rate": 3705,
+    "step_1_counter": 3650,
+    "step_2_counter": 3570,
+    "step_3_counter": 3490
+  },
+  "LOAD-005": {
+    "floor_rate": 1913,
+    "target_rate": 2138,
+    "step_1_counter": 2100,
+    "step_2_counter": 2050,
+    "step_3_counter": 2000
+  },
+  "LOAD-006": {
+    "floor_rate": 1403,
+    "target_rate": 1568,
+    "step_1_counter": 1545,
+    "step_2_counter": 1510,
+    "step_3_counter": 1475
+  },
+  "LOAD-007": {
+    "floor_rate": 1020,
+    "target_rate": 1140,
+    "step_1_counter": 1125,
+    "step_2_counter": 1100,
+    "step_3_counter": 1075
+  },
+  "LOAD-008": {
+    "floor_rate": 1785,
+    "target_rate": 1995,
+    "step_1_counter": 1965,
+    "step_2_counter": 1925,
+    "step_3_counter": 1880
+  },
+  "LOAD-009": {
+    "floor_rate": 1063,
+    "target_rate": 1188,
+    "step_1_counter": 1170,
+    "step_2_counter": 1145,
+    "step_3_counter": 1115
+  },
+  "LOAD-010": {
+    "floor_rate": 1530,
+    "target_rate": 1710,
+    "step_1_counter": 1685,
+    "step_2_counter": 1650,
+    "step_3_counter": 1610
+  },
+  "LOAD-011": {
+    "floor_rate": 1063,
+    "target_rate": 1188,
+    "step_1_counter": 1170,
+    "step_2_counter": 1145,
+    "step_3_counter": 1115
+  },
+  "LOAD-012": {
+    "floor_rate": 1105,
+    "target_rate": 1235,
+    "step_1_counter": 1220,
+    "step_2_counter": 1195,
+    "step_3_counter": 1165
+  },
+  "LOAD-013": {
+    "floor_rate": 1488,
+    "target_rate": 1663,
+    "step_1_counter": 1640,
+    "step_2_counter": 1605,
+    "step_3_counter": 1565
+  },
+  "LOAD-014": {
+    "floor_rate": 2210,
+    "target_rate": 2470,
+    "step_1_counter": 2435,
+    "step_2_counter": 2380,
+    "step_3_counter": 2320
+  },
+  "LOAD-015": {
+    "floor_rate": 1063,
+    "target_rate": 1188,
+    "step_1_counter": 1170,
+    "step_2_counter": 1145,
+    "step_3_counter": 1115
+  },
+  "LOAD-016": {
+    "floor_rate": 1445,
+    "target_rate": 1615,
+    "step_1_counter": 1590,
+    "step_2_counter": 1555,
+    "step_3_counter": 1520
+  },
+  "LOAD-017": {
+    "floor_rate": 1658,
+    "target_rate": 1853,
+    "step_1_counter": 1825,
+    "step_2_counter": 1785,
+    "step_3_counter": 1740
+  },
+  "LOAD-018": {
+    "floor_rate": 1233,
+    "target_rate": 1378,
+    "step_1_counter": 1360,
+    "step_2_counter": 1330,
+    "step_3_counter": 1295
+  },
+  "LOAD-019": {
+    "floor_rate": 2423,
+    "target_rate": 2708,
+    "step_1_counter": 2670,
+    "step_2_counter": 2610,
+    "step_3_counter": 2540
+  },
+  "LOAD-020": {
+    "floor_rate": 1785,
+    "target_rate": 1995,
+    "step_1_counter": 1965,
+    "step_2_counter": 1925,
+    "step_3_counter": 1880
+  },
+  "LOAD-021": {
+    "floor_rate": 2720,
+    "target_rate": 3040,
+    "step_1_counter": 3000,
+    "step_2_counter": 2935,
+    "step_3_counter": 2855
+  },
+  "LOAD-022": {
+    "floor_rate": 3060,
+    "target_rate": 3420,
+    "step_1_counter": 3375,
+    "step_2_counter": 3300,
+    "step_3_counter": 3210
+  },
+  "LOAD-023": {
+    "floor_rate": 1020,
+    "target_rate": 1140,
+    "step_1_counter": 1125,
+    "step_2_counter": 1100,
+    "step_3_counter": 1075
+  },
+  "LOAD-024": {
+    "floor_rate": 3825,
+    "target_rate": 4275,
+    "step_1_counter": 4215,
+    "step_2_counter": 4125,
+    "step_3_counter": 4015
+  }
+}

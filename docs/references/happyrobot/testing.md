@@ -2,6 +2,12 @@
 
 How to verify the workflow without making real phone calls, and how to debug when something misbehaves.
 
+> **Platform-level references**:
+> - Runs table + filters + custom columns + export → [happyrobot-kb/runs-ops/runs-monitoring.md](file:///C:/Users/Andre/happyrobot-kb/runs-ops/runs-monitoring.md)
+> - Debugging (graph tab, tool-call inspection, quality flags) → [happyrobot-kb/runs-ops/debugging.md](file:///C:/Users/Andre/happyrobot-kb/runs-ops/debugging.md)
+> - Custom evals + northstars (eval-gated publish patterns) → [happyrobot-kb/quality/custom-evals.md](file:///C:/Users/Andre/happyrobot-kb/quality/custom-evals.md), [northstars.md](file:///C:/Users/Andre/happyrobot-kb/quality/northstars.md)
+> - Adversarial suites for red-team regression → [happyrobot-kb/quality/adversarial.md](file:///C:/Users/Andre/happyrobot-kb/quality/adversarial.md)
+
 ## Test console (workflow-level)
 
 HR provides a **Test** tab on each workflow. This is how you validate the workflow before publishing, and how you can simulate calls afterward.
@@ -22,7 +28,7 @@ Once published:
 - Speak to the agent. It runs the full workflow.
 - Watch the HR **execution log** panel (usually available in the platform UI) for per-node status + variable values.
 
-This **does** consume a real call-minute (platform-tier dependent). For iterative testing, prefer text-based unit tests on our side (pytest for `negotiate_evaluate` logic) and use the web-call test sparingly.
+This **does** consume a real call-minute (platform-tier dependent). For iterative testing, prefer HR's **Chat Playground** (text-only, no audio, no minute cost — exercises the Prompt + tool logic without STT/TTS/turn-taking), and use full web-call tests sparingly. The `negotiate_evaluate` Python Code sidecar can be unit-tested with the Test button on the node itself (HR passes sample inputs).
 
 ## Tailing our API logs during a test
 
@@ -49,14 +55,21 @@ Failure modes to check:
 
 ## Avoiding real-call quota burn
 
-- Use `pytest` for testing the negotiation state machine — don't test algorithm changes via voice calls.
-- Unit-test the extraction prompt offline: feed sample transcripts to Claude API (or similar) with the same prompt, verify JSON output. Saves HR minutes.
-- When testing HR workflow changes structurally, test each node's Test tab first; only use full web-call test at the end.
+- Use HR's **Chat Playground** for prompt iteration — no audio, no minute cost, exercises the tool logic end-to-end.
+- Click **Test** on every node individually before running a full web call.
+- Unit-test the Extract JSON schema offline: feed sample transcripts to a local LLM with the same prompt, verify JSON matches our strict schema. Saves HR minutes.
+- Only use full web-call test at the end of a change + for the demo video.
 
 ## Debugging tips
 
+### HR variable resolution silently fails → "Missing mc_number parameter" style errors
+- Symptom: tool fires with a variable reference in its URL/body but HR's webhook layer returns `{"error":"Missing X parameter"}`, even though the upstream tool extracted the value correctly.
+- Root cause: the variable reference uses a name (`{{trigger.x}}`, `{{verify_carrier.x}}`) or lacks a group_id prefix (`{{mc_number}}`). Those silently render as empty string at runtime.
+- Fix: delete the existing variable reference; re-insert it using HR's `@` picker. HR inserts the correct `{{<persistent_id_uuid>.var}}` form automatically.
+- Verify: click the variable chip/token in the field → HR shows what it's bound to. Should point at a specific upstream node output, not a placeholder.
+
 ### "The agent sounds slow / awkward pauses"
-- Check tool-call latencies via Fly logs. If `fmcsa.fetch` is > 1500 ms cold-cache, warm the cache on app start (TODO in API).
+- Check tool-call latencies. `verify_carrier` (HR demo FMCSA) typically ~300ms. Our `/v1/loads/*` endpoints target <50ms. `negotiate_evaluate` Python Code is in-platform (<100ms).
 - Check the system-prompt length — > 800 tokens and responsiveness degrades.
 
 ### "The agent didn't follow instructions"

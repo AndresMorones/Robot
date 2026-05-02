@@ -1,0 +1,13 @@
+{
+  "identifier": "MC-345678",
+  "identifier_type": "MC",
+  "eligible": true,
+  "manual_review_required": false,
+  "carrier_name": "Southern Haul Co",
+  "dot_number": "3567890",
+  "entity_type": "CARRIER",
+  "operating_status": "AUTHORIZED_FOR_PROPERTY",
+  "insurance_on_file": true,
+  "safety_rating": "SATISFACTORY",
+  "reason_codes": []
+}
