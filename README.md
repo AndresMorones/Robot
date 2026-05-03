@@ -1,215 +1,212 @@
-# Inbound Carrier Sales Voice Agent
+# Robot
 
-Take-home submission for HappyRobot's FDE technical challenge. An inbound voice agent for a freight brokerage, built on the HappyRobot platform with a custom Next.js dashboard and FastAPI backend, deployed on Fly.io. Carriers call in, get verified against FMCSA, hear matching loads, negotiate up to 3 rounds, and get booked — with bookings persisted mid-call and per-call analytics persisted post-call into HR Twin (managed Postgres).
+> Inbound carrier voice agent for freight brokerages, built on HappyRobot.
 
-## Architecture
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![Deploy](https://img.shields.io/badge/deploy-Fly.io-purple)
+
+---
+
+## What this is
+
+Carriers dial an AI voice agent, get verified against the FMCSA in real time, hear matching loads from the broker's catalog, negotiate the rate up to three rounds, and get booked — all without a human picking up. Every call is captured (transcript, outcome, sentiment, agreed rate, MC, lane) and surfaced on a custom operations dashboard.
+
+The voice agent itself runs on the [HappyRobot](https://happyrobot.ai) platform. This repository contains the supporting backend (FastAPI), the operations dashboard (Next.js 15), the data schemas, the prompts, and the deployment scripting that make the system reproducible end-to-end.
+
+This was built against the HappyRobot FDE technical challenge — full spec at [`docs/FDE-TECHNICAL-CHALLENGE.md`](docs/FDE-TECHNICAL-CHALLENGE.md). The three top-level objectives the build satisfies:
+
+1. An inbound HR voice agent that verifies MC numbers against FMCSA, searches the loads catalog, negotiates up to three rounds, mocks a transfer to a sales rep, then extracts and classifies the call (outcome + sentiment).
+2. A custom dashboard for the resulting metrics (no platform analytics).
+3. Containerized with Docker, deployed to a public cloud, behind HTTPS, with API-key auth on every `/v1/*` route, and reproducible from a clean clone.
+
+## Live demo
+
+| What | URL | Health |
+|---|---|---|
+| Dashboard | https://robot-dashboard-andres-morones.fly.dev | `/api/health` |
+| API | https://robot-api-andres-morones.fly.dev | `/healthz` |
+| HR workflow | https://platform.happyrobot.ai/fdeandresnavarro/workflows/xsfvbpjpsoy4/editor/c8yjoguc8i4t | — |
+
+The dashboard is read-only and safe to share. The API requires a Bearer token on every `/v1/*` route.
+
+## 🏗️ Architecture at a glance
 
 ```mermaid
-graph LR
-  Carrier[Motor Carrier] -->|web call| HRWeb[HR Web Call Trigger]
-  HRWeb --> VA[Voice Agent + Prompt v4.3]
-  VA -->|verify_carrier| FMCSA[FMCSA QCMobile API]
-  VA -->|query_loads| Twin[(HR Twin Postgres<br/>loads · calls_log · bookings)]
-  VA -->|negotiate_rate| Calc[calculate_rate.py<br/>HR Run Python sidecar]
-  VA -->|book_load mid-call| Twin
-  VA -->|post-call| Extract[AI Extract] --> CHS[Case Health Score] --> Twin
-  Twin -.read.-> FastAPI[FastAPI<br/>dashboard endpoints]
-  FastAPI -.JSON.-> NextDash[Next.js 15 Dashboard]
-  Browser[Reviewer browser] --> NextDash
-  Browser -.legacy HTML.-> FastAPI
+flowchart LR
+    Carrier([Motor Carrier]) -->|web call| HR[HappyRobot Voice Agent<br/>inbound-carrier-v4]
+    HR -->|verify_carrier| FMCSA[(FMCSA<br/>QCMobile)]
+    HR -->|query_loads| Twin[(HappyRobot Twin<br/>Postgres)]
+    HR -->|negotiate_rate| Sidecar[Run Python sidecar<br/>calculate_rate.py]
+    HR -->|book_load| Twin
+    HR -->|post-call extract| Twin
+    Twin --> API[FastAPI<br/>read-only]
+    API --> Dashboard[Next.js 15<br/>Dashboard]
+    Dashboard --> Sales([Sales rep])
 ```
 
-The voice path is HR-native: prompt + 4 tools + post-call chain run inside HappyRobot. Our FastAPI is read-only against Twin for the dashboard and serves loads lookups for HR's Read-from-Twin tool wrappers. The Next.js dashboard is a separate Fly app that calls FastAPI server-side with the shared bearer token.
+Three independently deployable surfaces:
 
-## Spec compliance
+1. **HappyRobot workflow** — voice agent, prompts, tools, post-call extraction. Lives in HR (not in this repo); reproducible from `docs/iac/ui-build-guide.md`.
+2. **FastAPI backend** — Bearer-authed read API over the HR Twin store. Powers the dashboard.
+3. **Next.js dashboard** — server-rendered analytics on funnel, economics, operational, quality, and telemetry KPIs.
 
-Mapping each requirement in `docs/FDE-TECHNICAL-CHALLENGE.md` to the component delivering it.
+For a deeper walkthrough of the system (data flow, table layout, security model, decisions), see [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-### Objective 1 — Inbound use case
+## 🚀 Quick start (local)
 
-| Spec clause | Component |
-|---|---|
-| "Use the HappyRobot platform to create an inbound agent" | HR workflow `inbound-carrier-sales-new` (alias `inbound-carrier-v15`), web-call trigger |
-| "Loads searched using an API in a file or DB" with the 13 listed fields | `data/loads.csv` (150 rows) → seeded into Twin `loads` table (15 cols incl. `num_of_pieces`, `miles`, `dimensions`, `notes`); read by HR `query_loads` tool and `GET /v1/loads/*` |
-| "Get their MC number and verify they are eligible" via FMCSA | HR tool `verify_carrier` → FMCSA QCMobile demo endpoint (no server-side proxy) |
-| "Search the load and pitch the details" | HR tool `query_loads` (Read-from-Twin) returns matching loads to the agent |
-| "Handle up to 3 back and forth's negotiating the offer" | HR tool `negotiate_rate` → Run Python sidecar `scripts/hr-tools/calculate_rate.py`; floor + max-rounds tunable via HR workflow vars |
-| "If a price is agreed, transfer the call" (mocked) | HR Transfer Popup node (Initiate New Contact) |
-| "Extract from the call the most relevant data" | HR AI Extract node (JSON Schema strict mode) → `prompts/ai-extract-schema-v3.md` |
-| "Classify the call based on its outcome" | Outcome enum emitted by AI Extract: `load_booked` / `no_match` / `carrier_not_qualified` / `call_abandoned` |
-| "Classify the sentiment of the carrier" | HR Case Health Score node emits sentiment alongside the score |
+You need Docker Desktop, a HappyRobot API key, and a chosen Bearer token.
 
-### Objective 2 — Metrics
+```bash
+git clone https://github.com/AndresMorones/Robot.git
+cd Robot
+cp .env.example .env       # then fill in API_BEARER_TOKEN + HAPPYROBOT_API_KEY
+docker compose up --build
+```
 
-> "create a dashboard/report mechanism… Don't use the platform analytics"
+Then open:
 
-Custom Next.js 15 dashboard (`dashboard/`) with 4 tabs (funnel, economics, operational, quality) plus calls and carriers feeds. Reads exclusively from our FastAPI, never from HR's built-in analytics. Legacy server-rendered HTML view at `/dashboard` on the API app for fallback.
+- API:       http://localhost:8000  (Swagger at `/docs`)
+- Dashboard: http://localhost:3000
 
-### Objective 3 — Deployment & infrastructure
+The dashboard talks to the API over the internal Docker network — you do not need to expose anything beyond the two ports above.
 
-| Spec clause | Delivery |
-|---|---|
-| "Containerize the solution with Docker" | `api/Dockerfile`, `dashboard/Dockerfile` |
-| "Deploy your API to a cloud provider" | Fly.io (region `iad`); see `fly.toml` |
-| "HTTPS… Let's Encrypt" | Fly auto-issued, `force_https = true` |
-| "API key authentication for all endpoints" | `app/deps.py::require_bearer` — constant-time compare; `Authorization: Bearer` or `x-api-key` header (header-only per ADR-008) |
-| "Reproduce your deployment" | `docs/iac/reproduce.md` |
+### Required environment variables
 
-### Deliverables
+| Variable | Required | Purpose |
+|---|:---:|---|
+| `API_BEARER_TOKEN` | yes | Shared secret between API and dashboard. Generate with `openssl rand -hex 32`. |
+| `HAPPYROBOT_API_KEY` | yes | HR org API key (`sk_live_...`). API uses this server-side to read Twin. Never reaches the browser. |
+| `FMCSA_WEB_KEY` | no | Reserved for a future server-side FMCSA proxy. The HR `verify_carrier` tool calls FMCSA directly today. |
+| `API_BASE_URL` | no | Where the dashboard fetches from. Defaults to the in-network `http://api:8000`. |
+| `LOG_LEVEL` | no | structlog filter level. Defaults to `INFO`. |
 
-| # | Deliverable | Location |
-|---|---|---|
-| 1 | Email to Carlos Becker | `docs/handoffs/carlos-becker-email.md` |
-| 2 | Broker doc (Acme Logistics) | `docs/handoffs/broker-doc.md` |
-| 3 | Deployed dashboard | https://robot-dashboard-andres-morones.fly.dev |
-| 4 | Code repository | (this repo) |
-| 5 | HappyRobot workflow link | _(filled in at submission — HR Production share URL)_ |
-| 6 | 5-min demo video | _(filled in at submission)_ |
+A per-service template with longer prose lives at `dashboard/.env.example`. The API reads its env via `pydantic-settings` from the same root `.env` when running under `docker compose`.
 
-## Repository structure
+## ☁️ Deploy to your own cloud
+
+The deployed reference targets [Fly.io](https://fly.io) in region `iad` with two apps (one for the API, one for the dashboard) and a one-time `fly secrets set` for each. Step-by-step procedure — including app create, secrets, smoke-test, and HR-side wiring — is in [`DEPLOY.md`](DEPLOY.md).
+
+Always use the wrapper scripts under `scripts/`:
+
+```bash
+scripts/deploy-api.sh         # or .ps1 on PowerShell
+scripts/deploy-dashboard.sh   # or .ps1 on PowerShell
+```
+
+They self-`cd` to the right directory and verify the deployed image's healthcheck fingerprint, so a wrong-cwd `flyctl deploy` cannot silently ship the API image to the dashboard app.
+
+## Project structure
 
 ```
 .
-├── api/                                FastAPI backend (Python 3.12, uv)
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── deps.py                     constant-time Bearer auth
-│   │   ├── models.py                   Pydantic v2 response shapes
-│   │   ├── routers/                    loads, calls, carriers, dashboard, dashboard_view, health
-│   │   └── services/                   twin_client, dashboard_aggregations, load_store, calls_store
-│   ├── tests/                          pytest + pytest-asyncio
-│   ├── Dockerfile
-│   └── pyproject.toml
-├── dashboard/                          Next.js 15 dashboard (separate Fly app)
-│   ├── src/
-│   │   ├── app/                        App Router pages
-│   │   ├── components/                 KPI cards, Recharts charts, drilldowns
-│   │   └── lib/                        server-only API client (Bearer)
-│   ├── Dockerfile
-│   └── package.json
-├── data/
-│   ├── loads.csv                       150 rows
-│   ├── twin_seed_loads_v2.sql          seed for Twin loads table
-│   ├── twin_schema_v15_bookings.sql    bookings table DDL
-│   ├── twin_schema_v15_calls_log_cleanup.sql
-│   └── fmcsa-fixtures/                 fixture data
-├── docs/
-│   ├── FDE-TECHNICAL-CHALLENGE.md      the spec
-│   ├── hr-architecture-map.md          live HR + Twin state
-│   ├── decisions/                      ADRs (incl. ADR-005 two-table booking pattern)
-│   ├── iac/reproduce.md                deployment reproduction guide
-│   ├── references/happyrobot/          vendor docs mirror
-│   └── handoffs/                       email + broker-doc deliverables
-├── prompts/
-│   ├── voice-agent-system-prompt-v4.md v4.3 (published)
-│   └── ai-extract-schema-v3.md
-├── scripts/
-│   └── hr-tools/
-│       ├── calculate_rate.py           HR Run Python sidecar
-│       └── case_health_score.py        CHS scoring reference
-├── fly.toml                            FastAPI Fly config
-└── README.md
+├── api/             FastAPI backend (Python 3.12, uv, pydantic v2, structlog)
+├── dashboard/       Next.js 15 dashboard (App Router, Tailwind 4, shadcn/ui, Recharts)
+├── data/            Twin DDL + loads catalog seed
+├── docs/            FDE spec + broker-facing build description
+├── scripts/         Deploy wrappers + signed-link helper
+├── docker-compose.yml
+├── fly.toml         API Fly config (dashboard has its own under dashboard/fly.toml)
+├── README.md        This file
+├── DEPLOY.md        End-to-end Fly.io deployment guide
+└── ARCHITECTURE.md  Stack, data model, security, decisions, roadmap
 ```
 
-## Live URLs
+## HappyRobot workflow
 
-- **API**: https://robot-api-andres-morones.fly.dev — health: `/healthz`, OpenAPI: `/docs`
-- **Dashboard**: https://robot-dashboard-andres-morones.fly.dev (when deployed)
-- **HR workflow editor**: _(filled in at submission — HR Production share URL)_
-- **HR web call URL**: see `docs/references/happyrobot/web-call-url.txt`
-- **Repo**: _(filled in at submission)_
+The voice agent — prompt, tools, negotiation sidecar, AI Extract, write-back to Twin — is configured inside HappyRobot and is not part of this repository (per FDE Deliverable 5: link, not source). The active workflow is `inbound-carrier-v4`.
 
-## Local setup
+- Editor link: https://platform.happyrobot.ai/fdeandresnavarro/workflows/xsfvbpjpsoy4/editor/c8yjoguc8i4t
+- Behavior overview, written for a freight broker reading the system cold: [`docs/broker-doc.md`](docs/broker-doc.md)
+- Architecture + decision rationale: [`ARCHITECTURE.md`](ARCHITECTURE.md)
+
+The HR side reads from this repo's API (`/v1/loads/...`) for load lookups, and writes back to the HR Twin Postgres store after each call. The API never holds call state itself.
+
+## API endpoints
+
+A subset of the routes the dashboard and HR workflow consume. All `/v1/*` routes require Bearer auth; full schemas at `/docs` (Swagger).
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/healthz` | Fly healthcheck (unauthenticated) |
+| `GET` | `/docs` | Swagger UI (unauthenticated) |
+| `GET` | `/v1/loads/{load_id}` | Single load lookup — used by HR `query_loads` |
+| `GET` | `/v1/loads/search` | Lane / equipment search — used by HR `query_loads` |
+| `GET` | `/v1/calls` | Recent calls feed (no transcript) |
+| `GET` | `/v1/calls/{call_id}` | Per-call detail with bookings and lane |
+| `GET` | `/v1/carriers` | Per-MC rollup feed |
+| `GET` | `/v1/carriers/{mc}` | Per-MC drilldown |
+| `GET` | `/v1/dashboard/funnel` | Acquisition → quote → book funnel KPIs |
+| `GET` | `/v1/dashboard/economics` | Avg loadboard rate, agreed rate, effective delta |
+| `GET` | `/v1/dashboard/operational` | Duration, abandon, decline rates |
+| `GET` | `/v1/dashboard/quality` | Sentiment, outcome, Case Health Score distributions |
+
+## 🔒 Security
+
+- HTTPS everywhere via Fly.io's managed Let's Encrypt issuer (`force_https = true` in `fly.toml`).
+- Every `/v1/*` route requires `Authorization: Bearer <token>` (or `?token=<token>` as a query-string fallback for tool integrations that cannot send custom headers). Constant-time compare in `api/app/deps.py`.
+- Secrets live in Fly Secrets in production and in a gitignored `.env` locally. They are never committed.
+- The API key never reaches the browser bundle — the dashboard's API client uses Next.js `server-only` imports.
+
+The full security model — threat surface, secret rotation, what is and is not in scope for MVP — is in [`ARCHITECTURE.md`](ARCHITECTURE.md#8-security-model).
+
+## Reproducibility
+
+| Need | Path |
+|---|---|
+| Loads catalog seed | `data/twin_seed_loads_v2.sql` |
+| Loads table DDL | `data/twin_schema_loads.sql` |
+| `calls_log` DDL | `data/twin_schema_calls_log.sql` |
+| `bookings` DDL | `data/twin_schema_v15_bookings.sql` |
+| FMCSA fixture data (offline tests) | `api/tests/fixtures/` |
+| End-to-end deploy walkthrough | [`DEPLOY.md`](DEPLOY.md) |
+| HR workflow setup | [`DEPLOY.md`](DEPLOY.md) Step 4 |
+
+Anyone with a Fly.io account, a HappyRobot account, and the FMCSA web key from the public QCMobile portal can stand up an equivalent deployment from a clean clone.
+
+## Tech decisions
+
+A few choices worth flagging up front: the operational store is HappyRobot's managed Twin Postgres rather than a self-hosted database (single source of truth), the dashboard skips heavy chart and date-picker libraries in favor of Recharts plus native inputs, and the negotiation state machine lives in an HR Run Python sidecar rather than in this API so prompt injection cannot extract the floor or target rates. The full series of decisions, with rationale and references, is in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+
+## Tests
 
 ```bash
-# Backend
 cd api
 uv sync
-cp .env.example .env       # fill API_BEARER_TOKEN, HAPPYROBOT_API_KEY, FMCSA_WEB_KEY
-uv run pytest -x           # run tests
-uv run uvicorn app.main:app --reload
-# API now at http://localhost:8000
-
-# Dashboard (separate terminal)
-cd ../dashboard
-npm install
-cp .env.example .env.local # fill API_BEARER_TOKEN, API_BASE_URL
-npm run dev
-# Dashboard at http://localhost:3000
+uv run pytest
 ```
 
-> **Critical**: `API_BEARER_TOKEN` MUST match between `api/.env` and `dashboard/.env.local`. If they differ, every dashboard → FastAPI request returns `401 Missing or invalid API key`.
+Contract-style tests cover the auth boundary, the loads endpoints, dashboard aggregations, the Twin client wrapper, dashboard caching, call/booking response shapes, FMCSA eligibility evaluation, and MC-number normalization. Live end-to-end integration tests against a HR workflow are intentionally out of scope for the public branch — they require recorded webhook fixtures and a private Twin namespace.
 
-For full local-test loop including HR webhook simulation, common 401 traps, and tunnel-via-cloudflared, see [`docs/local-development.md`](docs/local-development.md).
-
-## Deploy (Fly.io)
-
-**Always use the wrapper scripts.** They self-cd to the correct directory and verify the deployed image's `/healthz` (or `/api/health`) fingerprint, so a wrong-cwd deploy can't silently ship the API image to the dashboard app (or vice versa).
+To smoke-test the live API:
 
 ```bash
-# Dashboard (Next.js)
-scripts/deploy-dashboard.sh        # bash; or scripts/deploy-dashboard.ps1 on PowerShell
-
-# API (FastAPI)
-scripts/deploy-api.sh              # bash; or scripts/deploy-api.ps1 on PowerShell
+curl -H "Authorization: Bearer $API_BEARER_TOKEN" \
+  https://robot-api-andres-morones.fly.dev/v1/dashboard/funnel
 ```
 
-Never run `flyctl deploy` directly from the repo root for the dashboard — wrong-cwd applies the root `fly.toml` (API config) and ships the API image to the dashboard app. The healthcheck still passes, only `/api/health` (and the actual UI) reveals the wrong image.
+## Roadmap
 
-Secrets are a one-time setup; the scripts do not touch them. See `docs/iac/reproduce.md` for the full procedure including `fly secrets set` and HR-side wiring.
+The shipped scope is intentionally narrow — voice flow, persistence, dashboard, deploy. Larger items deferred behind explicit triggers:
 
-## Environment variables
+- Multi-region failover and a Postgres replica path that bypasses the Twin REST gateway
+- Transcript-review tooling (Langfuse / Phoenix / Logfire) on top of `calls_log.transcript`
+- Server-side FMCSA proxy with TTL cache
+- Loads-catalog dynamic sync from a broker TMS instead of a bundled CSV
+- Credential rotation runbook, app-level rate limits, CSP headers, supply-chain pinning
 
-| Var | Where | Purpose | Example |
-|---|---|---|---|
-| `API_BEARER_TOKEN` | Fly secret on both apps + local `.env` | Bearer auth between Next.js → FastAPI + dashboard CLI usage | 32+ random hex bytes |
-| `HAPPYROBOT_API_KEY` | Fly secret on API + local `.env` | FastAPI → HR Twin REST gateway | `sk_live_...` |
-| `FMCSA_WEB_KEY` | Fly secret on API + local `.env` | Reserved for future server-side FMCSA proxy (HR demo endpoint used today) | provided in spec |
-| `API_BASE_URL` | Dashboard env only | Where Next.js fetches from server-side | `https://robot-api-andres-morones.fly.dev` |
-| `LOG_LEVEL` | Both apps | structlog filter | `INFO` |
+See [`ARCHITECTURE.md`](ARCHITECTURE.md#12-known-limitations-and-roadmap) and the broker doc for the full list with priorities.
 
-## Key endpoints
+## License
 
-| Method | Path | Auth | Purpose |
-|---|---|:---:|---|
-| GET | `/healthz` | — | Fly healthcheck |
-| GET | `/docs` | — | Swagger UI |
-| GET | `/dashboard` | — | Legacy server-rendered HTML view (no PII) |
-| GET | `/loads/{load_id}`, `/v1/loads/{load_id}` | ✓ | Single load lookup (HR `query_loads`) |
-| GET | `/loads/search`, `/v1/loads/search` | ✓ | Lane search (HR `query_loads`) |
-| GET | `/v1/calls?limit=N` | ✓ | Recent calls (no transcript in list) |
-| GET | `/v1/calls/{call_id}` | ✓ | Single call detail + bookings + load lane |
-| GET | `/v1/carriers?limit=N` | ✓ | Per-MC rollup feed |
-| GET | `/v1/carriers/{mc}` | ✓ | Per-MC drilldown |
-| GET | `/v1/dashboard/funnel` | ✓ | Funnel KPIs |
-| GET | `/v1/dashboard/economics` | ✓ | Avg loadboard, avg agreed, effective delta |
-| GET | `/v1/dashboard/operational` | ✓ | Duration, abandon, decline rates |
-| GET | `/v1/dashboard/quality` | ✓ | Sentiment, outcome, CHS distributions |
+MIT. Use it, fork it, ship it. No warranty.
 
-`POST /v1/calls/log` returns **410 Gone** — replaced by HR Twin Write per ADR-005.
+## Built with
 
-## What's NOT in MVP (Tier-2 roadmap)
-
-The full roadmap lives in `docs/decisions/` and the broker doc. Highest-value Tier-2 items:
-
-1. **Multi-region + Postgres replicas** — currently single Fly machine in `iad`; multi-machine writes blocked by lack of distributed write path (resolved by Twin, but FastAPI itself is single-region)
-2. **Transcript-review dashboard** — Langfuse/Phoenix on top of `calls_log.transcript` for prompt iteration
-3. **Per-language narrowing** — 28 languages enabled today; narrow to en+es for US freight
-4. **FMCSA proxy with caching** — currently HR hits the FMCSA demo endpoint directly; server-side proxy with TTL cache reduces latency + risk
-5. **Loads catalog dynamic sync** — today's 150-row catalog is bundled; broker TMS REST sync via HR Polling Table is the production path
-6. **Declined-load context capture** — Tier-2 scalar `declined_loads_count` Extract field (per ADR-005)
-7. **Security hardening** — credential rotation runbook, app-level rate limits, CSP headers, supply-chain pinning
-
-## Reproduce the deployment
-
-Step-by-step procedure (Fly app create → secrets → deploy → HR-side wiring → smoke test) is at `docs/iac/reproduce.md`. The same doc covers rotating `API_BEARER_TOKEN` and re-seeding the Twin `loads` table.
-
-## Acknowledgements
-
-- **HappyRobot** — voice platform, Twin Postgres gateway, Run Python sidecar
-- **FMCSA QCMobile** — public carrier verification API
-- **Fly.io** — container hosting, Let's Encrypt automation
-- **shadcn/ui · Recharts · Next.js 15** — dashboard stack
-- **FastAPI · pydantic v2 · structlog · uv** — backend stack
-
-Built for HappyRobot's FDE technical challenge by Andres Morones.
+- [HappyRobot](https://happyrobot.ai) — voice platform, Twin Postgres gateway, Run Python sidecar
+- [FMCSA QCMobile](https://mobile.fmcsa.dot.gov/qc) — public carrier verification API
+- [Fly.io](https://fly.io) — container hosting and managed Let's Encrypt
+- [Next.js 15](https://nextjs.org), [Tailwind 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com), [Recharts](https://recharts.org)
+- [FastAPI](https://fastapi.tiangolo.com), [Pydantic v2](https://docs.pydantic.dev), [structlog](https://www.structlog.org), [uv](https://github.com/astral-sh/uv)

@@ -54,7 +54,6 @@ from app.routers import (
     calls_active,
     carriers,
     dashboard,
-    dashboard_view,
     events,
     health,
     loads,
@@ -176,6 +175,5 @@ app.include_router(transcript_timeline.router)
 app.include_router(calls.router)
 app.include_router(carriers.router)
 app.include_router(dashboard.router)
-app.include_router(dashboard_view.router)
 app.include_router(events.router)
 app.include_router(telemetry.router)

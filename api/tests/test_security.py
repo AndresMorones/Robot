@@ -200,23 +200,26 @@ def test_bearer_token_does_not_leak_into_structlog_output(
         wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
         cache_logger_on_first_use=False,
     )
+    # Build synthetic HR-style key at runtime so the literal pattern is not
+    # present in source (avoids GitHub secret-scanning false positives).
+    fake_hr_key = "sk_" + "live_" + ("A" * 38)
     try:
         # Three leak scenarios we want the pipeline to catch:
         #   1. Raw token shoved into an arbitrary field as a literal string.
         #   2. Token wrapped in `Bearer ...` (header-style).
-        #   3. An HR `sk_live_...` key alongside the token.
+        #   3. An HR sk_live_<...> key alongside the token.
         log = structlog.get_logger()
         log.info(
             "synthetic_leak_attempt",
             authorization=f"Bearer {token}",
             raw_token=token,
-            hr_key="sk_live_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            hr_key=fake_hr_key,
             note=f"if you see {token} in this output, the scrubber failed",
         )
 
         out = buf.getvalue()
         assert token not in out, f"raw token leaked into log output:\n{out}"
-        assert "sk_live_AAAAA" not in out
+        assert fake_hr_key[:13] not in out
         assert "<redacted>" in out
     finally:
         # Restore the production logging config so subsequent tests behave
@@ -231,14 +234,19 @@ def test_bearer_token_does_not_leak_into_structlog_output(
 # ---------------------------------------------------------------------------
 
 def test_scrub_processor_redacts_hr_keys() -> None:
-    """`sk_live_<...>` HR keys must be redacted regardless of where they appear
-    in the event_dict (top-level value, nested dict, list element)."""
+    """HR-style sk_live_<...> keys must be redacted regardless of where they
+    appear in the event_dict (top-level value, nested dict, list element).
+
+    Synthetic keys are assembled at runtime from string fragments to avoid
+    GitHub secret-scanning false positives on this source file."""
     from app.logging_security import REDACTED, scrub_secrets_processor
 
+    fake_key_a = "sk_" + "live_" + ("A" * 30)
+    fake_key_b = "sk_" + "live_" + ("B" * 30)
     event = {
         "event": "outbound_request",
-        "headers": {"authorization": "Bearer sk_live_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
-        "args": ["sk_live_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "fine"],
+        "headers": {"authorization": f"Bearer {fake_key_a}"},
+        "args": [fake_key_b, "fine"],
     }
     out = scrub_secrets_processor(None, "info", event)
     assert REDACTED in out["headers"]["authorization"]
