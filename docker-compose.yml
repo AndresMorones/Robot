@@ -24,7 +24,7 @@ services:
     environment:
       API_BEARER_TOKEN: ${API_BEARER_TOKEN:?set in .env — protects /v1/* endpoints}
       HAPPYROBOT_API_KEY: ${HAPPYROBOT_API_KEY:?set in .env — sk_live_... for HR Twin reads}
-      FMCSA_WEB_KEY: ${FMCSA_WEB_KEY:-cdc33e44d693a3a58451898d4ec9df862c65b954}
+      FMCSA_WEB_KEY: ${FMCSA_WEB_KEY:?set in .env — request a free WebKey from mobile.fmcsa.dot.gov}
       HR_BASE_URL: ${HR_BASE_URL:-https://platform.happyrobot.ai/api/v2}
       HR_WORKFLOW_ID: ${HR_WORKFLOW_ID:-}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
