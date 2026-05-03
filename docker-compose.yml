@@ -10,8 +10,7 @@
 # (no localhost binding required between them).
 #
 # Spec: FDE Sec.2.b — reviewer must be able to access AND reproduce the deployment.
-# This compose file is the manual-steps reproduction path. See docs/iac/reproduce.md
-# for full Fly redeploy.
+# This compose file is the local-run reproduction path. See DEPLOY.md for full Fly redeploy.
 
 services:
   api:

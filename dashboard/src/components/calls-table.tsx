@@ -35,9 +35,7 @@ import type { CallRecord } from "@/types/api-types";
 //
 // Drilldown shows the rest (created_at, duration, rate, transcript, etc.).
 //
-// `notes` (col #4) is sourced from calls_log.notes — column may not yet
-// exist on Twin (HT-1, HT-2 in pending register). Renders "—" when null.
-// TODO: needs Twin DDL — see docs/hr-twin-pending-register.md (HT-1).
+// `notes` (col #4) is sourced from calls_log.notes. Renders "—" when null.
 
 type SortKey =
   | "created_at"
