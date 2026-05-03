@@ -104,10 +104,10 @@ stateDiagram-v2
     MC_Readback --> MC_Capture: caller corrects
 
     Verify --> FMCSA_Gate: verify_carrier
-    FMCSA_Gate --> Decline: any of 7 checks fail
-    FMCSA_Gate --> LegalName_Readback: all 7 pass
+    FMCSA_Gate --> Decline: any of 8 checks fail
+    FMCSA_Gate --> LegalName_Readback: all 8 pass
 
-    Decline --> Decline_Hangup: 9 named scripts<br/>(OOS / no auth / etc.)
+    Decline --> Decline_Hangup: 8 named scripts<br/>(OOS / no auth / no common authority / etc.)
     Decline_Hangup --> [*]
 
     LegalName_Readback --> Identity_Mismatch: caller disputes name
@@ -156,7 +156,7 @@ stateDiagram-v2
 
 ### Key invariants
 
-- **FMCSA 7-check AND-gate.** The carrier must pass all seven of `allowedToOperate=Y`, `statusCode=A`, `safetyRating != Unsatisfactory`, `oosDate is null`, `commonAuthorityStatus == ACTIVE` (or `contractAuthorityStatus == ACTIVE`), `brokerAuthorityStatus != ACTIVE`, and `carrierOperationCode in {A, B}`. Any failure routes to one of nine named decline scripts and ends the call. A deliberate failed lookup is not the same as a decline — that branch logs and asks the caller to recheck their MC.
+- **FMCSA 8-check AND-gate.** The carrier must pass all eight of (1) FMCSA returned a non-null `content` (MC found), (2) `allowedToOperate == "Y"` — FMCSA's own primary "is this entity legally authorized to operate" determination, (3) `statusCode != "R"` (USDOT not Revoked), (4) `oosDate is null` (no Out-of-Service order), (5) `safetyRating != "Unsatisfactory"` (per 49 CFR 385.5 an Unsatisfactory-rated carrier is prohibited from operating a CMV in interstate commerce), (6) `commonAuthorityStatus == "A"` (active for-hire common authority — required to dispatch loads against MC docket), (7) `brokerAuthorityStatus != "A"` (anti-double-brokering — entity is not registered as a broker re-marketing freight as a carrier), and (8) `censusType == "C"` (motor carrier — rejects broker / shipper / freight forwarder). `statusCode == "I"` (Inactive USDOT — overdue MCS-150 biennial filing) is **explicitly NOT** a hard reject when `allowedToOperate == "Y"`: FMCSA's primary `allowedToOperate` already weighs MCS-150 status and authority together, so re-overriding it with a Census-level paperwork flag would reject carriers that are still legally hauling. Insurance (`bipdInsuranceOnFile >= bipdRequiredAmount`) is deliberately not gated here either — BIPD-on-file lags real coverage status (Tier-3, see §12). Any failure routes to one of eight named decline scripts (one per reason code) and ends the call. A deliberate failed lookup is not the same as a decline — that branch logs and asks the caller to recheck their MC. Authoritative sources: FMCSA SAFER company-snapshot help, FMCSA "Why is my operating authority status shown as NOT AUTHORIZED" FAQ, FMCSA Form MCS-150 instructions, FMCSA QCMobile API element reference, and 49 CFR 385.5.
 - **Negotiation policy lives in the sidecar, not the Prompt.** The main Voice Agent Prompt never sees the floor, the target, the percentage, or the urgency multipliers. It only receives the verdict (`accept` / `counter_at` / `walk`) and a single dollar number for THIS round of THIS load — and is explicitly instructed never to speak that number aloud. This is the architectural core of the prompt-injection defense (§8).
 - **Up-negotiation guardrail.** A carrier counter strictly greater than the loadboard rate is re-anchored, never auto-accepted. This was a v23 patch after a real test call exposed the agent congratulating a carrier who counter-offered above list.
 - **`book_load` is mid-call and idempotent.** The agent calls `book_load` the moment agreement is reached; the write hits Twin via the HR Write-to-Twin chip, and a `UNIQUE (call_id, load_id)` constraint at the schema layer absorbs network retries. A hangup after agreement still leaves a booking row.
@@ -605,7 +605,7 @@ The HappyRobot workflow is hand-built in the HR UI today. ADR-002 documents the 
 | **Twin** | HappyRobot-managed Postgres exposed via REST (`/api/v2/twin/sql`). Sits behind Cloudflare WAF. Single source of truth for `loads`, `calls_log`, `bookings`. |
 | **MC** | Motor Carrier number — primary US trucking authority identifier. Captured first in every call; verified against FMCSA. |
 | **FMCSA** | Federal Motor Carrier Safety Administration. Public API at `mobile.fmcsa.dot.gov/qc/services/carriers/{mc}` returns identity, authority, and safety profile. |
-| **OOS** | Out-of-Service. FMCSA-flagged status that disqualifies the carrier from booking. One of the seven AND-gate checks. |
+| **OOS** | Out-of-Service. FMCSA-flagged status that disqualifies the carrier from booking. One of the eight AND-gate checks. |
 | **CHS** | Case Health Score. 0–100 quality score computed by an HR LLM node post-call; pass threshold ≥70. |
 | **Sidecar** | HappyRobot Run Python node attached under a Prompt node. Runs in a RestrictedPython sandbox; used to hold negotiation policy out of the LLM context. |
 | **IAD** | AWS-style region code for Washington DC (Dulles). Fly.io region used for both apps. |

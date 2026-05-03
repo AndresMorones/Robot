@@ -8,7 +8,7 @@ A consultancy-style overview of an AI voice agent that handles inbound carrier s
 
 Carrier sales reps at typical mid-size brokerages spend 60–80% of their day on three repetitive tasks: FMCSA verification, lane-and-equipment matching, and rate negotiation within policy. That's high-friction, low-leverage work — exactly the wedge where a voice agent earns its keep.
 
-This solution replaces first-touch with an AI voice agent that verifies the carrier (FMCSA 7-check), matches them to available loads on Twin Postgres, negotiates within Acme's hard floor, books the load mid-call, and hands off booked deals to a sales rep for paperwork. Reps move up the value chain to outbound campaigns, key-account relationships, and complex multi-leg negotiations.
+This solution replaces first-touch with an AI voice agent that verifies the carrier (FMCSA 8-check), matches them to available loads on Twin Postgres, negotiates within Acme's hard floor, books the load mid-call, and hands off booked deals to a sales rep for paperwork. Reps move up the value chain to outbound campaigns, key-account relationships, and complex multi-leg negotiations.
 
 The system is production-ready: containerized FastAPI + Next.js 15 dashboard on Fly.io, Bearer-authed across the stack, 28 languages enabled, and configurable via 4 HappyRobot workflow variables — no code change required to retune negotiation policy.
 
@@ -35,7 +35,7 @@ The opportunity cost is bigger than the per-call cost. While reps are doing FMCS
 ```mermaid
 flowchart LR
   Carrier[Inbound carrier call] --> VA[Voice agent + Prompt v4.3]
-  VA -->|in-call tools| V1[verify_carrier<br/>FMCSA 7-check]
+  VA -->|in-call tools| V1[verify_carrier<br/>FMCSA 8-check]
   VA --> V2[query_loads<br/>Twin Read]
   VA --> V3[negotiate_rate<br/>Python sidecar]
   VA --> V4[book_load<br/>Twin Write → bookings]
@@ -66,21 +66,26 @@ flowchart LR
 
 ---
 
-## 4. Carrier verification (FMCSA 7-check AND-gate)
+## 4. Carrier verification (FMCSA 8-check AND-gate)
 
-Standard "MC alone" verification is **not sufficient in the 2026 freight ecosystem.** Double-brokering, identity-spoofing, and sham-carrier fraud are at multi-year highs (FMCSA's own newsroom + industry reports). Acme's gate runs **all 7 checks** on every call before any load is pitched:
+Standard "MC alone" verification is **not sufficient in the 2026 freight ecosystem.** Double-brokering, identity-spoofing, and sham-carrier fraud are at multi-year highs (FMCSA's own newsroom + industry reports). Acme's gate runs **all 8 checks** on every call before any load is pitched:
 
-1. **Response shape:** FMCSA returned a non-null carrier record
-2. **Authority:** `allowedToOperate == "Y"`
-3. **Status:** `statusCode == "A"` (not "I" inactive or "R" revoked)
-4. **Out-of-service:** `oosDate is null`
-5. **Safety rating:** null OR `Satisfactory` OR `Conditional`; only `Unsatisfactory` blocks
-6. **Broker authority:** `brokerAuthorityStatus != "A"` (anti-double-brokering soft-flag)
-7. **Census type:** `censusType == "C"` (motor carrier; rejects brokers, shippers, freight forwarders)
+1. **Response shape:** FMCSA returned a non-null carrier record (else `MC_NOT_FOUND`)
+2. **Primary authority:** `allowedToOperate == "Y"` — FMCSA's own determination that the entity is legally allowed to operate. This is the gate everything else defers to. (else `NOT_AUTHORIZED`)
+3. **USDOT not revoked:** `statusCode != "R"` (else `REVOKED`)
+4. **Out-of-service:** `oosDate is null` (else `OUT_OF_SERVICE`)
+5. **Safety rating:** null OR `Satisfactory` OR `Conditional`; only `Unsatisfactory` blocks (per 49 CFR 385.5, an Unsatisfactory-rated carrier is prohibited from operating a CMV in interstate commerce — else `UNSAFE_RATING`)
+6. **Common authority active:** `commonAuthorityStatus == "A"` — required to dispatch loads against an MC docket (else `NO_COMMON_AUTHORITY`)
+7. **Broker authority:** `brokerAuthorityStatus != "A"` (anti-double-brokering — else `LIKELY_BROKER`)
+8. **Census type:** `censusType == "C"` (motor carrier; rejects brokers, shippers, freight forwarders — else `NOT_A_CARRIER`)
+
+`statusCode == "I"` (Inactive USDOT — overdue MCS-150 biennial filing) is **explicitly NOT** a hard reject when `allowedToOperate == "Y"`. FMCSA's primary `allowedToOperate` flag already weighs MCS-150 status and authority together, so re-overriding with a Census-level paperwork flag would reject carriers that are still legally hauling. Insurance (`bipdInsuranceOnFile >= bipdRequiredAmount`) is also deliberately not gated here — BIPD-on-file lags real coverage status (insurance verification is staged for Tier-3 fraud defense).
+
+Authoritative sources for this rule set: FMCSA SAFER company-snapshot help (`safer.fmcsa.dot.gov/saferapp/help/companysnapshothelp.aspx`), the FMCSA "Why is my operating authority status shown as NOT AUTHORIZED" FAQ (`fmcsa.dot.gov/faq/why-my-operating-authority-status-shown-not-authorized-safety-and-fitness-electronic-records`), the FMCSA QCMobile API element reference (`mobile.fmcsa.dot.gov/QCDevsite/docs/apiElements`), and 49 CFR 385.5.
 
 The agent troubleshoots before declining: re-readback the MC if ASR confidence was low, retry the FMCSA call once on null, and confirm in plain language with the carrier before ending the call. Most "false declines" come from mangled digit capture (e.g., "MC dash one four eight three seven three" misheard as "148433"). The troubleshoot-first principle catches those.
 
-When the gate truly fails, the agent uses one of seven natural-language decline scripts (one per failure mode) and offers a callback path. No silent declines, no vague "I can't help you" — the carrier always knows what to fix.
+When the gate truly fails, the agent uses one of eight natural-language decline scripts (one per reason code: `MC_NOT_FOUND`, `NOT_AUTHORIZED`, `REVOKED`, `OUT_OF_SERVICE`, `UNSAFE_RATING`, `NO_COMMON_AUTHORITY`, `LIKELY_BROKER`, `NOT_A_CARRIER`) and offers a callback path. No silent declines, no vague "I can't help you" — the carrier always knows what to fix.
 
 ---
 
@@ -135,7 +140,7 @@ This single KPI tells Acme's owner whether the agent is delivering on rate disci
 
 This build deliberately leans into HappyRobot's native capabilities rather than re-implementing pieces externally:
 
-- **Voice Agent + Prompt v4.3:** plain-text prompt with FMCSA 7-check AND-gate, decline scripts (7 failure modes), troubleshoot-first principle, anti-jailbreak rules, and 3 worked examples
+- **Voice Agent + Prompt v4.3:** plain-text prompt with FMCSA 8-check AND-gate, decline scripts (8 failure modes — one per reason code), troubleshoot-first principle, anti-jailbreak rules, and 3 worked examples
 - **Tool architecture:** 4 tools, each with a typed child action node (Webhook / Read-from-Twin / Run Python / Write-to-Twin) — schema-first, runtime-typed
 - **Twin Postgres:** native Postgres-backed table store; we read via Read-from-Twin nodes (no SQL injection surface) and write via Write-to-Twin (UNIQUE constraint catches retries automatically)
 - **28 languages enabled:** English, Spanish, Portuguese, Punjabi, Russian, Polish, Arabic, Mandarin, Korean, Vietnamese, Tagalog, French, German, Italian, Dutch, Romanian, Bulgarian, Czech, Danish, Finnish, Greek, Hindi, Indonesian, Japanese, Malay, Norwegian, Slovak, Swedish, Turkish, Ukrainian — covers real US driver demographics
@@ -172,7 +177,7 @@ This build deliberately leans into HappyRobot's native capabilities rather than 
 - **Postgres migration off HR Twin** — Twin is fine at current scale; the architectural narrative ("native Twin throughout") is cleaner; migration is reversible later if needed.
 - **HR Capacity / TMS / Truckstop integrations** — out of scope for inbound carrier sales; reserved for outbound campaigns.
 - **Real SIP transfer** — out of FDE scope (web-call only per spec).
-- **Anti-fraud carrier verification beyond FMCSA 7-check** — base 7-check is sufficient for MVP demo; Tier-3 layers in caller-ID + insurance + monitoring.
+- **Anti-fraud carrier verification beyond FMCSA 8-check** — base 8-check is sufficient for MVP demo; Tier-3 layers in caller-ID + insurance + monitoring.
 
 ---
 
