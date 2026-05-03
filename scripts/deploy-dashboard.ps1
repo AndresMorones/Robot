@@ -1,7 +1,7 @@
 # Deploy the Next.js dashboard to Fly.
 # Self-cd's to the dashboard/ directory regardless of caller cwd.
 # WHY: running `flyctl deploy` from the repo root applies the API fly.toml and
-# silently ships the API image to the dashboard app. See docs/activity-log.md.
+# silently ships the API image to the dashboard app.
 $ErrorActionPreference = "Stop"
 
 $App = "robot-dashboard-andres-morones"
