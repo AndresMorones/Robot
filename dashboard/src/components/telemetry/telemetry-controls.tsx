@@ -22,7 +22,7 @@ export function TelemetryControls() {
   const pathname = usePathname();
   const sp = useSearchParams();
 
-  const range = sp.get("range") ?? "1d";
+  const range = sp.get("range") ?? "12h";
 
   const setRange = (v: string) => {
     const params = new URLSearchParams(sp.toString());

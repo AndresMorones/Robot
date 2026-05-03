@@ -127,13 +127,13 @@ function OperationalView({ o }: { o: OperationalMetrics }) {
         </div>
         <div className="border-t border-border pt-4">
           <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            Drop-offs
+            No match
           </p>
           <p className="mt-1 text-3xl font-semibold tabular-nums tracking-tight">
-            {fmtPct(o.abandon_rate_pct)}
+            {fmtPct(o.no_match_pct)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Calls hung up before booking
+            No matching load found
           </p>
         </div>
       </CardContent>

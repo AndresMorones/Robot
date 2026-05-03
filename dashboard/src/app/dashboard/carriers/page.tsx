@@ -8,11 +8,8 @@ import {
 } from "@/lib/api-client";
 import { fmtNumber } from "@/lib/format";
 
-// Aligned with /dashboard/calls + /dashboard/sales — 30s ISR feels live during
-// demos without hammering Twin per request. Webhook+SSE still drives push
-// freshness on the rest of the dashboard surface (ADR-009).
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// ADR-007: 30s ISR. Webhook+SSE drives push freshness on top (ADR-009).
+export const revalidate = 30;
 
 type Props = { searchParams: Promise<{ from?: string; to?: string }> };
 

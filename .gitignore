@@ -39,6 +39,15 @@ Thumbs.db
 *.swp
 *.swo
 
+# Claude Code internal config + memory (per-developer, never committed)
+.claude/
+.mcp.json
+sess_messages.json
+
+# Local scratch + audit outputs (per-developer, never committed)
+tmp/
+tmp_audit/
+
 # HappyRobot raw vendor docs (belt-and-suspenders; KB lives outside repo at C:\Users\Andre\happyrobot-kb\)
 docs/references/happyrobot/Happyrobot docs.*
 .happyrobot.env

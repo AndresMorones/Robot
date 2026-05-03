@@ -78,6 +78,7 @@ export type OperationalMetrics = {
   avg_duration_seconds: number | null;
   fmcsa_decline_pct: number | null;
   abandon_rate_pct: number | null;
+  no_match_pct: number | null;
   // Tracks avg_duration_seconds vs the prior same-length window.
   delta_pct_vs_prior?: number | null;
   sparkline?: SparklinePoint[];
@@ -295,12 +296,20 @@ export type TelemetryToolLatency = {
   p70_ms: number | null;
   p90_ms: number | null;
   p99_ms: number | null;
+  mean_ms: number | null;
+  stddev_ms: number | null;
   series: TelemetryLatencyPoint[];
 };
 
 export type TelemetryAggregate = {
   window: { from: string; to: string; bucket_minutes: number };
-  totals: { runs: number; node_samples: number };
+  totals: {
+    runs: number;
+    node_samples: number;
+    tool_attempts?: number;
+    tool_failures?: number;
+    tool_error_rate_pct?: number | null;
+  };
   rpm_series: TelemetryRpmPoint[];
   tpm_series: TelemetryTpmPoint[];
   latency: TelemetryLatency;

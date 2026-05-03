@@ -40,11 +40,9 @@ export type DailySentimentBucket = {
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /**
- * Pick a bucket size based on window length. Daily bars stay daily up to a
- * month — the chart scrolls horizontally when bars get crowded so users can
- * still read individual days. Bucket up only when daily would be impractical.
- *  - ≤ 31 days   → "day" (chart scrolls if dense)
- *  - 32-180 days → "week" (Monday-anchored ISO weeks)
+ * Pick a bucket size based on window length.
+ *  - ≤ 21 days   → "day" (one bar per day)
+ *  - 22-180 days → "week" (Monday-anchored ISO weeks, label = "Week of MMM DD")
  *  - > 180 days  → "month"
  *
  * Missing bound → "day" with the existing 14-day implicit window behavior.
@@ -55,7 +53,7 @@ export function bucketGranularity(
 ): Granularity {
   if (!from || !to) return "day";
   const days = Math.max(0, (to.getTime() - from.getTime()) / MS_PER_DAY);
-  if (days <= 31) return "day";
+  if (days <= 21) return "day";
   if (days <= 180) return "week";
   return "month";
 }
@@ -105,28 +103,26 @@ function bucketKey(d: Date, g: Granularity): string {
   return monthKey(d);
 }
 
-function bucketLabel(d: Date, g: Granularity): string {
-  if (g === "day") {
-    return d.toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    });
-  }
-  if (g === "week") {
-    // Use Monday-of-week as a stable display anchor; short form keeps the
-    // x-axis tight when there are 20+ weeks.
-    const mon = startOfIsoWeekUTC(d);
-    return mon.toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    });
-  }
-  // month
+function md(d: Date): string {
   return d.toLocaleDateString(undefined, {
     month: "short",
-    year: "2-digit",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function bucketLabel(d: Date, g: Granularity): string {
+  if (g === "day") return md(d);
+  if (g === "week") {
+    const mon = startOfIsoWeekUTC(d);
+    const sun = new Date(mon);
+    sun.setUTCDate(mon.getUTCDate() + 6);
+    return `${md(mon)} - ${md(sun)}`;
+  }
+  // month: full month + 4-digit year (e.g., "May 2026")
+  return d.toLocaleDateString(undefined, {
+    month: "short",
+    year: "numeric",
     timeZone: "UTC",
   });
 }

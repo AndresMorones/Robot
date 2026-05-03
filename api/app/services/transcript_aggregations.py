@@ -13,6 +13,7 @@ falling back to `len // 4` when import fails.
 
 from __future__ import annotations
 
+import bisect
 import json
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -60,6 +61,167 @@ def _latency_percentiles(latencies_ms: list[float]) -> dict[str, float | None]:
     return {"p50": pct(50), "p70": pct(70), "p90": pct(90), "p99": pct(99)}
 
 
+def _mean(samples: list[float]) -> float | None:
+    if not samples:
+        return None
+    return sum(samples) / len(samples)
+
+
+def _stddev(samples: list[float]) -> float | None:
+    # Population stddev. <2 samples → None (no spread to measure).
+    if len(samples) < 2:
+        return None
+    m = sum(samples) / len(samples)
+    var = sum((x - m) ** 2 for x in samples) / len(samples)
+    return var ** 0.5
+
+
+# HR built-in terminal tools: fire-and-forget, by design never produce a
+# tool_result (the call is over once they execute). Counting their missing
+# result as a "timeout" inflates the error rate by ~1/call on every happy
+# path. Names are case-insensitive; HR's `_`-prefix marks platform built-ins.
+_TERMINAL_TOOL_NAMES: frozenset[str] = frozenset(
+    {"_hangup", "hangup", "finalize_call", "end_call", "transfer_call"}
+)
+
+
+def _is_terminal_tool(name: str | None) -> bool:
+    if not name:
+        return False
+    return name.strip().lower() in _TERMINAL_TOOL_NAMES
+
+
+def _is_tool_failure(result: Any) -> bool:
+    """Heuristic: a true tool *service* error or timeout — NOT a successful
+    tool call that returned a negative business outcome.
+
+    True only when the payload looks like a service-layer failure envelope:
+    null/empty result, an error envelope shape (`{"error": "...", ...}` with
+    no other business fields), an HTTP transport failure (status_code >= 400
+    on the envelope), or a raw error/timeout string. Successful structured
+    payloads — including FMCSA decline responses, empty load searches, walked
+    negotiations, etc. — are NOT failures: the tool did its job and returned
+    valid data describing a negative business answer.
+
+    Conservative bias: when uncertain, return False (under-report).
+    """
+    # Null payload → service didn't return anything.
+    if result is None:
+        return True
+
+    # Raw string payload: tools that returned a literal error/timeout string.
+    if isinstance(result, str):
+        s = result.strip().lower()
+        if not s:
+            return True
+        # Match only when the string clearly leads with an error/timeout token.
+        # Substring scans falsely match valid prose containing "error" / "timeout".
+        return s.startswith(("error", "timeout", "{\"error\"", "exception"))
+
+    # Non-dict, non-string structured payload (list, number, bool) → tool
+    # returned valid data. Not a failure.
+    if not isinstance(result, dict):
+        return False
+
+    # Empty dict → ambiguous; treat as failure (no payload at all).
+    if not result:
+        return True
+
+    # HTTP transport failure on the envelope. Only trigger when the dict looks
+    # like a transport envelope (single/few keys around `status_code` + `error`)
+    # — NOT when a business payload happens to include a `status` field with a
+    # numeric value (e.g. some tools return load `status` codes).
+    status_code = result.get("status_code")
+    if isinstance(status_code, (int, float)) and status_code >= 400:
+        return True
+
+    # Pure error envelope: dict whose top-level error/errors value is truthy
+    # AND the payload carries no successful business shape alongside it. This
+    # protects against FMCSA HAL-style payloads where an `errors` link list
+    # may sit beside real `content`/`carrier` data.
+    err = result.get("error") or result.get("errors")
+    if err and not _has_business_payload(result):
+        # Be strict about what counts as an error value — an empty dict/list
+        # under `errors` is HAL link-shape noise, not a failure signal.
+        if isinstance(err, str) and err.strip():
+            return True
+        if isinstance(err, dict) and err:
+            return True
+        if isinstance(err, list) and any(err):
+            return True
+
+    return False
+
+
+# Keys that indicate the payload carries real business data — if any of these
+# are present, an `error`/`errors` field is treated as supplemental metadata
+# (HAL links, sub-resource error arrays, etc.) rather than a service failure.
+_BUSINESS_PAYLOAD_KEYS: frozenset[str] = frozenset(
+    {
+        "content",       # FMCSA top-level
+        "carrier",       # FMCSA carrier block
+        "rows",          # query_loads / Twin queries
+        "count",         # query_loads
+        "data",          # generic data envelope
+        "result",        # generic result envelope
+        "results",       # generic results envelope
+        "success",       # book_load and similar booking ack
+        "table",         # Twin write ack
+        "final_floor",   # negotiate_rate verdict
+        "urgency_tier",  # negotiate_rate verdict
+        "load_id",       # any load-shaped payload
+        "loadboard_rate",
+    }
+)
+
+
+def _has_business_payload(result: dict) -> bool:
+    """True if the dict contains at least one key indicating real business
+    data. Used to distinguish a service error envelope from a successful
+    payload that incidentally includes an `error`/`errors` field."""
+    return any(k in result for k in _BUSINESS_PAYLOAD_KEYS)
+
+
+def _tool_error_count(events: list[dict]) -> tuple[int, int]:
+    """Returns (error_count, total_attempts) across one call's tool calls.
+
+    A tool call is an attempt iff there's an `assistant_tool_call` for it AND
+    the tool isn't a terminal/fire-and-forget HR built-in (e.g. `_hangup`,
+    which by design never produces a tool_result — counting its missing
+    result as a timeout would falsely inflate the error rate by ~1/call).
+
+    A failure is either an error-shaped `tool_result` OR a missing result
+    on a non-terminal tool (no result event followed → counted as timeout).
+    """
+    attempts = 0
+    failures = 0
+    # Map tool_call_id → result payload (None if no result followed)
+    results_by_id: dict[str, Any] = {}
+    for e in events:
+        if e.get("kind") == "tool_result":
+            tr = e.get("tool_result") or {}
+            tcid = tr.get("tool_call_id")
+            if tcid:
+                results_by_id[tcid] = tr.get("result")
+    for e in events:
+        if e.get("kind") != "assistant_tool_call":
+            continue
+        for tc in e.get("tool_calls") or []:
+            name = tc.get("name") if isinstance(tc, dict) else None
+            if _is_terminal_tool(name):
+                # Terminal tools are not request/response — exclude from both
+                # numerator and denominator so they don't skew the error rate.
+                continue
+            tcid = tc.get("id")
+            attempts += 1
+            if tcid not in results_by_id:
+                failures += 1  # never came back → treat as timeout
+                continue
+            if _is_tool_failure(results_by_id[tcid]):
+                failures += 1
+    return failures, attempts
+
+
 def _coerce_transcript(raw: Any) -> list[dict] | None:
     """Twin returns transcript as JSON string; legacy paths may already be
     list. Anything malformed → None so the caller skips the row."""
@@ -101,10 +263,12 @@ def _tool_call_durations_ms(events: list[dict]) -> list[tuple[str | None, float]
     sorted_assistant_idxs = sorted(assistant_ts_by_idx)
 
     def _next_assistant_after(i: int) -> int | None:
-        for j in sorted_assistant_idxs:
-            if j > i:
-                return assistant_ts_by_idx[j]
-        return None
+        # bisect_right gives the first sorted index > i in O(log N) instead of
+        # the prior O(N) linear scan. Output is identical to the loop version.
+        pos = bisect.bisect_right(sorted_assistant_idxs, i)
+        if pos >= len(sorted_assistant_idxs):
+            return None
+        return assistant_ts_by_idx[sorted_assistant_idxs[pos]]
 
     durations: list[tuple[str | None, float]] = []
     for i, e in enumerate(events):
@@ -195,6 +359,8 @@ async def _aggregate_uncached(
     bucket_by_tool: dict[str, dict[datetime, list[float]]] = defaultdict(
         lambda: defaultdict(list)
     )
+    tool_failures = 0
+    tool_attempts = 0
     runs_count = 0
 
     for row in in_window:
@@ -215,6 +381,9 @@ async def _aggregate_uncached(
         runs_count += 1
         call_durations = _tool_call_durations_ms(events)
         pooled_durations.extend(d for _, d in call_durations)
+        f, a = _tool_error_count(events)
+        tool_failures += f
+        tool_attempts += a
 
         # Bucket by call start: parser's UUIDv7-derived `call_started_at` is
         # the canonical clock; fall back to row's `created_at`.
@@ -284,6 +453,8 @@ async def _aggregate_uncached(
             "p70_ms": tp["p70"],
             "p90_ms": tp["p90"],
             "p99_ms": tp["p99"],
+            "mean_ms": _mean(samples),
+            "stddev_ms": _stddev(samples),
             "series": _series_from_buckets(bucket_by_tool[tool_name]),
         }
 
@@ -301,7 +472,17 @@ async def _aggregate_uncached(
             "to": window_to.isoformat(),
             "bucket_minutes": bucket_minutes,
         },
-        "totals": {"runs": runs_count, "node_samples": sample_count},
+        "totals": {
+            "runs": runs_count,
+            "node_samples": sample_count,
+            "tool_attempts": tool_attempts,
+            "tool_failures": tool_failures,
+            "tool_error_rate_pct": (
+                round(100 * tool_failures / tool_attempts, 1)
+                if tool_attempts > 0
+                else None
+            ),
+        },
         "rpm_series": _fill_continuous(rpm_buckets, bucket_minutes, "rpm"),
         "tpm_series": _fill_continuous(tpm_buckets, bucket_minutes, "tpm"),
         "latency": {

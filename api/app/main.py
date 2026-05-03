@@ -88,6 +88,11 @@ log = structlog.get_logger()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     configure_logging()
+    if not settings.api_bearer_token:
+        raise RuntimeError(
+            "API_BEARER_TOKEN is not set. Generate with `openssl rand -hex 32` "
+            "and set in api/.env (local) or `fly secrets set` (prod)."
+        )
     log.info(
         "startup",
         backend="twin",

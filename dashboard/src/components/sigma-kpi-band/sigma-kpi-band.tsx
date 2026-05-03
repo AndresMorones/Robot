@@ -1,9 +1,9 @@
-import { fmtCurrency, fmtNumber, fmtPct } from "@/lib/format";
+import { fmtNumber, fmtPct } from "@/lib/format";
 import type {
-  EconomicsMetrics,
   FunnelMetrics,
   OperationalMetrics,
   QualityMetrics,
+  TelemetryAggregate,
 } from "@/types/api-types";
 
 import { SigmaKpiCell } from "./sigma-kpi-cell";
@@ -49,27 +49,23 @@ function ahtBar(seconds: number | null | undefined): number {
   return 1 - (seconds - SUCCESS_AHT_FLOOR_S) / (SUCCESS_AHT_CEIL_S - SUCCESS_AHT_FLOOR_S);
 }
 
-// Margin-captured sign convention (locked):
-//   effective_delta_dollars NEGATIVE = below list = margin captured (good).
-//   POSITIVE = concession given (bad).
-// Display the signed dollar value; bar magnitude = abs(pct) capped at 25%.
-function marginBar(pct: number | null | undefined): number {
-  if (pct === null || pct === undefined || Number.isNaN(pct)) return 0;
-  return Math.min(Math.abs(pct) / 25, 1);
-}
+// Drop-off bar fills proportional to abandon rate; 30%+ saturates.
+const DROP_OFF_BAR_CEIL_PCT = 30;
+// Tool error bar saturates at 20% — anything above is unambiguously bad.
+const TOOL_ERR_BAR_CEIL_PCT = 20;
 
 export type SigmaKpiBandProps = {
   funnel: FunnelMetrics;
-  economics: EconomicsMetrics;
   operational: OperationalMetrics;
   quality: QualityMetrics;
+  telemetry: TelemetryAggregate | null;
 };
 
 export function SigmaKpiBand({
   funnel,
-  economics,
   operational,
   quality,
+  telemetry,
 }: SigmaKpiBandProps): React.JSX.Element {
   // ---- 1. Total calls — bar fills against a reference window count.
   const totalCalls = funnel.total_calls ?? 0;
@@ -89,19 +85,25 @@ export function SigmaKpiBand({
   // Shorter is better, so positive (green) when below the ceiling.
   const ahtPos = aht !== null && aht !== undefined && aht <= SUCCESS_AHT_CEIL_S;
 
-  // ---- 5. Margin captured — sign-flipped per locked convention.
-  const marginDollars = economics.effective_delta_dollars; // negative = good
-  const marginPct = economics.effective_delta_pct;
-  // Positive trend (green) when margin captured (negative number).
-  const marginPos =
-    marginDollars !== null && marginDollars !== undefined && marginDollars <= 0;
+  // ---- 5. No match — % of calls where no matching load was found
+  // (call_outcome = "no_match" / total). Lower is better.
+  const noMatchPct = operational.no_match_pct ?? null;
+  const noMatchBar =
+    noMatchPct !== null
+      ? Math.min(noMatchPct / DROP_OFF_BAR_CEIL_PCT, 1)
+      : 0;
+  // Positive (green) when no-match rate is low (<10%).
+  const noMatchPos = noMatchPct !== null && noMatchPct < 10;
 
-  // ---- 6. Tool-call success rate — not directly fetched. Phase-1 placeholder
-  // per ADR scope: telemetry totals expose `runs` + `node_samples` but no
-  // success/failure split. We render an em-dash with a hint until a dedicated
-  // field lands on the telemetry endpoint.
-  const toolSuccessValue = "—";
-  const toolSuccessBar = 0;
+  // ---- 6. Tool error rate — % of tool calls that returned an error or
+  // never returned (timeout). Computed dashboard-side from transcripts in
+  // `transcript_aggregations._tool_error_count`. Lower is better.
+  const toolErrPct = telemetry?.totals.tool_error_rate_pct ?? null;
+  const toolErrBar =
+    toolErrPct !== null
+      ? Math.min(toolErrPct / TOOL_ERR_BAR_CEIL_PCT, 1)
+      : 0;
+  const toolErrPos = toolErrPct !== null && toolErrPct < 5;
 
   return (
     <div
@@ -149,26 +151,18 @@ export function SigmaKpiBand({
           hint="mm:ss · shorter better"
         />
         <SigmaKpiCell
-          label="Margin captured"
-          value={fmtCurrency(
-            marginDollars !== null && marginDollars !== undefined
-              ? -marginDollars
-              : null,
-          )}
-          bar={marginBar(marginPct)}
-          pos={marginPos}
-          hint={
-            marginPct !== null && marginPct !== undefined
-              ? `${marginPct <= 0 ? "" : "+"}${marginPct.toFixed(1)}% vs list`
-              : "vs list"
-          }
+          label="No match"
+          value={noMatchPct !== null ? fmtPct(noMatchPct) : "—"}
+          bar={noMatchBar}
+          pos={noMatchPos}
+          hint="no matching load found"
         />
         <SigmaKpiCell
-          label="Tool success"
-          value={toolSuccessValue}
-          bar={toolSuccessBar}
-          pos
-          hint="awaiting telemetry"
+          label="Tool error rate"
+          value={toolErrPct !== null ? fmtPct(toolErrPct) : "—"}
+          bar={toolErrBar}
+          pos={toolErrPos}
+          hint="errors + timeouts"
           isLast
         />
       </div>

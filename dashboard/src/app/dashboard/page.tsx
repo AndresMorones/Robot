@@ -31,15 +31,12 @@ import { RpmTpmChart } from "@/components/telemetry/rpm-tpm-chart";
 import { TelemetryControls } from "@/components/telemetry/telemetry-controls";
 import { TelemetryEmptyState } from "@/components/telemetry/telemetry-empty-state";
 import { TelemetryKpiStrip } from "@/components/telemetry/telemetry-kpi-strip";
-import { TokenSpendTrendCard } from "@/components/telemetry/token-spend-trend-card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Force fully-dynamic — without this, the Monitor page caches its server
-// render for 5 min and the global date picker doesn't propagate to widgets
-// until the cache expires. 30s fetch revalidation underneath catches stale
-// API data; the page itself re-renders on every filter change.
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// ADR-007: 30s ISR. Distinct ?from / ?to / ?range param combinations get
+// their own cache entries, so the date picker propagates immediately —
+// only repeated identical-param renders inside the 30s window hit cache.
+export const revalidate = 30;
 
 type Props = {
   searchParams: Promise<{
@@ -70,8 +67,15 @@ export default async function DashboardPage({ searchParams }: Props) {
   const sp = await searchParams;
   const filters = parseFilterParams(sp);
 
-  const telemetryWindow = rangeToCutoff(sp.range);
-  const telemetryFrom = telemetryWindow.from ?? filters.from;
+  // Telemetry has its OWN time filter (the range chips inside the Telemetry
+  // tab). It is intentionally decoupled from the global date picker so that
+  // (a) the heavy transcript-parse cost is bounded by the chip selection
+  // regardless of how wide the user opens the global filter, and (b) the
+  // operator can keep economics on a wide window while watching live
+  // telemetry on a narrow one. Default = last 12h.
+  const telemetryWindow = rangeToCutoff(sp.range ?? "12h");
+  const telemetryFrom = telemetryWindow.from;
+  const telemetryTo = new Date();
 
   const [
     funnel,
@@ -90,7 +94,7 @@ export default async function DashboardPage({ searchParams }: Props) {
     getRecentBookings(filters),
     getTelemetry({
       from: telemetryFrom,
-      to: filters.to,
+      to: telemetryTo,
       bucketMinutes: telemetryWindow.bucket,
       maxRuns: 200,
     }),
@@ -176,10 +180,6 @@ export default async function DashboardPage({ searchParams }: Props) {
         <Suspense fallback={<Skeleton className="h-24 w-full" />}>
           <TelemetryKpiStrip data={telemetry} />
         </Suspense>
-        <TokenSpendTrendCard
-          telemetry={telemetry}
-          calls={callsForQuality.calls}
-        />
         <Suspense fallback={<Skeleton className="h-[480px] w-full" />}>
           <RpmTpmChart rpm={telemetry.rpm_series} tpm={telemetry.tpm_series} />
         </Suspense>

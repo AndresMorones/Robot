@@ -14,7 +14,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    api_bearer_token: str = "dev-token-change-me"
+    api_bearer_token: str = ""
 
     loads_csv_path: str = "../data/loads.csv"
     calls_json_path: str = "../data/calls.json"

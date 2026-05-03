@@ -88,14 +88,27 @@ export type DashboardFilters = { from?: Date; to?: Date };
  * Also tolerates the older full ISO-8601 datetime shape — if the param already
  * carries time + offset we round-trip it as-is.
  */
+// When the URL carries no explicit ?from/?to, every page defaults to the
+// last DEFAULT_WINDOW_DAYS days. Lock-in 2026-05-02 — keeps the dashboard
+// from rendering a year of data on first load and forces granularity to
+// stay daily until the user widens the window themselves.
+const DEFAULT_WINDOW_DAYS = 7;
+
 export function parseFilterParams(sp: {
   from?: string;
   to?: string;
 }): DashboardFilters {
-  return {
-    from: parseStartBound(sp.from),
-    to: parseEndBound(sp.to),
-  };
+  const fromExplicit = parseStartBound(sp.from);
+  const toExplicit = parseEndBound(sp.to);
+  // If neither bound is provided, fall back to the last 7 days. If only one
+  // is provided, leave the other undefined so the user's intent (open-ended
+  // half-window) is preserved.
+  if (fromExplicit === undefined && toExplicit === undefined) {
+    const now = new Date();
+    const from = new Date(now.getTime() - DEFAULT_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+    return { from, to: now };
+  }
+  return { from: fromExplicit, to: toExplicit };
 }
 
 function parseStartBound(s: string | undefined): Date | undefined {

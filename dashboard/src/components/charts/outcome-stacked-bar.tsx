@@ -74,7 +74,14 @@ export function OutcomeStackedBar({
         {counts.map((d) => {
           if (d.n === 0) return null;
           const pct = (d.n / total) * 100;
+          const pctRounded = Math.round(pct);
           const isBooked = d.key === "load_booked";
+          // Only render the in-segment % when the slice has enough horizontal
+          // room. Booked is the headline so it gets a more lenient threshold;
+          // the others suppress quietly when slim. The hover title still
+          // carries the precise value either way.
+          const showPct = isBooked ? pct >= 8 : pct >= 12;
+          const showLabel = isBooked ? pct >= 6 : pct >= 18;
           return (
             <div
               key={d.key}
@@ -82,24 +89,28 @@ export function OutcomeStackedBar({
               style={{ flex: pct, background: COLORS[d.key] }}
               title={`${LABELS[d.key]}: ${d.n} (${pct.toFixed(1)}%)`}
             >
-              <span
-                className={
-                  isBooked
-                    ? "text-xl font-bold tabular-nums leading-none"
-                    : "text-sm font-semibold tabular-nums leading-none"
-                }
-              >
-                {pct.toFixed(1)}%
-              </span>
-              <span
-                className={
-                  isBooked
-                    ? "mt-1 text-[11px] font-semibold uppercase tracking-wider"
-                    : "mt-1 text-[9px] uppercase tracking-wider opacity-90"
-                }
-              >
-                {LABELS[d.key]}
-              </span>
+              {showPct ? (
+                <span
+                  className={
+                    isBooked
+                      ? "text-xl font-bold tabular-nums leading-none"
+                      : "text-sm font-semibold tabular-nums leading-none"
+                  }
+                >
+                  {pctRounded}%
+                </span>
+              ) : null}
+              {showLabel ? (
+                <span
+                  className={
+                    isBooked
+                      ? "mt-1 text-[11px] font-semibold uppercase tracking-wider"
+                      : "mt-1 text-[9px] uppercase tracking-wider opacity-90"
+                  }
+                >
+                  {LABELS[d.key]}
+                </span>
+              ) : null}
             </div>
           );
         })}

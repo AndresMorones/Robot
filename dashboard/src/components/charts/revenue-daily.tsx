@@ -57,24 +57,25 @@ function bucketKey(d: Date, g: Granularity): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
+const MD = (d: Date): string =>
+  d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+
 function bucketLabel(d: Date, g: Granularity): string {
-  if (g === "day") {
-    return d.toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    });
-  }
+  if (g === "day") return MD(d);
   if (g === "week") {
-    return startOfIsoWeekUTC(d).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    });
+    const mon = startOfIsoWeekUTC(d);
+    const sun = new Date(mon);
+    sun.setUTCDate(mon.getUTCDate() + 6);
+    return `${MD(mon)} - ${MD(sun)}`;
   }
+  // month: "May 2026"
   return d.toLocaleDateString(undefined, {
     month: "short",
-    year: "2-digit",
+    year: "numeric",
     timeZone: "UTC",
   });
 }
@@ -203,7 +204,7 @@ export function RevenueDailyChart({
   const tickStep = max / yTicks;
 
   const fmtY = (v: number) =>
-    v >= 1000 ? `$${(v / 1000).toFixed(1)}K` : `$${v.toFixed(0)}`;
+    v >= 1000 ? `$${Math.round(v / 1000)}K` : `$${Math.round(v)}`;
 
   return (
     <div className="relative w-full overflow-x-auto">
@@ -249,6 +250,14 @@ export function RevenueDailyChart({
           const cx = padL + slotW * i + slotW / 2;
           const barH = (d.actual / max) * innerH;
           const ghostY = padT + innerH - (d.listed / max) * innerH;
+          // Compact $ label for the data point above each actual-revenue bar.
+          // Whole dollars only; collapses to "$1K" past 1000 to stay legible
+          // when bucket slots are narrow.
+          const fmtDp = (v: number): string => {
+            if (v <= 0) return "";
+            if (v >= 1000) return `$${Math.round(v / 1000)}K`;
+            return `$${Math.round(v)}`;
+          };
           return (
             <g key={d.key}>
               {/* actual revenue bar */}
@@ -273,6 +282,20 @@ export function RevenueDailyChart({
                   strokeWidth="1.5"
                   opacity="0.7"
                 />
+              ) : null}
+              {/* Data-point label above the actual bar (whole dollars). */}
+              {d.actual > 0 ? (
+                <text
+                  x={cx}
+                  y={padT + innerH - barH - 4}
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="600"
+                  fill="currentColor"
+                  style={{ fontVariantNumeric: "tabular-nums" }}
+                >
+                  {fmtDp(d.actual)}
+                </text>
               ) : null}
               {/* X label — every bucket gets one (chart is scrollable when dense) */}
               <text

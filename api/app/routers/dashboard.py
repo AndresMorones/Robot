@@ -158,12 +158,13 @@ def _economics_from_rows(rows: list[dict[str, Any]]) -> EconomicsMetrics:
 
 def _operational_from_rows(rows: list[dict[str, Any]]) -> OperationalMetrics:
     """Row-mode operational (HTML view). Computes avg duration + abandon %
-    + fmcsa decline % from the in-memory row list."""
+    + fmcsa decline % + no-match % from the in-memory row list."""
     if not rows:
         return OperationalMetrics(
             avg_duration_seconds=None,
             fmcsa_decline_pct=None,
             abandon_rate_pct=None,
+            no_match_pct=None,
         )
     durations = [
         v for v in (_to_int_safe(r.get("duration_seconds")) for r in rows) if v is not None
@@ -171,11 +172,13 @@ def _operational_from_rows(rows: list[dict[str, Any]]) -> OperationalMetrics:
     avg_dur = round(mean(durations), 2) if durations else None
     total = len(rows)
     fmcsa_fail = sum(1 for r in rows if r.get("fmcsa_eligibility_failure_reason"))
-    abandoned = sum(1 for r in rows if _outcome(r) == "call_abandoned")
+    abandoned = sum(1 for r in rows if _outcome(r) in ("call_abandoned", "abandoned"))
+    no_match = sum(1 for r in rows if _outcome(r) == "no_match")
     return OperationalMetrics(
         avg_duration_seconds=avg_dur,
         fmcsa_decline_pct=round(fmcsa_fail / total * 100, 2) if total else None,
         abandon_rate_pct=round(abandoned / total * 100, 2) if total else None,
+        no_match_pct=round(no_match / total * 100, 2) if total else None,
     )
 
 
@@ -327,6 +330,7 @@ async def operational(
         avg_duration_seconds=summary["avg_duration_seconds"],
         fmcsa_decline_pct=summary["fmcsa_decline_pct"],
         abandon_rate_pct=summary["abandon_rate_pct"],
+        no_match_pct=summary.get("no_match_pct"),
         delta_pct_vs_prior=delta,
         sparkline=sparkline,
     )

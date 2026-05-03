@@ -23,19 +23,19 @@ import type {
 // would source these from an env / settings table; for the take-home a static
 // constant is the right call.
 
-// Demo-tuned: dummy synthetic transcripts have 10–20s gaps between assistant
-// turns (no real model talking), so production-realistic 3s/6s thresholds
-// fire RED on every call. These values let the dummy data render mostly
-// green with a couple of legitimate-feeling amber/red breaches. Real prod
-// values would be ~3000/6000 — change back when real-call data dominates.
-//
-// Observed live (24 runs / 56 tool samples): window p90 = 21.4s,
-// query_loads p90 = 23.0s (worst), verify_carrier p90 = 15.9s.
-// 15s amber / 22s red → query_loads RED, global window p90 AMBER,
-// verify_carrier AMBER, everything else GREEN.
+// Latency alerts use a 3-sigma anomaly rule (3σ above the per-tool mean) —
+// no fixed millisecond ladder. Any tool whose p90 sits more than 3 standard
+// deviations above its own mean AND is itself slow (>= floor) fires RED.
+// The absolute floor suppresses statistically-anomalous-but-fast outliers
+// (e.g. p90=120ms, mean=80ms, stddev=10ms is 4σ but who cares). Tuned for
+// the take-home dataset where dummy transcripts have 10-20s natural gaps
+// from synthetic UUIDv7 spacing — production prompt-derived gaps would be
+// closer to 1-3s and the floor would drop accordingly.
+const SIGMA_K = 3;
+const SIGMA_MIN_SAMPLES = 8;
+const SIGMA_P90_FLOOR_MS = 5000;
+
 const THRESHOLDS = {
-  P90_LATENCY_AMBER_MS: 15000, // demo-tuned (see note above); prod value ~3000
-  P90_LATENCY_RED_MS: 22000,   // demo-tuned (see note above); prod value ~6000
   ERROR_RATE_AMBER_PCT: 5,    // 5% error rate = something's chronic
   ERROR_RATE_RED_PCT: 12,
   RPM_CEILING: 60,            // demo ceiling — 60 carrier requests/min
@@ -84,54 +84,29 @@ function buildAlerts(
 ): Alert[] {
   const alerts: Alert[] = [];
 
-  // p90 latency — global aggregate first.
-  const p90 = telemetry?.latency.p90_ms ?? null;
-  if (p90 !== null) {
-    if (p90 >= THRESHOLDS.P90_LATENCY_RED_MS) {
-      alerts.push({
-        severity: "red",
-        metric: "p90_latency",
-        message: (
-          <span>
-            <b>p90 = {(p90 / 1000).toFixed(1)}s</b> across all tool calls
-          </span>
-        ),
-      });
-    } else if (p90 >= THRESHOLDS.P90_LATENCY_AMBER_MS) {
-      alerts.push({
-        severity: "amber",
-        metric: "p90_latency",
-        message: (
-          <span>
-            <b>p90 = {(p90 / 1000).toFixed(1)}s</b> approaching budget
-          </span>
-        ),
-      });
-    }
-  }
-
-  // Per-tool breaches — name the offending tool. Same thresholds as global.
+  // 3-sigma anomaly rule — fire only when p90 is more than 3σ above the
+  // mean. Skips low-sample tools where stddev is meaningless.
   const byTool = telemetry?.latency_by_tool;
   if (byTool) {
     for (const [name, t] of Object.entries(byTool)) {
-      if (t.p90_ms === null || t.sample_count < 3) continue; // skip noisy small samples
-      if (t.p90_ms >= THRESHOLDS.P90_LATENCY_RED_MS) {
+      if (
+        t.p90_ms === null ||
+        t.mean_ms === null ||
+        t.stddev_ms === null ||
+        t.sample_count < SIGMA_MIN_SAMPLES ||
+        t.p90_ms < SIGMA_P90_FLOOR_MS
+      ) {
+        continue;
+      }
+      const sigmas = (t.p90_ms - t.mean_ms) / t.stddev_ms;
+      if (sigmas >= SIGMA_K) {
         alerts.push({
           severity: "red",
-          metric: `p90_${name}`,
+          metric: `sigma_${name}`,
           message: (
             <span>
-              <b>{name}</b> p90 = {(t.p90_ms / 1000).toFixed(1)}s
-            </span>
-          ),
-        });
-      } else if (t.p90_ms >= THRESHOLDS.P90_LATENCY_AMBER_MS) {
-        alerts.push({
-          severity: "amber",
-          metric: `p90_${name}`,
-          message: (
-            <span>
-              <b>{name}</b> p90 = {(t.p90_ms / 1000).toFixed(1)}s
+              <b>{name}</b> p90 = {(t.p90_ms / 1000).toFixed(1)}s ·{" "}
+              {sigmas.toFixed(1)}σ above mean
             </span>
           ),
         });

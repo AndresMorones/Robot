@@ -128,6 +128,7 @@ class OperationalMetrics(BaseModel):
     avg_duration_seconds: float | None
     fmcsa_decline_pct: float | None
     abandon_rate_pct: float | None
+    no_match_pct: float | None = None
     # v2 spark-card surfaces. Delta tracks avg_duration_seconds vs the prior
     # window; sparkline is the daily mean duration.
     delta_pct_vs_prior: float | None = None

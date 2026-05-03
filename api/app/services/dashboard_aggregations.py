@@ -1054,6 +1054,7 @@ async def _operational_summary_uncached(
             "avg_duration_seconds": None,
             "fmcsa_decline_pct": None,
             "abandon_rate_pct": None,
+            "no_match_pct": None,
         }
 
     durations = [
@@ -1062,7 +1063,11 @@ async def _operational_summary_uncached(
     fmcsa_fail = sum(
         1 for r in rows if r.get("fmcsa_eligibility_failure_reason") not in (None, "")
     )
-    abandoned = sum(1 for r in rows if r.get("call_outcome") == "call_abandoned")
+    # Outcome enum aliases — legacy rows may carry colloquial form. Count both.
+    abandoned = sum(
+        1 for r in rows if r.get("call_outcome") in ("call_abandoned", "abandoned")
+    )
+    no_match = sum(1 for r in rows if r.get("call_outcome") == "no_match")
 
     return {
         "avg_duration_seconds": (
@@ -1070,6 +1075,7 @@ async def _operational_summary_uncached(
         ),
         "fmcsa_decline_pct": round(fmcsa_fail / total * 100, 2),
         "abandon_rate_pct": round(abandoned / total * 100, 2),
+        "no_match_pct": round(no_match / total * 100, 2),
     }
 
 

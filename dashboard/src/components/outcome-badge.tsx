@@ -16,17 +16,18 @@ export function OutcomeBadge({
       </Badge>
     );
   }
+  // Color rule: only the meaningful outcomes get a tinted tag — booked = green
+  // (the win), not_qualified = red (rejection), abandoned = amber (drop-off
+  // signal). no_match + unknowns stay plain so the colored ones pop.
   const v = value.toLowerCase();
   const variant =
     v === "load_booked"
       ? "success"
       : v === "carrier_not_qualified"
         ? "destructive"
-        : v === "no_match"
+        : v === "call_abandoned"
           ? "warning"
-          : v === "call_abandoned"
-            ? "secondary"
-            : "outline";
+          : "outline";
   return (
     <Badge variant={variant} className={cn("font-medium", className)}>
       {titleCase(value)}
